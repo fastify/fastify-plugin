@@ -1,6 +1,7 @@
 'use strict'
 
 const semver = require('semver')
+const console = require('console')
 
 function plugin (fn, version) {
   if (typeof fn !== 'function') {
@@ -12,8 +13,14 @@ function plugin (fn, version) {
       throw new TypeError(`fastify-plugin expects a version string as second parameter, instead got '${typeof version}'`)
     }
 
-    const fastifyVersion = require('fastify/package.json').version
-    if (!semver.satisfies(fastifyVersion, version)) {
+    var fastifyVersion
+    try {
+      fastifyVersion = require('fastify/package.json').version
+    } catch (_) {
+      console.info('fastify not found, proceeding anyway')
+    }
+
+    if (fastifyVersion && !semver.satisfies(fastifyVersion, version)) {
       throw new Error(`fastify-plugin - expected '${version}' fastify version, '${fastifyVersion}' is installed`)
     }
   }

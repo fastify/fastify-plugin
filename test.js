@@ -1,6 +1,7 @@
 'use strict'
 
 const t = require('tap')
+const proxyquire = require('proxyquire')
 const test = t.test
 const fp = require('./')
 
@@ -71,4 +72,23 @@ test('should throw if the version number is not a string', t => {
   } catch (e) {
     t.is(e.message, 'fastify-plugin expects a version string as second parameter, instead got \'number\'')
   }
+})
+
+test('should not throw if fastify is not found', t => {
+  t.plan(1)
+
+  const fp = proxyquire('./index.js', {
+    'fastify/package.json': null,
+    console: {
+      info: function (msg) {
+        t.is(msg, 'fastify not found, proceeding anyway')
+      }
+    }
+  })
+
+  function plugin (fastify, opts, next) {
+    next()
+  }
+
+  fp(plugin, '>= 0')
 })
