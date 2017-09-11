@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/fastify/fastify-plugin#readme",
   "devDependencies": {
-    "fastify": "^0.18.0",
+    "fastify": "^0.27.0",
     "proxyquire": "^1.8.0",
     "standard": "^10.0.0",
     "tap": "^10.3.0"
