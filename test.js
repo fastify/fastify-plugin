@@ -67,10 +67,10 @@ test('should throw if the version number is not a string', t => {
   t.plan(1)
 
   try {
-    fp(() => {}, 12)
+    fp(() => {}, { version: 12 })
     t.fail()
   } catch (e) {
-    t.is(e.message, 'fastify-plugin expects a version string as second parameter, instead got \'number\'')
+    t.is(e.message, 'fastify-plugin expects a version string, instead got \'number\'')
   }
 })
 
@@ -91,4 +91,49 @@ test('should not throw if fastify is not found', t => {
   }
 
   fp(plugin, '>= 0')
+})
+
+test('Should accept an option object', t => {
+  t.plan(2)
+
+  const opts = { hello: 'world' }
+
+  function plugin (fastify, opts, next) {
+    next()
+  }
+
+  fp(plugin, opts)
+  t.ok(plugin[Symbol.for('skip-override')])
+  t.deepEqual(plugin[Symbol.for('plugin-meta')], opts)
+})
+
+test('Should accept an option object and checks the version', t => {
+  t.plan(2)
+
+  const opts = { hello: 'world', version: '>=0.10.0' }
+
+  function plugin (fastify, opts, next) {
+    next()
+  }
+
+  fp(plugin, opts)
+  t.ok(plugin[Symbol.for('skip-override')])
+  delete opts.version
+  t.deepEqual(plugin[Symbol.for('plugin-meta')], opts)
+})
+
+test('should throw if the fastify version does not satisfies the plugin requested version', t => {
+  t.plan(1)
+
+  function plugin (fastify, opts, next) {
+    next()
+  }
+
+  const v = require('fastify/package.json').version
+  try {
+    fp(plugin, { version: '1000.1000.1000' })
+    t.fail()
+  } catch (e) {
+    t.is(e.message, `fastify-plugin - expected '1000.1000.1000' fastify version, '${v}' is installed`)
+  }
 })
