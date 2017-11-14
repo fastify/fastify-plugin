@@ -9,9 +9,10 @@ When you build plugins for Fastify and you want that them to be accessible in th
 2. Use this module
 
 #### Usage
-`fastify-plugin` can do two things for you:
+`fastify-plugin` can do three things for you:
 - Add the `skip-override` hidden property
 - Check the bare-minimum version of Fastify
+- Pass some custom meta to the plugin
 
 Example:
 ```js
@@ -34,6 +35,24 @@ module.exports = fp(function (fastify, opts, next) {
 ```
 
 You can check [here](https://github.com/npm/node-semver#ranges) how to define a `semver` range.
+
+You can also pass some metadata that will be handled by Fastify, such as the dependencies of your plugin.
+```js
+const fp = require('fastify-plugin')
+
+function plugin (fastify, opts, next) {
+  // your plugin code
+  next()
+}
+
+module.exports = fp(plugin, {
+  version: '0.x',
+  dependencies: {
+    fastify: ['plugin1', 'plugin2'],
+    reply: ['compress']
+  }
+})
+```
 
 ## Acknowledgements
 
