@@ -22,10 +22,10 @@
   },
   "homepage": "https://github.com/fastify/fastify-plugin#readme",
   "devDependencies": {
-    "fastify": "^0.33.0",
+    "fastify": "^0.35.5",
     "proxyquire": "^1.8.0",
     "standard": "^10.0.3",
-    "tap": "^10.7.3"
+    "tap": "^11.0.0"
   },
   "dependencies": {
     "semver": "^5.4.1"
