@@ -8,11 +8,13 @@ When you build plugins for Fastify and you want that them to be accessible in th
 1. Use the `skip-override` hidden property
 2. Use this module
 
+In addition if you use this module when creating new plugins, you can declare the dependencies, the name and the expected Fastify version that your plugin needs.
+
 #### Usage
 `fastify-plugin` can do three things for you:
 - Add the `skip-override` hidden property
 - Check the bare-minimum version of Fastify
-- Pass some custom meta to the plugin
+- Pass some custom metadata of the plugin to Fastify
 
 Example:
 ```js
@@ -31,7 +33,7 @@ const fp = require('fastify-plugin')
 module.exports = fp(function (fastify, opts, next) {
   // your plugin code
   next()
-}, '0.x')
+}, { fastify: '0.x' })
 ```
 
 You can check [here](https://github.com/npm/node-semver#ranges) how to define a `semver` range.
@@ -46,7 +48,7 @@ function plugin (fastify, opts, next) {
 }
 
 module.exports = fp(plugin, {
-  version: '0.x',
+  fastify: '0.x',
   dependencies: {
     fastify: ['plugin1', 'plugin2'],
     reply: ['compress']
