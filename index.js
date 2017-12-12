@@ -10,17 +10,17 @@ function plugin (fn, options) {
 
   fn[Symbol.for('skip-override')] = true
 
-  if (!options) return fn
-
-  if (typeof options === 'string') {
-    checkVersion(options)
-  } else {
-    if (options.version) {
-      checkVersion(options.version)
-      delete options.version
-    }
-    fn[Symbol.for('plugin-meta')] = options
+  if (options === undefined) return fn
+  if (typeof options !== 'object' || Array.isArray(options) || options === null) {
+    throw new TypeError('The options object should be an object')
   }
+
+  if (options.fastify) {
+    checkVersion(options.fastify)
+    delete options.fastify
+  }
+
+  fn[Symbol.for('plugin-meta')] = options
 
   return fn
 }
