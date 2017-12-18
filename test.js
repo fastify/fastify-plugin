@@ -47,8 +47,23 @@ test('should check the fastify version', t => {
   }
 })
 
+test('should check the fastify version', t => {
+  t.plan(1)
+
+  function plugin (fastify, opts, next) {
+    next()
+  }
+
+  try {
+    fp(plugin, '>=0.10.0')
+    t.pass()
+  } catch (e) {
+    t.fail()
+  }
+})
+
 test('the options object should be an object', t => {
-  t.plan(3)
+  t.plan(2)
 
   try {
     fp(() => {}, null)
@@ -59,13 +74,6 @@ test('the options object should be an object', t => {
 
   try {
     fp(() => {}, [])
-    t.fail()
-  } catch (e) {
-    t.is(e.message, 'The options object should be an object')
-  }
-
-  try {
-    fp(() => {}, 'abc')
     t.fail()
   } catch (e) {
     t.is(e.message, 'The options object should be an object')
