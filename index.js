@@ -11,6 +11,12 @@ function plugin (fn, options) {
   fn[Symbol.for('skip-override')] = true
 
   if (options === undefined) return fn
+
+  if (typeof options === 'string') {
+    checkVersion(options)
+    return fn
+  }
+
   if (typeof options !== 'object' || Array.isArray(options) || options === null) {
     throw new TypeError('The options object should be an object')
   }
