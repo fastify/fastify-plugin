@@ -36,6 +36,8 @@ module.exports = fp(function (fastify, opts, next) {
 }, { fastify: '0.x' })
 ```
 
+If you need to check the Fastify version only, you can pass just the version string.
+
 You can check [here](https://github.com/npm/node-semver#ranges) how to define a `semver` range.
 
 You can also pass some metadata that will be handled by Fastify, such as the dependencies of your plugin.
