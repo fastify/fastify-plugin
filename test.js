@@ -87,7 +87,7 @@ test('should throw if the fastify version does not satisfies the plugin requeste
     next()
   }
 
-  const v = require('fastify/package.json').version
+  const v = require('fastify/package.json').version.replace(/-rc\.\d+/, '')
   try {
     fp(plugin, { fastify: '1000.1000.1000' })
     t.fail()
@@ -162,7 +162,7 @@ test('should throw if the fastify version does not satisfies the plugin requeste
     next()
   }
 
-  const v = require('fastify/package.json').version
+  const v = require('fastify/package.json').version.replace(/-rc\.\d+/, '')
   try {
     fp(plugin, { fastify: '1000.1000.1000' })
     t.fail()
