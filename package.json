@@ -5,7 +5,7 @@
   "main": "index.js",
   "typings": "fastify-plugin.d.ts",
   "scripts": {
-    "typescript": "tsc --project ./tsconfig.json",    
+    "typescript": "tsc --project ./tsconfig.json",
     "test": "standard && tap test.js && npm run typescript"
   },
   "repository": {
@@ -24,13 +24,13 @@
   },
   "homepage": "https://github.com/fastify/fastify-plugin#readme",
   "devDependencies": {
-    "fastify": "^1.0.0",
-    "proxyquire": "^2.0.0",
-    "standard": "^11.0.0",
-    "tap": "^11.0.0",
+    "fastify": "^1.2.1",
+    "proxyquire": "^2.0.1",
+    "standard": "^11.0.1",
+    "tap": "^11.1.4",
     "typescript": "^2.8.1"
   },
   "dependencies": {
-    "semver": "^5.4.1"
+    "semver": "^5.5.0"
   }
 }
