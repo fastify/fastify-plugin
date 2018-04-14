@@ -3,8 +3,10 @@
   "version": "0.2.2",
   "description": "Plugin helper for Fastify",
   "main": "index.js",
+  "typings": "fastify-plugin.d.ts",
   "scripts": {
-    "test": "standard && tap test.js"
+    "typescript": "tsc --project ./tsconfig.json",    
+    "test": "standard && tap test.js && npm run typescript"
   },
   "repository": {
     "type": "git",
@@ -22,10 +24,11 @@
   },
   "homepage": "https://github.com/fastify/fastify-plugin#readme",
   "devDependencies": {
-    "fastify": "^1.0.0-rc.1",
+    "fastify": "^1.0.0",
     "proxyquire": "^2.0.0",
     "standard": "^11.0.0",
-    "tap": "^11.0.0"
+    "tap": "^11.0.0",
+    "typescript": "^2.8.1"
   },
   "dependencies": {
     "semver": "^5.4.1"
