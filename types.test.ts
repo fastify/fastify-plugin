@@ -10,5 +10,8 @@ export const testPluginWithAsync = fp(async function (fastify: fastify.FastifyIn
   fastify.decorate('utility', () => { })
 }, {
     fastify: '>=1',
-    name: 'TestPlugin'
+    name: 'TestPlugin',
+    decorators: {
+      request: ['log']
+    }
   });
