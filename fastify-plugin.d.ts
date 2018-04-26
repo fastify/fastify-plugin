@@ -22,10 +22,12 @@ declare namespace fastifyPlugin {
   interface PluginOptions {
     /** Bare-minimum version of Fastify for your plugin, just add the semver range that you need. */
     fastify?: string,
+    name?: string,
     /** Decorator dependencies for this plugin */
     decorators?: {
       fastify?: string[],
-      reply?: string[]
+      reply?: string[],
+      request?: string[]
     },
     /** The plugin dependencies */
     dependencies?: string[]
