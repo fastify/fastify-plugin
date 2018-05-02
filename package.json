@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/fastify/fastify-plugin#readme",
   "devDependencies": {
-    "@types/node": "^9.0.0",
+    "@types/node": "^10.0.3",
     "fastify": "^1.2.1",
     "proxyquire": "^2.0.1",
     "standard": "^11.0.1",
