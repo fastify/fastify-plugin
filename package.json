@@ -28,7 +28,7 @@
     "fastify": "^1.2.1",
     "proxyquire": "^2.0.1",
     "standard": "^11.0.1",
-    "tap": "^11.1.4",
+    "tap": "^12.0.0",
     "typescript": "^2.8.1"
   },
   "dependencies": {
