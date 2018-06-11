@@ -6,7 +6,7 @@
   "typings": "fastify-plugin.d.ts",
   "scripts": {
     "typescript": "tsc --project ./tsconfig.json",
-    "test": "standard && tap test.js && npm run typescript"
+    "test": "standard && tap *.test.js test.js && npm run typescript"
   },
   "repository": {
     "type": "git",
