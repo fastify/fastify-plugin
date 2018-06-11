@@ -5,7 +5,7 @@ const console = require('console')
 
 const DISPLAY_NAME_SYMBOL = Symbol.for('fastify.display-name')
 const fpStackTracePattern = new RegExp('at\\s{1}plugin\\s{1}.*\\n\\s*(.*)')
-const fileNamePattern = new RegExp('\\/(\\w*)\\.js')
+const fileNamePattern = new RegExp('\\/(\\w*)(\\.\\w*)?\\.js')
 
 function plugin (fn, options) {
   if (typeof fn !== 'function') {
