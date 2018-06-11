@@ -3,10 +3,14 @@
 const semver = require('semver')
 const console = require('console')
 
+const DISPLAY_NAME_SYMBOL = Symbol.for('display-name')
+
 function plugin (fn, options) {
   if (typeof fn !== 'function') {
     throw new TypeError(`fastify-plugin expects a function, instead got a '${typeof fn}'`)
   }
+
+  fn[DISPLAY_NAME_SYMBOL] = checkName(fn)
 
   fn[Symbol.for('skip-override')] = true
 
@@ -31,6 +35,21 @@ function plugin (fn, options) {
   return fn
 }
 
+function checkName (fn) {
+  if (fn.name.length > 0) return fn.name
+
+  const r1 = new RegExp('at\\s{1}plugin\\s{1}.*\\n\\s*(.*)')
+  const r2 = new RegExp('\\/(\\w*)\\.js')
+  try {
+    throw new Error('anonymous function')
+  } catch (e) {
+    const stack = e.stack
+    let m = stack.match(r1)
+    m = m[1].match(r2)[1]
+    return m
+  }
+}
+
 function checkVersion (version) {
   if (typeof version !== 'string') {
     throw new TypeError(`fastify-plugin expects a version string, instead got '${typeof version}'`)
@@ -49,3 +68,4 @@ function checkVersion (version) {
 }
 
 module.exports = plugin
+module.exports.DISPLAY_NAME_SYMBOL = DISPLAY_NAME_SYMBOL
