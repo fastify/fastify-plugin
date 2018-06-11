@@ -170,3 +170,13 @@ test('should throw if the fastify version does not satisfies the plugin requeste
     t.is(e.message, `fastify-plugin - expected '1000.1000.1000' fastify version, '${v}' is installed`)
   }
 })
+
+test('should set anonymous function name to file it was called from', t => {
+  t.plan(1)
+
+  const fn = fp((fastify, opts, next) => {
+    next()
+  })
+
+  t.is(fn[Symbol.for('fastify.display-name')], 'test')
+})
