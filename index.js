@@ -3,7 +3,7 @@
 const semver = require('semver')
 const console = require('console')
 
-const DISPLAY_NAME_SYMBOL = Symbol.for('fastify-plugin.display-name')
+const DISPLAY_NAME_SYMBOL = Symbol.for('fastify.display-name')
 const fpStackTracePattern = new RegExp('at\\s{1}plugin\\s{1}.*\\n\\s*(.*)')
 const fileNamePattern = new RegExp('\\/(\\w*)\\.js')
 
@@ -68,4 +68,3 @@ function checkVersion (version) {
 }
 
 module.exports = plugin
-module.exports.DISPLAY_NAME_SYMBOL = DISPLAY_NAME_SYMBOL

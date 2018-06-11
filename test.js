@@ -178,5 +178,5 @@ test('should set anonymous function name to file it was called from', t => {
     next()
   })
 
-  t.is(fn[fp.DISPLAY_NAME_SYMBOL], 'test')
+  t.is(fn[Symbol('fastify.display-name')], 'test')
 })
