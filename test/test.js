@@ -3,7 +3,7 @@
 const t = require('tap')
 const proxyquire = require('proxyquire')
 const test = t.test
-const fp = require('./')
+const fp = require('./../')
 
 test('fastify-plugin is a function', t => {
   t.plan(1)
@@ -110,7 +110,7 @@ test('should throw if the version number is not a string', t => {
 test('should not throw if fastify is not found', t => {
   t.plan(1)
 
-  const fp = proxyquire('./index.js', {
+  const fp = proxyquire('./../index.js', {
     'fastify/package.json': null,
     console: {
       info: function (msg) {
