@@ -6,7 +6,7 @@
   "typings": "fastify-plugin.d.ts",
   "scripts": {
     "typescript": "tsc --project ./tsconfig.json",
-    "test": "standard && tap test/* && npm run typescript"
+    "test": "standard && tap test/*.js && npm run typescript"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
     "proxyquire": "^2.0.1",
     "standard": "^11.0.1",
     "tap": "^12.0.0",
+    "ts-node": "^6.1.1",
     "typescript": "^2.9.1"
   },
   "dependencies": {

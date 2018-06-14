@@ -4,8 +4,8 @@ const semver = require('semver')
 const console = require('console')
 
 const DISPLAY_NAME_SYMBOL = Symbol.for('fastify.display-name')
-const fpStackTracePattern = new RegExp('at\\s{1}plugin\\s{1}.*\\n\\s*(.*)')
-const fileNamePattern = new RegExp('(?:\\/|\\\\)(\\w*(\\.\\w*)*)\\.js')
+const fpStackTracePattern = new RegExp('at\\s{1}(?:.*\\.)?plugin\\s{1}.*\\n\\s*(.*)')
+const fileNamePattern = new RegExp('(?:\\/|\\\\)(\\w*(\\.\\w*)*)\\..*')
 
 function plugin (fn, options) {
   if (typeof fn !== 'function') {
@@ -45,8 +45,7 @@ function checkName (fn) {
   } catch (e) {
     const stack = e.stack
     let m = stack.match(fpStackTracePattern)
-    m = m[1].match(fileNamePattern)[1]
-    return m
+    return m ? m[1].match(fileNamePattern)[1] : 'anonymous'
   }
 }
 
