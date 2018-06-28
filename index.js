@@ -3,28 +3,27 @@
 const semver = require('semver')
 const console = require('console')
 
-const DISPLAY_NAME_SYMBOL = Symbol.for('fastify.display-name')
 const fpStackTracePattern = new RegExp('at\\s{1}(?:.*\\.)?plugin\\s{1}.*\\n\\s*(.*)')
 const fileNamePattern = new RegExp('(?:\\/|\\\\)(\\w*(\\.\\w*)*)\\..*')
 
-function plugin (fn, options) {
+function plugin (fn, options = {}) {
   if (typeof fn !== 'function') {
     throw new TypeError(`fastify-plugin expects a function, instead got a '${typeof fn}'`)
   }
 
-  fn[DISPLAY_NAME_SYMBOL] = checkName(fn)
-
   fn[Symbol.for('skip-override')] = true
-
-  if (options === undefined) return fn
 
   if (typeof options === 'string') {
     checkVersion(options)
-    return fn
+    options = {}
   }
 
   if (typeof options !== 'object' || Array.isArray(options) || options === null) {
     throw new TypeError('The options object should be an object')
+  }
+
+  if (!options.name) {
+    options.name = checkName(fn)
   }
 
   if (options.fastify) {

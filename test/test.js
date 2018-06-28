@@ -178,5 +178,5 @@ test('should set anonymous function name to file it was called from', t => {
     next()
   })
 
-  t.is(fn[Symbol.for('fastify.display-name')], 'test')
+  t.is(fn[Symbol.for('plugin-meta')].name, 'test')
 })
