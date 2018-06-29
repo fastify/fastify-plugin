@@ -172,11 +172,12 @@ test('should throw if the fastify version does not satisfies the plugin requeste
 })
 
 test('should set anonymous function name to file it was called from', t => {
-  t.plan(1)
+  t.plan(2)
 
   const fn = fp((fastify, opts, next) => {
     next()
   })
 
   t.is(fn[Symbol.for('plugin-meta')].name, 'test')
+  t.is(fn[Symbol.for('fastify.display-name')], 'test')
 })
