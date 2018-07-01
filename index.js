@@ -23,8 +23,7 @@ function plugin (fn, options = {}) {
   }
 
   if (!options.name) {
-    let name = checkName(fn)
-    options.name = name
+    options.name = checkName(fn)
   }
 
   fn[Symbol.for('fastify.display-name')] = options.name
