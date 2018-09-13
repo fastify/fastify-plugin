@@ -11,9 +11,7 @@ When you build plugins for Fastify and you want that them to be accessible in th
 1. Use the `skip-override` hidden property
 2. Use this module
 
-In addition if you use this module when creating new plugins, you can declare the dependencies, the name and the expected Fastify version that your plugin needs.
-
-#### Usage
+## Usage
 `fastify-plugin` can do three things for you:
 - Add the `skip-override` hidden property
 - Check the bare-minimum version of Fastify
@@ -29,6 +27,10 @@ module.exports = fp(function (fastify, opts, next) {
 })
 ```
 
+## Metadata
+In addition if you use this module when creating new plugins, you can declare the dependencies, the name and the expected Fastify version that your plugin needs.
+
+#### Fastify version
 If you need to set a bare-minimum version of Fastify for your plugin, just add the [semver](http://semver.org/) range that you need:
 ```js
 const fp = require('fastify-plugin')
@@ -36,14 +38,15 @@ const fp = require('fastify-plugin')
 module.exports = fp(function (fastify, opts, next) {
   // your plugin code
   next()
-}, { fastify: '0.x' })
+}, { fastify: '1.x' })
 ```
 
 If you need to check the Fastify version only, you can pass just the version string.
 
 You can check [here](https://github.com/npm/node-semver#ranges) how to define a `semver` range.
 
-You can also pass some metadata that will be handled by Fastify, such as the dependencies of your plugin.
+#### Name
+Fastify uses this option to validate dependency graph. On one hand it makes sure that no name collision occurs. On the other hand it makes possible to perform [dependency check](https://github.com/fastify/fastify-plugin/#Dependencies).
 ```js
 const fp = require('fastify-plugin')
 
@@ -53,7 +56,24 @@ function plugin (fastify, opts, next) {
 }
 
 module.exports = fp(plugin, {
-  fastify: '0.x',
+  fastify: '1.x',
+  name: 'your-plugin-name'
+})
+```
+
+#### Dependencies
+You can also check if the `plugins` and `decorators` which your plugin intend to use are present in the dependency graph.  
+> *Note:* This is the point where registering `name` of the plugins become important, because you can reference `plugin` dependencies by their [name](https://github.com/fastify/fastify-plugin#Name).
+```js
+const fp = require('fastify-plugin')
+
+function plugin (fastify, opts, next) {
+  // your plugin code
+  next()
+}
+
+module.exports = fp(plugin, {
+  fastify: '1.x',
   decorators: {
     fastify: ['plugin1', 'plugin2'],
     reply: ['compress']
