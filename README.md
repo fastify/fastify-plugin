@@ -46,7 +46,7 @@ If you need to check the Fastify version only, you can pass just the version str
 You can check [here](https://github.com/npm/node-semver#ranges) how to define a `semver` range.
 
 #### Name
-Fastify uses this option to validate dependency graph. On one hand it makes sure that no name collision occurs. On the other hand it makes possible to perform [dependency check](https://github.com/fastify/fastify-plugin/#Dependencies).
+Fastify uses this option to validate dependency graph. On one hand it makes sure that no name collision occurs. On the other hand it makes possible to perform [dependency check](https://github.com/fastify/fastify-plugin#dependencies).
 ```js
 const fp = require('fastify-plugin')
 
@@ -63,7 +63,7 @@ module.exports = fp(plugin, {
 
 #### Dependencies
 You can also check if the `plugins` and `decorators` which your plugin intend to use are present in the dependency graph.  
-> *Note:* This is the point where registering `name` of the plugins become important, because you can reference `plugin` dependencies by their [name](https://github.com/fastify/fastify-plugin#Name).
+> *Note:* This is the point where registering `name` of the plugins become important, because you can reference `plugin` dependencies by their [name](https://github.com/fastify/fastify-plugin#name).
 ```js
 const fp = require('fastify-plugin')
 
