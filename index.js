@@ -47,13 +47,8 @@ function checkName (fn) {
     const stack = e.stack
     const m = stack.match(fpStackTracePattern)
 
-    if (m == null) {
-      return 'anonymous'
-    }
-
-    const lastPathSection = m[1].split(/[/\\]/).slice(-1)[0]
-
-    return lastPathSection.match(fileNamePattern)[1]
+    // get last section of path and match for filename
+    return m ? m[1].split(/[/\\]/).slice(-1)[0].match(fileNamePattern)[1] : 'anonymous'
   }
 }
 
