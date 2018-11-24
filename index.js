@@ -3,8 +3,8 @@
 const semver = require('semver')
 const console = require('console')
 
-const fpStackTracePattern = new RegExp('at\\s{1}(?:.*\\.)?plugin\\s{1}.*\\n\\s*(.*)')
-const fileNamePattern = new RegExp('(?:\\/|\\\\)(\\w*(\\.\\w*)*)\\..*')
+const fpStackTracePattern = /at\s{1}(?:.*\.)?plugin\s{1}.*\n\s*(.*)/
+const fileNamePattern = /(\w*(\.\w*)*)\..*/
 
 function plugin (fn, options = {}) {
   if (typeof fn !== 'function') {
@@ -45,8 +45,15 @@ function checkName (fn) {
     throw new Error('anonymous function')
   } catch (e) {
     const stack = e.stack
-    let m = stack.match(fpStackTracePattern)
-    return m ? m[1].match(fileNamePattern)[1] : 'anonymous'
+    const m = stack.match(fpStackTracePattern)
+
+    if (m == null) {
+      return 'anonymous'
+    }
+
+    const lastPathSection = m[1].split(/[/\\]/)
+
+    return lastPathSection[lastPathSection.length - 1].match(fileNamePattern)[1]
   }
 }
 
