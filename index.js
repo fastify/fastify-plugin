@@ -51,9 +51,9 @@ function checkName (fn) {
       return 'anonymous'
     }
 
-    const lastPathSection = m[1].split(/[/\\]/)
+    const lastPathSection = m[1].split(/[/\\]/).slice(-1)[0]
 
-    return lastPathSection[lastPathSection.length - 1].match(fileNamePattern)[1]
+    return lastPathSection.match(fileNamePattern)[1]
   }
 }
 
