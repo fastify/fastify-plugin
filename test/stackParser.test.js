@@ -1,7 +1,6 @@
 'use strict'
 
 const t = require('tap')
-const test = t.test
 const extractPluginName = require('../stackParser')
 
 const winStack = `Error: anonymous function
@@ -42,10 +41,8 @@ at TAP.test (/home/leonardo/desktop/fastify-plugin/node_modules/tap/lib/test.js:
 
 const anonymousStack = `Unable to parse this`
 
-test('should extract plugin name correctly from stack', t => {
-  t.plan(3)
+t.plan(3)
 
-  t.is(extractPluginName(winStack), 'hello.test')
-  t.is(extractPluginName(nixStack), 'this.is.a.test')
-  t.is(extractPluginName(anonymousStack), 'anonymous')
-})
+t.is(extractPluginName(winStack), 'hello.test')
+t.is(extractPluginName(nixStack), 'this.is.a.test')
+t.is(extractPluginName(anonymousStack), 'anonymous')
