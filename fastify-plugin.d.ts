@@ -18,7 +18,7 @@ declare function fastifyPlugin<HttpServer, HttpRequest, HttpResponse, T>(
 ): fastify.Plugin<HttpServer, HttpRequest, HttpResponse, T>;
 
 declare namespace fastifyPlugin {
-  type nextCallback = () => void;
+  type nextCallback = (err?: Error) => void;
   interface PluginOptions {
     /** Bare-minimum version of Fastify for your plugin, just add the semver range that you need. */
     fastify?: string,
