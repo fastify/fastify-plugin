@@ -28,7 +28,6 @@ function plugin (fn, options = {}) {
 
   if (options.fastify) {
     checkVersion(options.fastify)
-    delete options.fastify
   }
 
   fn[Symbol.for('plugin-meta')] = options
