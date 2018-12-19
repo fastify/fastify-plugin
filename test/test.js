@@ -151,7 +151,6 @@ test('Should accept an option object and checks the version', t => {
 
   fp(plugin, opts)
   t.ok(plugin[Symbol.for('skip-override')])
-  delete opts.version
   t.deepEqual(plugin[Symbol.for('plugin-meta')], opts)
 })
 
@@ -193,4 +192,14 @@ test('should set display-name to meta name', t => {
 
   t.is(fn[Symbol.for('plugin-meta')].name, functionName)
   t.is(fn[Symbol.for('fastify.display-name')], functionName)
+})
+
+test('should preserve fastify version in meta', t => {
+  t.plan(1)
+
+  const opts = { hello: 'world', fastify: '>=0.10.0' }
+
+  const fn = fp((fastify, opts, next) => next(), opts)
+
+  t.is(fn[Symbol.for('plugin-meta')].fastify, '>=0.10.0')
 })
