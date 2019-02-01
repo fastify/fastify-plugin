@@ -5,6 +5,10 @@ const console = require('console')
 const extractPluginName = require('./stackParser')
 
 function plugin (fn, options = {}) {
+  if (typeof fn.default !== "undefined" ) {
+    fn = fn.default
+  }
+
   if (typeof fn !== 'function') {
     throw new TypeError(`fastify-plugin expects a function, instead got a '${typeof fn}'`)
   }
