@@ -22,7 +22,7 @@ test('should return the function with the skip-override Symbol', t => {
   t.ok(plugin[Symbol.for('skip-override')])
 })
 
-test('should return "default" function from ECMAScript module', t => {
+test('should support "default" function from babel module', t => {
   t.plan(1)
 
   const plugin = {
