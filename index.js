@@ -5,7 +5,7 @@ const console = require('console')
 const extractPluginName = require('./stackParser')
 
 function plugin (fn, options = {}) {
-  if (typeof fn.default !== 'undefined') {
+  if (typeof fn.default !== 'undefined') { // Support for 'export default' behaviour in transpiled ECMAScript module
     fn = fn.default
   }
 
