@@ -12,7 +12,7 @@ import * as fastify from 'fastify';
  * @param next The `next` callback is not available when using `async`/`await`. If you do invoke a `next` callback in this situation unexpected behavior may occur.
  */
 declare function fastifyPlugin<HttpServer, HttpRequest, HttpResponse, T>(
-  fn: fastify.Plugin<HttpServer, HttpRequest, HttpResponse, T>,
+  fn: fastify.Plugin<HttpServer, HttpRequest, HttpResponse, T> | { default: fastify.Plugin<HttpServer, HttpRequest, HttpResponse, T> },
   options?: fastifyPlugin.PluginOptions | string,
   next?: fastifyPlugin.nextCallback
 ): fastify.Plugin<HttpServer, HttpRequest, HttpResponse, T>;
