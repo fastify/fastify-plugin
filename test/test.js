@@ -4,6 +4,7 @@ const t = require('tap')
 const proxyquire = require('proxyquire')
 const test = t.test
 const fp = require('./../')
+const Fastify = require('fastify')
 
 test('fastify-plugin is a function', t => {
   t.plan(1)
@@ -19,6 +20,21 @@ test('should return the function with the skip-override Symbol', t => {
 
   fp(plugin)
   t.ok(plugin[Symbol.for('skip-override')])
+})
+
+test('should support "default" function from babel module', t => {
+  t.plan(1)
+
+  const plugin = {
+    default: () => {}
+  }
+
+  try {
+    fp(plugin)
+    t.pass()
+  } catch (e) {
+    t.is(e.message, 'fastify-plugin expects a function, instead got a \'object\'')
+  }
 })
 
 test('should throw if the plugin is not a function', t => {
@@ -202,4 +218,64 @@ test('should preserve fastify version in meta', t => {
   const fn = fp((fastify, opts, next) => next(), opts)
 
   t.is(fn[Symbol.for('plugin-meta')].fastify, '>=0.10.0')
+})
+
+test('should check fastify dependency graph - plugin', t => {
+  t.plan(1)
+  const fastify = Fastify()
+
+  fastify.register(fp((fastify, opts, next) => next(), {
+    fastify: '1.x',
+    name: 'plugin1-name'
+  }))
+
+  fastify.register(fp((fastify, opts, next) => next(), {
+    fastify: '1.x',
+    name: 'test',
+    dependencies: ['plugin1-name', 'plugin2-name']
+  }))
+
+  fastify.ready(err => {
+    t.is(err.message, `The dependency 'plugin2-name' is not registered`)
+  })
+})
+
+test('should check fastify dependency graph - decorate', t => {
+  t.plan(1)
+  const fastify = Fastify()
+
+  fastify.decorate('plugin1', fp((fastify, opts, next) => next(), {
+    fastify: '1.x',
+    name: 'plugin1-name'
+  }))
+
+  fastify.register(fp((fastify, opts, next) => next(), {
+    fastify: '1.x',
+    name: 'test',
+    decorators: { fastify: ['plugin1', 'plugin2'] }
+  }))
+
+  fastify.ready(err => {
+    t.is(err.message, `The decorator 'plugin2' is not present in Fastify`)
+  })
+})
+
+test('should check fastify dependency graph - decorateReply', t => {
+  t.plan(1)
+  const fastify = Fastify()
+
+  fastify.decorateReply('plugin1', fp((fastify, opts, next) => next(), {
+    fastify: '1.x',
+    name: 'plugin1-name'
+  }))
+
+  fastify.register(fp((fastify, opts, next) => next(), {
+    fastify: '1.x',
+    name: 'test',
+    decorators: { reply: ['plugin1', 'plugin2'] }
+  }))
+
+  fastify.ready(err => {
+    t.is(err.message, `The decorator 'plugin2' is not present in Reply`)
+  })
 })

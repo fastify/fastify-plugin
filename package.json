@@ -1,6 +1,6 @@
 {
   "name": "fastify-plugin",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Plugin helper for Fastify",
   "main": "index.js",
   "typings": "fastify-plugin.d.ts",
@@ -24,11 +24,11 @@
   },
   "homepage": "https://github.com/fastify/fastify-plugin#readme",
   "devDependencies": {
-    "@types/node": "^9.6.22",
-    "fastify": "^1.13.0",
+    "@types/node": "^9.6.41",
+    "fastify": "^1.14.1",
     "proxyquire": "^2.0.1",
     "standard": "^12.0.0",
-    "tap": "^12.0.0",
+    "tap": "^12.5.1",
     "typescript": "^2.9.2"
   },
   "dependencies": {
