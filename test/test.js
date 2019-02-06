@@ -22,6 +22,21 @@ test('should return the function with the skip-override Symbol', t => {
   t.ok(plugin[Symbol.for('skip-override')])
 })
 
+test('should support "default" function from babel module', t => {
+  t.plan(1)
+
+  const plugin = {
+    default: () => {}
+  }
+
+  try {
+    fp(plugin)
+    t.pass()
+  } catch (e) {
+    t.is(e.message, 'fastify-plugin expects a function, instead got a \'object\'')
+  }
+})
+
 test('should throw if the plugin is not a function', t => {
   t.plan(1)
 
