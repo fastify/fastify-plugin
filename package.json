@@ -29,7 +29,6 @@
     "proxyquire": "^2.0.1",
     "standard": "^12.0.0",
     "tap": "^12.5.1",
-    "ts-node": "^7.0.0",
     "typescript": "^2.9.2"
   },
   "dependencies": {
