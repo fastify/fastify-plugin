@@ -1,6 +1,7 @@
 /// <reference types="fastify" />
 
 import * as fastify from 'fastify';
+import { Server, IncomingMessage, ServerResponse } from 'http'
 
 /**
  * This function does three things for you:
@@ -11,7 +12,7 @@ import * as fastify from 'fastify';
  * @param options Optional plugin options
  * @param next The `next` callback is not available when using `async`/`await`. If you do invoke a `next` callback in this situation unexpected behavior may occur.
  */
-declare function fastifyPlugin<HttpServer, HttpRequest, HttpResponse, T>(
+declare function fastifyPlugin<HttpServer = Server, HttpRequest = IncomingMessage, HttpResponse = ServerResponse, T = any>(
   fn: fastify.Plugin<HttpServer, HttpRequest, HttpResponse, T> | { default: fastify.Plugin<HttpServer, HttpRequest, HttpResponse, T> },
   options?: fastifyPlugin.PluginOptions | string,
   next?: fastifyPlugin.nextCallback
