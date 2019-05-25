@@ -34,3 +34,4 @@ export const testPluginWithAsync = fp(
 const server = fastify()
 
 server.register(testPlugin) // register expects a fastify.Plugin
+server.register(testPluginWithCallback) // test fastify.Plugin's gerneric typings
