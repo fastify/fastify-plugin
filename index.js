@@ -13,7 +13,17 @@ function plugin (fn, options = {}) {
     throw new TypeError(`fastify-plugin expects a function, instead got a '${typeof fn}'`)
   }
 
-  fn[Symbol.for('skip-override')] = true
+  return setMetaData(fn, options)
+}
+
+function Plugin (options = {}) {
+  return function pluginDecorator (target) {
+    setMetaData(target.prototype, options, true)
+  }
+}
+
+function setMetaData (target, options, isClass) {
+  target[Symbol.for('skip-override')] = true
 
   if (typeof options === 'string') {
     checkVersion(options)
@@ -25,22 +35,24 @@ function plugin (fn, options = {}) {
   }
 
   if (!options.name) {
-    options.name = checkName(fn)
+    options.name = checkName(target, isClass)
   }
 
-  fn[Symbol.for('fastify.display-name')] = options.name
+  target[Symbol.for('fastify.display-name')] = options.name
 
   if (options.fastify) {
     checkVersion(options.fastify)
   }
 
-  fn[Symbol.for('plugin-meta')] = options
+  target[Symbol.for('plugin-meta')] = options
 
-  return fn
+  return target
 }
 
-function checkName (fn) {
-  if (fn.name.length > 0) return fn.name
+function checkName (target, isClass) {
+  if (isClass) return target.constructor.name
+
+  if (target.name.length > 0) return target.name
 
   try {
     throw new Error('anonymous function')
@@ -67,3 +79,4 @@ function checkVersion (version) {
 }
 
 module.exports = plugin
+module.exports.Plugin = Plugin

@@ -33,6 +33,7 @@ declare namespace fastifyPlugin {
     /** The plugin dependencies */
     dependencies?: string[]
   }
+  function Plugin (target: any): void
 }
 
 export = fastifyPlugin;

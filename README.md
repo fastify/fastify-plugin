@@ -82,6 +82,25 @@ module.exports = fp(plugin, {
 })
 ```
 
+#### Class based plugins
+
+> Experimental
+
+When using class based plugin the `@Plugin(options)` decorator can be used to set the `skip-override` hidden property and add metadata to the plugin:
+
+```ts
+const { Plugin } = require('fastify-plugin')
+const { Get } = require('fastify')
+
+@Plugin({ fastify: '3.x' })
+class MyPlugin {
+  @Get('/')
+  async route (request, reply) {
+    return 'hello world'
+  }
+}
+```
+
 ## Acknowledgements
 
 This project is kindly sponsored by:
