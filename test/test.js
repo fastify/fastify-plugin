@@ -236,7 +236,7 @@ test('should check fastify dependency graph - plugin', t => {
   }))
 
   fastify.ready(err => {
-    t.is(err.message, `The dependency 'plugin2-name' of plugin 'test' is not registered`)
+    t.is(err.message, "The dependency 'plugin2-name' of plugin 'test' is not registered")
   })
 })
 
@@ -256,7 +256,7 @@ test('should check fastify dependency graph - decorate', t => {
   }))
 
   fastify.ready(err => {
-    t.is(err.message, `The decorator 'plugin2' is not present in Fastify`)
+    t.is(err.message, "The decorator 'plugin2' is not present in Fastify")
   })
 })
 
@@ -276,6 +276,6 @@ test('should check fastify dependency graph - decorateReply', t => {
   }))
 
   fastify.ready(err => {
-    t.is(err.message, `The decorator 'plugin2' is not present in Reply`)
+    t.is(err.message, "The decorator 'plugin2' is not present in Reply")
   })
 })

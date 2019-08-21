@@ -39,7 +39,7 @@ at TAP.process (/home/leonardo/desktop/fastify-plugin/node_modules/tap/lib/test.
 at TAP.sub (/home/leonardo/desktop/fastify-plugin/node_modules/tap/lib/test.js:185:10)
 at TAP.test (/home/leonardo/desktop/fastify-plugin/node_modules/tap/lib/test.js:209:17)`
 
-const anonymousStack = `Unable to parse this`
+const anonymousStack = 'Unable to parse this'
 
 t.plan(3)
 
