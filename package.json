@@ -32,7 +32,7 @@
     "@types/node": "^11.9.3"
   },
   "dependencies": {
-    "semver": "^6.0.0"
+    "semver": "^7.0.0"
   },
   "greenkeeper": {
     "ignore": [
