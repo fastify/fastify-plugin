@@ -1,7 +1,4 @@
-/// <reference types="fastify" />
-
-import * as fastify from 'fastify';
-import { Server, IncomingMessage, ServerResponse } from 'http'
+import fastify, { FastifyPlugin } from 'fastify';
 
 /**
  * This function does three things for you:
@@ -10,29 +7,23 @@ import { Server, IncomingMessage, ServerResponse } from 'http'
  *   3. Pass some custom metadata of the plugin to Fastify
  * @param fn Fastify plugin function
  * @param options Optional plugin options
- * @param next The `next` callback is not available when using `async`/`await`. If you do invoke a `next` callback in this situation unexpected behavior may occur.
  */
-declare function fastifyPlugin<HttpServer = Server, HttpRequest = IncomingMessage, HttpResponse = ServerResponse, T = any>(
-  fn: fastify.Plugin<HttpServer, HttpRequest, HttpResponse, T> | { default: fastify.Plugin<HttpServer, HttpRequest, HttpResponse, T> },
-  options?: fastifyPlugin.PluginOptions | string,
-  next?: fastifyPlugin.nextCallback
-): fastify.Plugin<HttpServer, HttpRequest, HttpResponse, T>;
+export default function fp (
+  fn: FastifyPlugin,
+  options?: string | FPOptions
+): FastifyPlugin;
 
-declare namespace fastifyPlugin {
-  type nextCallback = (err?: Error) => void;
-  interface PluginOptions {
-    /** Bare-minimum version of Fastify for your plugin, just add the semver range that you need. */
-    fastify?: string,
-    name?: string,
-    /** Decorator dependencies for this plugin */
-    decorators?: {
-      fastify?: string[],
-      reply?: string[],
-      request?: string[]
-    },
-    /** The plugin dependencies */
-    dependencies?: string[]
-  }
+/** Options object for fastify-plugin. Not to be confused with fastify.FastifyPluginOptions */
+export interface FPOptions {
+  /** Bare-minimum version of Fastify for your plugin, just add the semver range that you need. */
+  fastify?: string,
+  name?: string,
+  /** Decorator dependencies for this plugin */
+  decorators?: {
+    fastify?: string[],
+    reply?: string[],
+    request?: string[]
+  },
+  /** The plugin dependencies */
+  dependencies?: string[]
 }
-
-export = fastifyPlugin;

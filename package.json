@@ -2,11 +2,11 @@
   "name": "fastify-plugin",
   "version": "1.6.0",
   "description": "Plugin helper for Fastify",
-  "main": "index.js",
-  "typings": "fastify-plugin.d.ts",
+  "main": "fastify-plugin.js",
+  "types": "fastify-plugin.d.ts",
   "scripts": {
-    "typescript": "tsc --project ./tsconfig.json",
-    "test": "standard && tap test/*.js && npm run typescript"
+    "test:typescript": "tsd",
+    "test": "standard && tap test/*.js && npm run test:typescript"
   },
   "repository": {
     "type": "git",
@@ -24,12 +24,13 @@
   },
   "homepage": "https://github.com/fastify/fastify-plugin#readme",
   "devDependencies": {
+    "@types/node": "^11.9.3",
     "fastify": "^2.0.0",
     "proxyquire": "^2.1.0",
     "standard": "^14.0.0",
     "tap": "^12.6.5",
-    "typescript": "^3.3.3",
-    "@types/node": "^11.9.3"
+    "tsd": "^0.11.0",
+    "typescript": "^3.3.3"
   },
   "dependencies": {
     "semver": "^6.0.0"
@@ -39,5 +40,8 @@
       "@types/node",
       "tap"
     ]
-  }
+  },
+  "tsd": {
+		"directory": "test"
+	}
 }
