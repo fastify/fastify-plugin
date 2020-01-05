@@ -82,6 +82,10 @@ module.exports = fp(plugin, {
 })
 ```
 
+#### Base Options
+
+If a plugin has a `options` property, `fastify-plugin` will automatically reference this options object on a `Symbol.for('base-options')` as well. This provides seamless compatibility with [`fastify-autoload`](https://github.com/fastify/fastify-autoload) plugin configuration options shorthand feature.
+
 ## Acknowledgements
 
 This project is kindly sponsored by:

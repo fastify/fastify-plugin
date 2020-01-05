@@ -279,3 +279,14 @@ test('should check fastify dependency graph - decorateReply', t => {
     t.is(err.message, "The decorator 'plugin2' is not present in Reply")
   })
 })
+
+test('should return the function with a base-options Symbol when an options property exists', t => {
+  t.plan(1)
+
+  function plugin (fastify, opts, next) {
+    next()
+  }
+  plugin.options = { some: 'options' }
+  fp(plugin)
+  t.is(plugin[Symbol.for('base-options')], plugin.options)
+})

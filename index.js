@@ -15,6 +15,10 @@ function plugin (fn, options = {}) {
 
   fn[Symbol.for('skip-override')] = true
 
+  if (typeof fn.options === 'object' && fn.options !== null) {
+    fn[Symbol.for('base-options')] = fn.options
+  }
+
   if (typeof options === 'string') {
     checkVersion(options)
     options = {}
