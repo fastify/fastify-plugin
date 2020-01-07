@@ -288,5 +288,5 @@ test('should return the function with a base-options Symbol when an options prop
   }
   plugin.options = { some: 'options' }
   fp(plugin)
-  t.is(plugin[Symbol.for('base-options')], plugin.options)
+  t.is(plugin[Symbol.for('fastify-auto-config')], plugin.autoConfig)
 })

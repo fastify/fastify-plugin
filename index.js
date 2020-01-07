@@ -15,8 +15,8 @@ function plugin (fn, options = {}) {
 
   fn[Symbol.for('skip-override')] = true
 
-  if (typeof fn.options === 'object' && fn.options !== null) {
-    fn[Symbol.for('base-options')] = fn.options
+  if (typeof fn.autoConfig === 'object' && fn.autoConfig !== null) {
+    fn[Symbol.for('fastify-auto-connfig')] = fn.autoConfig
   }
 
   if (typeof options === 'string') {
