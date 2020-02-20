@@ -15,7 +15,7 @@ function plugin (fn, options = {}) {
 
   fn[Symbol.for('skip-override')] = true
 
-  const pluginName = checkName(fn)
+  const pluginName = options.name || checkName(fn)
 
   if (typeof options === 'string') {
     checkVersion(options, pluginName)
