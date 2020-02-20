@@ -15,8 +15,10 @@ function plugin (fn, options = {}) {
 
   fn[Symbol.for('skip-override')] = true
 
+  const pluginName = checkName(fn)
+
   if (typeof options === 'string') {
-    checkVersion(options)
+    checkVersion(options, pluginName)
     options = {}
   }
 
@@ -25,13 +27,13 @@ function plugin (fn, options = {}) {
   }
 
   if (!options.name) {
-    options.name = checkName(fn)
+    options.name = pluginName
   }
 
   fn[Symbol.for('fastify.display-name')] = options.name
 
   if (options.fastify) {
-    checkVersion(options.fastify)
+    checkVersion(options.fastify, pluginName)
   }
 
   fn[Symbol.for('plugin-meta')] = options
@@ -49,7 +51,7 @@ function checkName (fn) {
   }
 }
 
-function checkVersion (version) {
+function checkVersion (version, pluginName) {
   if (typeof version !== 'string') {
     throw new TypeError(`fastify-plugin expects a version string, instead got '${typeof version}'`)
   }
@@ -62,7 +64,7 @@ function checkVersion (version) {
   }
 
   if (fastifyVersion && !semver.satisfies(fastifyVersion, version)) {
-    throw new Error(`fastify-plugin - expected '${version}' fastify version, '${fastifyVersion}' is installed`)
+    throw new Error(`fastify-plugin: ${pluginName} - expected '${version}' fastify version, '${fastifyVersion}' is installed`)
   }
 }
 
