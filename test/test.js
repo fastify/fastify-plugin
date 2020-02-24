@@ -108,7 +108,7 @@ test('should throw if the fastify version does not satisfies the plugin requeste
     fp(plugin, { fastify: '1000.1000.1000' })
     t.fail()
   } catch (e) {
-    t.is(e.message, `fastify-plugin - expected '1000.1000.1000' fastify version, '${v}' is installed`)
+    t.is(e.message, `fastify-plugin: plugin - expected '1000.1000.1000' fastify version, '${v}' is installed`)
   }
 })
 
@@ -182,7 +182,23 @@ test('should throw if the fastify version does not satisfies the plugin requeste
     fp(plugin, { fastify: '1000.1000.1000' })
     t.fail()
   } catch (e) {
-    t.is(e.message, `fastify-plugin - expected '1000.1000.1000' fastify version, '${v}' is installed`)
+    t.is(e.message, `fastify-plugin: plugin - expected '1000.1000.1000' fastify version, '${v}' is installed`)
+  }
+})
+
+test('should throw if the fastify version does not satisfies the plugin requested version - plugin name', t => {
+  t.plan(1)
+
+  function plugin (fastify, opts, next) {
+    next()
+  }
+
+  const v = require('fastify/package.json').version.replace(/-rc\.\d+/, '')
+  try {
+    fp(plugin, { name: 'this-is-an-awesome-name', fastify: '1000.1000.1000' })
+    t.fail()
+  } catch (e) {
+    t.is(e.message, `fastify-plugin: this-is-an-awesome-name - expected '1000.1000.1000' fastify version, '${v}' is installed`)
   }
 })
 
