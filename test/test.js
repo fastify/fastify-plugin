@@ -3,7 +3,7 @@
 const t = require('tap')
 const proxyquire = require('proxyquire')
 const test = t.test
-const fp = require('./../')
+const fp = require('../plugin')
 const Fastify = require('fastify')
 
 test('fastify-plugin is a function', t => {
@@ -26,7 +26,7 @@ test('should support "default" function from babel module', t => {
   t.plan(1)
 
   const plugin = {
-    default: () => {}
+    default: () => { }
   }
 
   try {
@@ -82,14 +82,14 @@ test('the options object should be an object', t => {
   t.plan(2)
 
   try {
-    fp(() => {}, null)
+    fp(() => { }, null)
     t.fail()
   } catch (e) {
     t.is(e.message, 'The options object should be an object')
   }
 
   try {
-    fp(() => {}, [])
+    fp(() => { }, [])
     t.fail()
   } catch (e) {
     t.is(e.message, 'The options object should be an object')
@@ -116,7 +116,7 @@ test('should throw if the version number is not a string', t => {
   t.plan(1)
 
   try {
-    fp(() => {}, { fastify: 12 })
+    fp(() => { }, { fastify: 12 })
     t.fail()
   } catch (e) {
     t.is(e.message, 'fastify-plugin expects a version string, instead got \'number\'')
@@ -126,7 +126,7 @@ test('should throw if the version number is not a string', t => {
 test('should not throw if fastify is not found', t => {
   t.plan(1)
 
-  const fp = proxyquire('./../index.js', {
+  const fp = proxyquire('./../plugin.js', {
     'fastify/package.json': null,
     console: {
       info: function (msg) {
