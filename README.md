@@ -1,9 +1,7 @@
 # fastify-plugin
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/fastify/fastify-plugin.svg)](https://greenkeeper.io/)
-
+![CI workflow](https://github.com/fastify/fastify-plugin/workflows/CI%20workflow/badge.svg?branch=master)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](http://standardjs.com/)
-[![Build Status](https://travis-ci.org/fastify/fastify-plugin.svg?branch=master)](https://travis-ci.org/fastify/fastify-plugin)
 
 `fastify-plugin` is a plugin helper for [Fastify](https://github.com/fastify/fastify).
 
