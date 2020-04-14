@@ -103,7 +103,7 @@ test('should throw if the fastify version does not satisfies the plugin requeste
     next()
   }
 
-  const v = require('fastify/package.json').version.replace(/-rc\.\d+/, '')
+  const v = require('fastify/package.json').version.replace(/-(rc|alpha)\.\d+/, '')
   try {
     fp(plugin, { fastify: '1000.1000.1000' })
     t.fail()
@@ -177,7 +177,7 @@ test('should throw if the fastify version does not satisfies the plugin requeste
     next()
   }
 
-  const v = require('fastify/package.json').version.replace(/-rc\.\d+/, '')
+  const v = require('fastify/package.json').version.replace(/-(rc|alpha)\.\d+/, '')
   try {
     fp(plugin, { fastify: '1000.1000.1000' })
     t.fail()
@@ -193,7 +193,7 @@ test('should throw if the fastify version does not satisfies the plugin requeste
     next()
   }
 
-  const v = require('fastify/package.json').version.replace(/-rc\.\d+/, '')
+  const v = require('fastify/package.json').version.replace(/-(rc|alpha)\.\d+/, '')
   try {
     fp(plugin, { name: 'this-is-an-awesome-name', fastify: '1000.1000.1000' })
     t.fail()
@@ -241,12 +241,12 @@ test('should check fastify dependency graph - plugin', t => {
   const fastify = Fastify()
 
   fastify.register(fp((fastify, opts, next) => next(), {
-    fastify: '2.x',
+    fastify: '3.x',
     name: 'plugin1-name'
   }))
 
   fastify.register(fp((fastify, opts, next) => next(), {
-    fastify: '2.x',
+    fastify: '3.x',
     name: 'test',
     dependencies: ['plugin1-name', 'plugin2-name']
   }))
@@ -261,12 +261,12 @@ test('should check fastify dependency graph - decorate', t => {
   const fastify = Fastify()
 
   fastify.decorate('plugin1', fp((fastify, opts, next) => next(), {
-    fastify: '2.x',
+    fastify: '3.x',
     name: 'plugin1-name'
   }))
 
   fastify.register(fp((fastify, opts, next) => next(), {
-    fastify: '2.x',
+    fastify: '3.x',
     name: 'test',
     decorators: { fastify: ['plugin1', 'plugin2'] }
   }))
@@ -281,12 +281,12 @@ test('should check fastify dependency graph - decorateReply', t => {
   const fastify = Fastify()
 
   fastify.decorateReply('plugin1', fp((fastify, opts, next) => next(), {
-    fastify: '2.x',
+    fastify: '3.x',
     name: 'plugin1-name'
   }))
 
   fastify.register(fp((fastify, opts, next) => next(), {
-    fastify: '2.x',
+    fastify: '3.x',
     name: 'test',
     decorators: { reply: ['plugin1', 'plugin2'] }
   }))
