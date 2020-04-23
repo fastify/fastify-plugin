@@ -58,7 +58,7 @@ function checkVersion (version, pluginName) {
 
   var fastifyVersion
   try {
-    fastifyVersion = require('fastify/package.json').version.replace(/-rc\.\d+/, '')
+    fastifyVersion = require('fastify/package.json').version.replace(/-(rc|alpha)\.\d+/, '')
   } catch (_) {
     console.info('fastify not found, proceeding anyway')
   }

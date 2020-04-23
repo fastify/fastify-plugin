@@ -3,7 +3,7 @@
 const t = require('tap')
 const proxyquire = require('proxyquire')
 const test = t.test
-const fp = require('./../')
+const fp = require('../plugin')
 const Fastify = require('fastify')
 
 test('fastify-plugin is a function', t => {
@@ -26,7 +26,7 @@ test('should support "default" function from babel module', t => {
   t.plan(1)
 
   const plugin = {
-    default: () => {}
+    default: () => { }
   }
 
   try {
@@ -82,14 +82,14 @@ test('the options object should be an object', t => {
   t.plan(2)
 
   try {
-    fp(() => {}, null)
+    fp(() => { }, null)
     t.fail()
   } catch (e) {
     t.is(e.message, 'The options object should be an object')
   }
 
   try {
-    fp(() => {}, [])
+    fp(() => { }, [])
     t.fail()
   } catch (e) {
     t.is(e.message, 'The options object should be an object')
@@ -103,7 +103,7 @@ test('should throw if the fastify version does not satisfies the plugin requeste
     next()
   }
 
-  const v = require('fastify/package.json').version.replace(/-rc\.\d+/, '')
+  const v = require('fastify/package.json').version.replace(/-(rc|alpha)\.\d+/, '')
   try {
     fp(plugin, { fastify: '1000.1000.1000' })
     t.fail()
@@ -116,7 +116,7 @@ test('should throw if the version number is not a string', t => {
   t.plan(1)
 
   try {
-    fp(() => {}, { fastify: 12 })
+    fp(() => { }, { fastify: 12 })
     t.fail()
   } catch (e) {
     t.is(e.message, 'fastify-plugin expects a version string, instead got \'number\'')
@@ -126,7 +126,7 @@ test('should throw if the version number is not a string', t => {
 test('should not throw if fastify is not found', t => {
   t.plan(1)
 
-  const fp = proxyquire('./../index.js', {
+  const fp = proxyquire('./../plugin.js', {
     'fastify/package.json': null,
     console: {
       info: function (msg) {
@@ -177,7 +177,7 @@ test('should throw if the fastify version does not satisfies the plugin requeste
     next()
   }
 
-  const v = require('fastify/package.json').version.replace(/-rc\.\d+/, '')
+  const v = require('fastify/package.json').version.replace(/-(rc|alpha)\.\d+/, '')
   try {
     fp(plugin, { fastify: '1000.1000.1000' })
     t.fail()
@@ -193,7 +193,7 @@ test('should throw if the fastify version does not satisfies the plugin requeste
     next()
   }
 
-  const v = require('fastify/package.json').version.replace(/-rc\.\d+/, '')
+  const v = require('fastify/package.json').version.replace(/-(rc|alpha)\.\d+/, '')
   try {
     fp(plugin, { name: 'this-is-an-awesome-name', fastify: '1000.1000.1000' })
     t.fail()
@@ -241,12 +241,12 @@ test('should check fastify dependency graph - plugin', t => {
   const fastify = Fastify()
 
   fastify.register(fp((fastify, opts, next) => next(), {
-    fastify: '2.x',
+    fastify: '3.x',
     name: 'plugin1-name'
   }))
 
   fastify.register(fp((fastify, opts, next) => next(), {
-    fastify: '2.x',
+    fastify: '3.x',
     name: 'test',
     dependencies: ['plugin1-name', 'plugin2-name']
   }))
@@ -261,12 +261,12 @@ test('should check fastify dependency graph - decorate', t => {
   const fastify = Fastify()
 
   fastify.decorate('plugin1', fp((fastify, opts, next) => next(), {
-    fastify: '2.x',
+    fastify: '3.x',
     name: 'plugin1-name'
   }))
 
   fastify.register(fp((fastify, opts, next) => next(), {
-    fastify: '2.x',
+    fastify: '3.x',
     name: 'test',
     decorators: { fastify: ['plugin1', 'plugin2'] }
   }))
@@ -281,12 +281,12 @@ test('should check fastify dependency graph - decorateReply', t => {
   const fastify = Fastify()
 
   fastify.decorateReply('plugin1', fp((fastify, opts, next) => next(), {
-    fastify: '2.x',
+    fastify: '3.x',
     name: 'plugin1-name'
   }))
 
   fastify.register(fp((fastify, opts, next) => next(), {
-    fastify: '2.x',
+    fastify: '3.x',
     name: 'test',
     decorators: { reply: ['plugin1', 'plugin2'] }
   }))

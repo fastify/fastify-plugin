@@ -2,7 +2,7 @@
 
 const t = require('tap')
 const test = t.test
-const fp = require('./../')
+const fp = require('../plugin')
 
 test('anonymous function should be named composite.test', t => {
   t.plan(2)
