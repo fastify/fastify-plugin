@@ -9,6 +9,9 @@ When you build plugins for Fastify and you want that them to be accessible in th
 1. Use the `skip-override` hidden property
 2. Use this module
 
+__Note: the v2.x series of this module covers Fastify v3. For Fastify v2
+support refert to the v1.x series.__
+
 ## Usage
 `fastify-plugin` can do three things for you:
 - Add the `skip-override` hidden property
@@ -36,7 +39,7 @@ const fp = require('fastify-plugin')
 module.exports = fp(function (fastify, opts, next) {
   // your plugin code
   next()
-}, { fastify: '1.x' })
+}, { fastify: '3.x' })
 ```
 
 If you need to check the Fastify version only, you can pass just the version string.
@@ -54,13 +57,13 @@ function plugin (fastify, opts, next) {
 }
 
 module.exports = fp(plugin, {
-  fastify: '1.x',
+  fastify: '3.x',
   name: 'your-plugin-name'
 })
 ```
 
 #### Dependencies
-You can also check if the `plugins` and `decorators` which your plugin intend to use are present in the dependency graph.  
+You can also check if the `plugins` and `decorators` which your plugin intend to use are present in the dependency graph.
 > *Note:* This is the point where registering `name` of the plugins become important, because you can reference `plugin` dependencies by their [name](https://github.com/fastify/fastify-plugin#name).
 ```js
 const fp = require('fastify-plugin')
@@ -71,7 +74,7 @@ function plugin (fastify, opts, next) {
 }
 
 module.exports = fp(plugin, {
-  fastify: '1.x',
+  fastify: '3.x',
   decorators: {
     fastify: ['plugin1', 'plugin2'],
     reply: ['compress']
