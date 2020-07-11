@@ -1,12 +1,8 @@
 /// <reference types="fastify" />
 
 import {
-  FastifyPlugin,
-  FastifyPluginOptions,
-  RawServerBase,
-  RawServerDefault,
-  RawRequestDefaultExpression,
-  RawReplyDefaultExpression
+  FastifyPluginCallback,
+  FastifyPluginAsync,
 } from 'fastify'
 
 /**
@@ -18,13 +14,22 @@ import {
  * @param options Optional plugin options
  */
 export default function fp<Options>(
-  fn: FastifyPlugin<Options>,
-  options?: string,
-): FastifyPlugin<Options>;
-export default function fp<Options>(
-  fn: FastifyPlugin<Options>,
+  fn: FastifyPluginCallback<Options>,
   options?: Options & PluginOptions,
-): FastifyPlugin<Options>;
+): FastifyPluginCallback<Options>;
+export default function fp<Options>(
+  fn: FastifyPluginAsync<Options>,
+  options?: Options & PluginOptions,
+): FastifyPluginAsync<Options>;
+
+export default function fp<Options>(
+  fn: FastifyPluginCallback<Options>,
+  options?: string,
+): FastifyPluginCallback<Options>;
+export default function fp<Options>(
+  fn: FastifyPluginAsync<Options>,
+  options?: string,
+): FastifyPluginAsync<Options>;
 
 export interface PluginOptions {
   /** Bare-minimum version of Fastify for your plugin, just add the semver range that you need. */
