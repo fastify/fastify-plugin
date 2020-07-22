@@ -18,8 +18,7 @@ export const testPluginWithCallback: FastifyPlugin<TestOptions> = fp(
     fastify.decorate('utility', () => { })
     next();
     return;
-  },
-  { customNumber: 1 },
+  }
 )
 
 export const testPluginWithAsync = fp<TestOptions>(
@@ -27,7 +26,6 @@ export const testPluginWithAsync = fp<TestOptions>(
     fastify.decorate('utility', () => { })
   },
   {
-    customNumber: 2,
     fastify: '>=1',
     name: 'TestPlugin',
     decorators: {
@@ -40,8 +38,11 @@ export const testPluginWithAsync = fp<TestOptions>(
 const server = fastify()
 
 server.register(testPluginWithOptions) // register expects a FastifyPlugin
-server.register(testPluginWithCallback)
-server.register(testPluginWithAsync)
+server.register(testPluginWithCallback, { customNumber: 2 })
+server.register(testPluginWithAsync, { customNumber: 3 })
+expectError(server.register(testPluginWithCallback, { })) // invalid options passed to plugin on registration
+expectError(server.register(testPluginWithAsync, { customNumber: '2' })) // invalid type in options passed to plugin on registration
+
 
 // Register with HTTP2
 const serverWithHttp2 = fastify({ http2: true });

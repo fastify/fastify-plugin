@@ -15,11 +15,11 @@ import {
  */
 export default function fp<Options>(
   fn: FastifyPluginCallback<Options>,
-  options?: Options & PluginOptions,
+  options?: PluginOptions,
 ): FastifyPluginCallback<Options>;
 export default function fp<Options>(
   fn: FastifyPluginAsync<Options>,
-  options?: Options & PluginOptions,
+  options?: PluginOptions,
 ): FastifyPluginAsync<Options>;
 
 export default function fp<Options>(
