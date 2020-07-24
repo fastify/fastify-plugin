@@ -15,11 +15,11 @@ import {
  */
 export default function fp<Options>(
   fn: FastifyPluginCallback<Options>,
-  options?: Options & PluginOptions,
+  options?: PluginMetadata,
 ): FastifyPluginCallback<Options>;
 export default function fp<Options>(
   fn: FastifyPluginAsync<Options>,
-  options?: Options & PluginOptions,
+  options?: PluginMetadata,
 ): FastifyPluginAsync<Options>;
 
 export default function fp<Options>(
@@ -31,7 +31,7 @@ export default function fp<Options>(
   options?: string,
 ): FastifyPluginAsync<Options>;
 
-export interface PluginOptions {
+export interface PluginMetadata {
   /** Bare-minimum version of Fastify for your plugin, just add the semver range that you need. */
   fastify?: string,
   name?: string,
@@ -44,5 +44,8 @@ export interface PluginOptions {
   /** The plugin dependencies */
   dependencies?: string[]
 }
+
+// Exporting PluginOptions for backward compatibility after renaming it to PluginMetadata
+export interface PluginOptions extends PluginMetadata {}
 
 export type NextCallback = (err?: Error) => void;
