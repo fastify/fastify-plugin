@@ -3,6 +3,7 @@
 const semver = require('semver')
 const console = require('console')
 const extractPluginName = require('./stackParser')
+const { join, dirname } = require('path')
 
 function plugin (fn, options = {}) {
   if (typeof fn.default !== 'undefined') { // Support for 'export default' behaviour in transpiled ECMAScript module
@@ -58,7 +59,8 @@ function checkVersion (version, pluginName) {
 
   var fastifyVersion
   try {
-    fastifyVersion = semver.coerce(require('fastify/package.json').version)
+    const pkgPath = join(dirname(require.resolve('fastify', { paths: [require.main.filename] })), 'package.json')
+    fastifyVersion = semver.coerce(require(pkgPath).version)
   } catch (_) {
     console.info('fastify not found, proceeding anyway')
   }

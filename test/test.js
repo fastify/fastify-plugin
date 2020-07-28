@@ -5,6 +5,7 @@ const proxyquire = require('proxyquire')
 const test = t.test
 const fp = require('../plugin')
 const Fastify = require('fastify')
+const { join, normalize } = require('path')
 
 test('fastify-plugin is a function', t => {
   t.plan(1)
@@ -127,7 +128,7 @@ test('should not throw if fastify is not found', t => {
   t.plan(1)
 
   const fp = proxyquire('./../plugin.js', {
-    'fastify/package.json': null,
+    [normalize(join(__dirname, '..', 'node_modules', 'fastify', 'package.json'))]: null,
     console: {
       info: function (msg) {
         t.is(msg, 'fastify not found, proceeding anyway')
