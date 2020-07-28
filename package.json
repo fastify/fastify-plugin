@@ -32,6 +32,9 @@
     "tsd": "^0.11.0",
     "typescript": "^3.8.2"
   },
+  "peerDependencies": {
+    "fastify": "^3.0.0"
+  },
   "dependencies": {
     "semver": "^7.3.2"
   }
