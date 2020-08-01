@@ -203,15 +203,24 @@ test('should throw if the fastify version does not satisfies the plugin requeste
   }
 })
 
-test('should set anonymous function name to file it was called from', t => {
-  t.plan(2)
+test('should set anonymous function name to file it was called from with a counter', t => {
+  const fp = proxyquire('../plugin.js', { stubs: {} })
 
   const fn = fp((fastify, opts, next) => {
     next()
   })
 
-  t.is(fn[Symbol.for('plugin-meta')].name, 'test')
-  t.is(fn[Symbol.for('fastify.display-name')], 'test')
+  t.is(fn[Symbol.for('plugin-meta')].name, 'test0')
+  t.is(fn[Symbol.for('fastify.display-name')], 'test0')
+
+  const fn2 = fp((fastify, opts, next) => {
+    next()
+  })
+
+  t.is(fn2[Symbol.for('plugin-meta')].name, 'test1')
+  t.is(fn2[Symbol.for('fastify.display-name')], 'test1')
+
+  t.end()
 })
 
 test('should set display-name to meta name', t => {
