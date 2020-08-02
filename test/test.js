@@ -210,15 +210,15 @@ test('should set anonymous function name to file it was called from with a count
     next()
   })
 
-  t.is(fn[Symbol.for('plugin-meta')].name, 'test0')
-  t.is(fn[Symbol.for('fastify.display-name')], 'test0')
+  t.is(fn[Symbol.for('plugin-meta')].name, 'test-auto-0')
+  t.is(fn[Symbol.for('fastify.display-name')], 'test-auto-0')
 
   const fn2 = fp((fastify, opts, next) => {
     next()
   })
 
-  t.is(fn2[Symbol.for('plugin-meta')].name, 'test1')
-  t.is(fn2[Symbol.for('fastify.display-name')], 'test1')
+  t.is(fn2[Symbol.for('plugin-meta')].name, 'test-auto-1')
+  t.is(fn2[Symbol.for('fastify.display-name')], 'test-auto-1')
 
   t.end()
 })

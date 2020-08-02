@@ -30,7 +30,7 @@ function plugin (fn, options = {}) {
   }
 
   if (!options.name) {
-    options.name = pluginName + count++
+    options.name = pluginName + '-auto-' + count++
   }
 
   fn[Symbol.for('fastify.display-name')] = options.name
