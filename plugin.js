@@ -5,6 +5,8 @@ const console = require('console')
 const extractPluginName = require('./stackParser')
 const { join, dirname } = require('path')
 
+let count = 0
+
 function plugin (fn, options = {}) {
   if (typeof fn.default !== 'undefined') { // Support for 'export default' behaviour in transpiled ECMAScript module
     fn = fn.default
@@ -28,7 +30,7 @@ function plugin (fn, options = {}) {
   }
 
   if (!options.name) {
-    options.name = pluginName
+    options.name = pluginName + '-auto-' + count++
   }
 
   fn[Symbol.for('fastify.display-name')] = options.name
