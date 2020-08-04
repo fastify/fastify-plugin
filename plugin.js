@@ -59,9 +59,18 @@ function checkVersion (version, pluginName) {
     throw new TypeError(`fastify-plugin expects a version string, instead got '${typeof version}'`)
   }
 
+  // TODO refactor this check and move it inside Fastify itself.
   var fastifyVersion
   try {
-    const pkgPath = join(dirname(require.resolve('fastify', { paths: [require.main.filename] })), 'package.json')
+    var pkgPath
+    if (require.main.filename) {
+      // We need to dynamically compute this to support yarn pnp
+      pkgPath = join(dirname(require.resolve('fastify', { paths: [require.main.filename] })), 'package.json')
+    } else {
+      // In bundlers, there is no require.main.filename so we go ahead and require directly
+      pkgPath = 'fastify/package.json'
+    }
+
     fastifyVersion = semver.coerce(require(pkgPath).version)
   } catch (_) {
     console.info('fastify not found, proceeding anyway')
