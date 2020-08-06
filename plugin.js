@@ -41,6 +41,11 @@ function plugin (fn, options = {}) {
 
   fn[Symbol.for('plugin-meta')] = options
 
+  // Faux modules support
+  if (!fn.default) {
+    fn.default = fn
+  }
+
   return fn
 }
 
