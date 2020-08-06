@@ -30,7 +30,7 @@ test('support faux modules', (t) => {
   const plugin = fp((fastify, opts, next) => {
     next()
   })
-  
+
   t.is(plugin.default, plugin)
   t.end()
 })
