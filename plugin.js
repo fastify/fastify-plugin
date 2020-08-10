@@ -49,7 +49,7 @@ function plugin (fn, options = {}) {
     fn.default = fn
   }
 
-  if (autoName && !fn[options.name]) {
+  if (!autoName && !fn[options.name]) {
     fn[options.name] = fn
   }
 
