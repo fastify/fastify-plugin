@@ -50,7 +50,7 @@ function plugin (fn, options = {}) {
   }
 
   if (!autoName && !fn[options.name]) {
-    fn[options.name] = fn
+    fn[toCamelCase(options.name)] = fn
   }
 
   return fn
@@ -64,6 +64,13 @@ function checkName (fn) {
   } catch (e) {
     return extractPluginName(e.stack)
   }
+}
+
+function toCamelCase (name) {
+  const newName = name.replace(/-(.)/g, function (match, g1) {
+    return g1.toUpperCase()
+  })
+  return newName
 }
 
 function checkVersion (version, pluginName) {

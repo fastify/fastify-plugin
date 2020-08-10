@@ -45,3 +45,25 @@ test('support ts named imports', (t) => {
   t.is(plugin.hello, plugin)
   t.end()
 })
+
+test('from kebabo-case to camelCase', (t) => {
+  const plugin = fp((fastify, opts, next) => {
+    next()
+  }, {
+    name: 'hello-world'
+  })
+
+  t.is(plugin.helloWorld, plugin)
+  t.end()
+})
+
+test('from kebabo-case to camelCase multiple words', (t) => {
+  const plugin = fp((fastify, opts, next) => {
+    next()
+  }, {
+    name: 'hello-long-world'
+  })
+
+  t.is(plugin.helloLongWorld, plugin)
+  t.end()
+})
