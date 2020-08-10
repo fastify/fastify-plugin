@@ -4,8 +4,5 @@
     "module": "commonjs",
     "noEmit": true,
     "strict": true,
-  },
-  "files": [
-    "./test/types.test.ts"
-  ]
+  }
 }
