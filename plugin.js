@@ -8,6 +8,8 @@ const { join, dirname } = require('path')
 let count = 0
 
 function plugin (fn, options = {}) {
+  let autoName = false
+
   if (typeof fn.default !== 'undefined') { // Support for 'export default' behaviour in transpiled ECMAScript module
     fn = fn.default
   }
@@ -30,6 +32,7 @@ function plugin (fn, options = {}) {
   }
 
   if (!options.name) {
+    autoName = true
     options.name = pluginName + '-auto-' + count++
   }
 
@@ -46,6 +49,14 @@ function plugin (fn, options = {}) {
     fn.default = fn
   }
 
+  // TypeScript support for named imports
+  // See https://github.com/fastify/fastify/issues/2404 for more details
+  // The type definitions would have to be update to match this.
+  const camelCase = toCamelCase(options.name)
+  if (!autoName && !fn[camelCase]) {
+    fn[camelCase] = fn
+  }
+
   return fn
 }
 
@@ -57,6 +68,13 @@ function checkName (fn) {
   } catch (e) {
     return extractPluginName(e.stack)
   }
+}
+
+function toCamelCase (name) {
+  const newName = name.replace(/-(.)/g, function (match, g1) {
+    return g1.toUpperCase()
+  })
+  return newName
 }
 
 function checkVersion (version, pluginName) {

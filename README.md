@@ -83,6 +83,10 @@ module.exports = fp(plugin, {
 })
 ```
 
+#### Bundlers and Typescript
+`fastify-plugin` adds a `.default` and `[name]` property to the passed in function.
+The type definition would have to be updated to leverage this.
+
 ## Acknowledgements
 
 This project is kindly sponsored by:
