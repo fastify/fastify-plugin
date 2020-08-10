@@ -34,3 +34,14 @@ test('support faux modules', (t) => {
   t.is(plugin.default, plugin)
   t.end()
 })
+
+test('support ts named imports', (t) => {
+  const plugin = fp((fastify, opts, next) => {
+    next()
+  }, {
+    name: 'hello'
+  })
+
+  t.is(plugin.hello, plugin)
+  t.end()
+})

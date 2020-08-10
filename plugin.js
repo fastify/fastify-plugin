@@ -8,6 +8,8 @@ const { join, dirname } = require('path')
 let count = 0
 
 function plugin (fn, options = {}) {
+  let autoName = false
+
   if (typeof fn.default !== 'undefined') { // Support for 'export default' behaviour in transpiled ECMAScript module
     fn = fn.default
   }
@@ -30,6 +32,7 @@ function plugin (fn, options = {}) {
   }
 
   if (!options.name) {
+    autoName = true
     options.name = pluginName + '-auto-' + count++
   }
 
@@ -44,6 +47,10 @@ function plugin (fn, options = {}) {
   // Faux modules support
   if (!fn.default) {
     fn.default = fn
+  }
+
+  if (autoName && !fn[options.name]) {
+    fn[options.name] = fn
   }
 
   return fn
