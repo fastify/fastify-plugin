@@ -34,3 +34,52 @@ test('support faux modules', (t) => {
   t.is(plugin.default, plugin)
   t.end()
 })
+
+test('support ts named imports', (t) => {
+  const plugin = fp((fastify, opts, next) => {
+    next()
+  }, {
+    name: 'hello'
+  })
+
+  t.is(plugin.hello, plugin)
+  t.end()
+})
+
+test('from kebabo-case to camelCase', (t) => {
+  const plugin = fp((fastify, opts, next) => {
+    next()
+  }, {
+    name: 'hello-world'
+  })
+
+  t.is(plugin.helloWorld, plugin)
+  t.end()
+})
+
+test('from kebab-case to camelCase multiple words', (t) => {
+  const plugin = fp((fastify, opts, next) => {
+    next()
+  }, {
+    name: 'hello-long-world'
+  })
+
+  t.is(plugin.helloLongWorld, plugin)
+  t.end()
+})
+
+test('from kebab-case to camelCase multiple words does not override', (t) => {
+  const fn = (fastify, opts, next) => {
+    next()
+  }
+
+  const foobar = {}
+  fn.helloLongWorld = foobar
+
+  const plugin = fp(fn, {
+    name: 'hello-long-world'
+  })
+
+  t.is(plugin.helloLongWorld, foobar)
+  t.end()
+})
