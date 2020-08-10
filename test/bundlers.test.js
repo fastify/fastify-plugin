@@ -57,7 +57,7 @@ test('from kebabo-case to camelCase', (t) => {
   t.end()
 })
 
-test('from kebabo-case to camelCase multiple words', (t) => {
+test('from kebab-case to camelCase multiple words', (t) => {
   const plugin = fp((fastify, opts, next) => {
     next()
   }, {
@@ -65,5 +65,21 @@ test('from kebabo-case to camelCase multiple words', (t) => {
   })
 
   t.is(plugin.helloLongWorld, plugin)
+  t.end()
+})
+
+test('from kebab-case to camelCase multiple words does not override', (t) => {
+  const fn = (fastify, opts, next) => {
+    next()
+  }
+
+  const foobar = {}
+  fn.helloLongWorld = foobar
+
+  const plugin = fp(fn, {
+    name: 'hello-long-world'
+  })
+
+  t.is(plugin.helloLongWorld, foobar)
   t.end()
 })

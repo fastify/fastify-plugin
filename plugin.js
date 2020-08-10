@@ -49,8 +49,10 @@ function plugin (fn, options = {}) {
     fn.default = fn
   }
 
-  if (!autoName && !fn[options.name]) {
-    fn[toCamelCase(options.name)] = fn
+  // TypeScript support
+  const camelCase = toCamelCase(options.name)
+  if (!autoName && !fn[camelCase]) {
+    fn[camelCase] = fn
   }
 
   return fn
