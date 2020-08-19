@@ -77,6 +77,10 @@ function toCamelCase (name) {
   return newName
 }
 
+function resolvePkgPath (mainFilename) {
+  return join(dirname(require.resolve('fastify', { paths: [mainFilename] })), 'package.json')
+}
+
 function checkVersion (version, pluginName) {
   if (typeof version !== 'string') {
     throw new TypeError(`fastify-plugin expects a version string, instead got '${typeof version}'`)
@@ -88,7 +92,10 @@ function checkVersion (version, pluginName) {
     var pkgPath
     if (require.main && require.main.filename) {
       // We need to dynamically compute this to support yarn pnp
-      pkgPath = join(dirname(require.resolve('fastify', { paths: [require.main.filename] })), 'package.json')
+      pkgPath = resolvePkgPath(require.main.filename)
+    } else if (process.argv[1]) {
+      // We need this to support native ESM context
+      pkgPath = resolvePkgPath(process.argv[1])
     } else {
       // In bundlers, there is no require.main.filename so we go ahead and require directly
       pkgPath = 'fastify/package.json'
