@@ -86,7 +86,7 @@ function checkVersion (version, pluginName) {
   var fastifyVersion
   try {
     var pkgPath
-    if (require.main.filename) {
+    if (require.main && require.main.filename) {
       // We need to dynamically compute this to support yarn pnp
       pkgPath = join(dirname(require.resolve('fastify', { paths: [require.main.filename] })), 'package.json')
     } else {
