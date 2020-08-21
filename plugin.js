@@ -81,26 +81,37 @@ function resolvePkgPath (mainFilename) {
   return join(dirname(require.resolve('fastify', { paths: [mainFilename] })), 'package.json')
 }
 
+function tryGetPath (p) {
+  var pkgPath
+  try {
+    pkgPath = resolvePkgPath(p)
+  } catch (_) {
+  }
+  return pkgPath
+}
+
 function checkVersion (version, pluginName) {
   if (typeof version !== 'string') {
     throw new TypeError(`fastify-plugin expects a version string, instead got '${typeof version}'`)
   }
 
-  // TODO refactor this check and move it inside Fastify itself.
+  // TODO refactor this check and move it inside Fastify itself. https://github.com/fastify/fastify/issues/2507
   var fastifyVersion
-  try {
-    var pkgPath
-    if (require.main && require.main.filename) {
-      // We need to dynamically compute this to support yarn pnp
-      pkgPath = resolvePkgPath(require.main.filename)
-    } else if (process.argv[1]) {
-      // We need this to support native ESM context
-      pkgPath = resolvePkgPath(process.argv[1])
-    } else {
-      // In bundlers, there is no require.main.filename so we go ahead and require directly
-      pkgPath = 'fastify/package.json'
-    }
+  var pkgPath
+  if (require.main && require.main.filename) {
+    // We need to dynamically compute this to support yarn pnp
+    pkgPath = tryGetPath(require.main.filename)
+  }
+  if (!pkgPath && process.argv[1]) {
+    // We need this to support native ESM context
+    pkgPath = tryGetPath(process.argv[1])
+  }
+  if (!pkgPath) {
+    // In bundlers, there is no require.main.filename so we go ahead and require directly
+    pkgPath = 'fastify/package.json'
+  }
 
+  try {
     fastifyVersion = semver.coerce(require(pkgPath).version)
   } catch (_) {
     console.info('fastify not found, proceeding anyway')
