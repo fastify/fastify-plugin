@@ -1,54 +1,72 @@
 import fp from './plugin';
-import fastify, { FastifyPlugin } from 'fastify';
-import { expectError } from 'tsd'
+import fastify, { FastifyPluginCallback, FastifyPluginAsync, FastifyError, FastifyInstance, FastifyPluginOptions } from 'fastify';
+import { expectAssignable, expectError } from 'tsd'
 
-export interface TestOptions {
-  customNumber: number
+interface Options {
+  foo: string
 }
 
-export const testPluginWithOptions: FastifyPlugin<TestOptions> = fp(
-  function (fastify, options, _next) {
-    fastify.decorate('utility', () => options.customNumber)
+// Callback
+
+const pluginCallback: FastifyPluginCallback = (fastify, options, next) => { }
+expectAssignable<FastifyPluginCallback>(fp(pluginCallback))
+
+const pluginCallbackWithTypes = (fastify: FastifyInstance, options: FastifyPluginOptions, next: (error?: FastifyError) => void): void => { }
+expectAssignable<FastifyPluginCallback>(fp(pluginCallbackWithTypes))
+
+expectAssignable<FastifyPluginCallback>(fp((fastify: FastifyInstance, options: FastifyPluginOptions, next: (error?: FastifyError) => void): void => { }))
+
+expectAssignable<FastifyPluginCallback>(fp(pluginCallback, '' ))
+expectAssignable<FastifyPluginCallback>(fp(pluginCallback, {
+  fastify: '',
+  name: '',
+  decorators: {
+    fastify: [ '' ],
+    reply: [ '' ],
+    request: [ '' ]
   },
-  '>=1'
-);
+  dependencies: [ '' ]
+}))
 
-export const testPluginWithCallback: FastifyPlugin<TestOptions> = fp(
-  function (fastify, _options, next) {
-    fastify.decorate('utility', () => { })
-    next();
-    return;
-  }
-)
+const pluginCallbackWithOptions: FastifyPluginCallback<Options> = (fastify, options, next) => {
+  expectAssignable<string>(options.foo)
+}
 
-export const testPluginWithAsync = fp<TestOptions>(
-  async function (fastify, _options) {
-    fastify.decorate('utility', () => { })
+expectAssignable<FastifyPluginCallback<Options>>(fp(pluginCallbackWithOptions))
+
+// Async
+
+const pluginAsync: FastifyPluginAsync = async (fastify, options) => { }
+expectAssignable<FastifyPluginAsync>(fp(pluginAsync))
+
+const pluginAsyncWithTypes = async (fastify: FastifyInstance, options: FastifyPluginOptions): Promise<void> => { }
+expectAssignable<FastifyPluginAsync>(fp(pluginAsyncWithTypes))
+
+expectAssignable<FastifyPluginAsync>(fp(async (fastify: FastifyInstance, options: FastifyPluginOptions): Promise<void> => { }))
+expectAssignable<FastifyPluginAsync>(fp(pluginAsync, '' ))
+expectAssignable<FastifyPluginAsync>(fp(pluginAsync, {
+  fastify: '',
+  name: '',
+  decorators: {
+    fastify: [ '' ],
+    reply: [ '' ],
+    request: [ '' ]
   },
-  {
-    fastify: '>=1',
-    name: 'TestPlugin',
-    decorators: {
-      request: ['log']
-    }
-  }
-);
+  dependencies: [ '' ]
+}))
 
-// Register with HTTP
+const pluginAsyncWithOptions: FastifyPluginAsync<Options> = async (fastify, options) => {
+  expectAssignable<string>(options.foo)
+}
+
+expectAssignable<FastifyPluginAsync<Options>>(fp(pluginAsyncWithOptions))
+
+// Fastify register
+
 const server = fastify()
-
-server.register(testPluginWithOptions) // register expects a FastifyPlugin
-server.register(testPluginWithCallback, { customNumber: 2 })
-server.register(testPluginWithAsync, { customNumber: 3 })
-expectError(server.register(testPluginWithCallback, { })) // invalid options passed to plugin on registration
-expectError(server.register(testPluginWithAsync, { customNumber: '2' })) // invalid type in options passed to plugin on registration
-
-
-// Register with HTTP2
-const serverWithHttp2 = fastify({ http2: true });
-
-serverWithHttp2.register(testPluginWithOptions) // register expects a FastifyPlugin
-serverWithHttp2.register(testPluginWithCallback)
-expectError(serverWithHttp2.register({ no: 'plugin' })) // register only accept valid plugins
-expectError(serverWithHttp2.register(testPluginWithAsync, { logLevel: 'invalid-log-level' })) // register options need to be valid built in fastify options
-expectError(serverWithHttp2.register(testPluginWithAsync, { customNumber: 'not-a-number' })) // or valid custom options defined by plugin itself
+server.register(fp(pluginCallback))
+server.register(fp(pluginCallbackWithTypes))
+server.register(fp(pluginCallbackWithOptions))
+server.register(fp(pluginAsync))
+server.register(fp(pluginAsyncWithTypes))
+server.register(fp(pluginAsyncWithOptions))

@@ -87,6 +87,52 @@ module.exports = fp(plugin, {
 `fastify-plugin` adds a `.default` and `[name]` property to the passed in function.
 The type definition would have to be updated to leverage this.
 
+## Known Issue: TypeScript Contextual Inference
+
+[Documentation Reference](https://www.typescriptlang.org/docs/handbook/functions.html#inferring-the-types)
+
+It is common for developers to inline their plugin with fastify-plugin such as:
+
+```js
+fp((fastify, opts, next) => { next() })
+fp(async (fastify, opts) => { return })
+```
+
+TypeScript can sometimes infer the types of the arguments for these functions. Plugins in fastify are recommended to be typed using either `FastifyPluginCallback` or `FastifyPluginAsync`. These two definitions only differ in two ways:
+
+1. The third argument `next` (the callback part)
+2. The return type `FastifyPluginCallback` or `FastifyPluginAsync`
+
+At this time, TypeScript inference is not smart enough to differentiate by definition argument length alone.
+
+Thus, if you are a TypeScript developer please use on the following patterns instead:
+
+```ts
+// Callback
+
+// Assign type directly
+const pluginCallback: FastifyPluginCallback = (fastify, options, next) => { }
+fp(pluginCallback)
+
+// or define your own function declaration that satisfies the existing definitions
+const pluginCallbackWithTypes = (fastify: FastifyInstance, options: FastifyPluginOptions, next: (error?: FastifyError) => void): void => { }
+fp(pluginCallbackWithTypes)
+// or inline
+fp((fastify: FastifyInstance, options: FastifyPluginOptions, next: (error?: FastifyError) => void): void => { })
+
+// Async
+
+// Assign type directly
+const pluginAsync: FastifyPluginAsync = async (fastify, options) => { }
+fp(pluginAsync)
+
+// or define your own function declaration that satisfies the existing definitions
+const pluginAsyncWithTypes = async (fastify: FastifyInstance, options: FastifyPluginOptions): Promise<void> => { }
+fp(pluginAsyncWithTypes)
+// or inline
+fp(async (fastify: FastifyInstance, options: FastifyPluginOptions): Promise<void> => { })
+```
+
 ## Acknowledgements
 
 This project is kindly sponsored by:
