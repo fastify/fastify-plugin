@@ -122,4 +122,5 @@ function checkVersion (version, pluginName) {
   }
 }
 
+plugin.default = plugin
 module.exports = plugin
