@@ -1,7 +1,4 @@
 import t from 'tap'
-import { readFileSync } from 'fs'
-import { resolve, dirname } from 'path'
-import { fileURLToPath } from 'url'
 
 import fp from '../../plugin.js'
 
