@@ -5,7 +5,6 @@ const proxyquire = require('proxyquire')
 const test = t.test
 const fp = require('../plugin')
 const Fastify = require('fastify')
-const { join, normalize } = require('path')
 
 test('fastify-plugin is a function', t => {
   t.plan(1)
@@ -97,22 +96,6 @@ test('the options object should be an object', t => {
   }
 })
 
-test('should throw if the fastify version does not satisfies the plugin requested version', t => {
-  t.plan(1)
-
-  function plugin (fastify, opts, next) {
-    next()
-  }
-
-  const v = require('fastify/package.json').version.replace(/-(rc|alpha)\.\d+/, '')
-  try {
-    fp(plugin, { fastify: '1000.1000.1000' })
-    t.fail()
-  } catch (e) {
-    t.is(e.message, `fastify-plugin: plugin - expected '1000.1000.1000' fastify version, '${v}' is installed`)
-  }
-})
-
 test('should throw if the version number is not a string', t => {
   t.plan(1)
 
@@ -122,25 +105,6 @@ test('should throw if the version number is not a string', t => {
   } catch (e) {
     t.is(e.message, 'fastify-plugin expects a version string, instead got \'number\'')
   }
-})
-
-test('should not throw if fastify is not found', t => {
-  t.plan(1)
-
-  const fp = proxyquire('./../plugin.js', {
-    [normalize(join(__dirname, '..', 'node_modules', 'fastify', 'package.json'))]: null,
-    console: {
-      info: function (msg) {
-        t.is(msg, 'fastify not found, proceeding anyway')
-      }
-    }
-  })
-
-  function plugin (fastify, opts, next) {
-    next()
-  }
-
-  fp(plugin, { fastify: '>= 0' })
 })
 
 test('Should accept an option object', t => {
@@ -169,38 +133,6 @@ test('Should accept an option object and checks the version', t => {
   fp(plugin, opts)
   t.ok(plugin[Symbol.for('skip-override')])
   t.deepEqual(plugin[Symbol.for('plugin-meta')], opts)
-})
-
-test('should throw if the fastify version does not satisfies the plugin requested version', t => {
-  t.plan(1)
-
-  function plugin (fastify, opts, next) {
-    next()
-  }
-
-  const v = require('fastify/package.json').version.replace(/-(rc|alpha)\.\d+/, '')
-  try {
-    fp(plugin, { fastify: '1000.1000.1000' })
-    t.fail()
-  } catch (e) {
-    t.is(e.message, `fastify-plugin: plugin - expected '1000.1000.1000' fastify version, '${v}' is installed`)
-  }
-})
-
-test('should throw if the fastify version does not satisfies the plugin requested version - plugin name', t => {
-  t.plan(1)
-
-  function plugin (fastify, opts, next) {
-    next()
-  }
-
-  const v = require('fastify/package.json').version.replace(/-(rc|alpha)\.\d+/, '')
-  try {
-    fp(plugin, { name: 'this-is-an-awesome-name', fastify: '1000.1000.1000' })
-    t.fail()
-  } catch (e) {
-    t.is(e.message, `fastify-plugin: this-is-an-awesome-name - expected '1000.1000.1000' fastify version, '${v}' is installed`)
-  }
 })
 
 test('should set anonymous function name to file it was called from with a counter', t => {
