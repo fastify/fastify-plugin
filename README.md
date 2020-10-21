@@ -9,7 +9,7 @@ When you build plugins for Fastify and you want that them to be accessible in th
 1. Use the `skip-override` hidden property
 2. Use this module
 
-__Note: the v2.x series of this module covers Fastify v3. For Fastify v2
+__Note: the v2.x & v3.x series of this module covers Fastify v3. For Fastify v2
 support refert to the v1.x series.__
 
 ## Usage
