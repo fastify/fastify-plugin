@@ -214,7 +214,7 @@ test('should check fastify dependency graph - decorate', t => {
   }))
 
   fastify.ready(err => {
-    t.is(err.message, "The decorator 'plugin2' is not present in Fastify")
+    t.is(err.message, "The decorator 'plugin2' required by 'test' is not present in Fastify")
   })
 })
 
@@ -234,6 +234,6 @@ test('should check fastify dependency graph - decorateReply', t => {
   }))
 
   fastify.ready(err => {
-    t.is(err.message, "The decorator 'plugin2' is not present in Reply")
+    t.is(err.message, "The decorator 'plugin2' required by 'test' is not present in Reply")
   })
 })
