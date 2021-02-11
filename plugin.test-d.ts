@@ -1,6 +1,6 @@
 import fp from './plugin';
 import fastify, { FastifyPluginCallback, FastifyPluginAsync, FastifyError, FastifyInstance, FastifyPluginOptions } from 'fastify';
-import { expectAssignable, expectError } from 'tsd'
+import { expectAssignable } from 'tsd'
 
 interface Options {
   foo: string
