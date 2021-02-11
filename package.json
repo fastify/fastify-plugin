@@ -5,8 +5,8 @@
   "main": "plugin.js",
   "types": "plugin.d.ts",
   "scripts": {
-    "typescript": "tsd",
-    "test": "standard && tap test/*.js test/esm/*.js && npm run typescript"
+    "test": "standard && tap test/*.js test/esm/*.js && npm run typescript",
+    "typescript": "tsd"
   },
   "repository": {
     "type": "git",
