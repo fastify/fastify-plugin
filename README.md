@@ -49,8 +49,6 @@ If you need to check the Fastify version only, you can pass just the version str
 You can check [here](https://github.com/npm/node-semver#ranges) how to define a `semver` range.
 
 #### Name
-Fastify uses this option to validate the dependency graph. On one hand it makes sure that no name collision occurs. On the other hand it makes possible to perform [dependency check](https://github.com/fastify/fastify-plugin#dependencies).
-
 Fastify uses this option to validate the dependency graph, allowing it to ensure that no name collisions occur and making it possible to perform [dependency checks](https://github.com/fastify/fastify-plugin#dependencies).
 
 ```js
