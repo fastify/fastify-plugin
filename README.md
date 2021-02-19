@@ -20,13 +20,24 @@ __Note: the v2.x & v3.x series of this module covers Fastify v3. For Fastify v2 
 - Check the bare-minimum version of Fastify
 - Pass some custom metadata of the plugin to Fastify
 
-Example:
+Example using a callback:
 ```js
 const fp = require('fastify-plugin')
 
 module.exports = fp(function (fastify, opts, next) {
   // your plugin code
   next()
+})
+```
+
+Example using an [async](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) function:
+```js
+const fp = require('fastify-plugin')
+
+// A callback function param is not required for async functions
+module.exports = fp(async function (fastify, opts) {
+  // Wait for an async function to fulfill promise before proceeding
+  await exampleAsyncFunction()
 })
 ```
 
