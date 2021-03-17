@@ -1,6 +1,6 @@
 # fastify-plugin
 
-![CI workflow](https://github.com/fastify/fastify-plugin/workflows/CI%20workflow/badge.svg?branch=master)
+![CI](https://github.com/fastify/fastify-plugin/workflows/CI/badge.svg?branch=master)
 [![NPM version](https://img.shields.io/npm/v/fastify-plugin.svg?style=flat)](https://www.npmjs.com/package/fastify-plugin)
 [![Known Vulnerabilities](https://snyk.io/test/github/fastify/fastify-plugin/badge.svg)](https://snyk.io/test/github/fastify/fastify-plugin)
 [![Coverage Status](https://coveralls.io/repos/github/fastify/fastify-plugin/badge.svg?branch=master)](https://coveralls.io/github/fastify/fastify-plugin?branch=master)
