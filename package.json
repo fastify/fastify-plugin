@@ -5,8 +5,8 @@
   "main": "plugin.js",
   "types": "plugin.d.ts",
   "scripts": {
-    "test": "standard && tap test/*.js test/esm/*.js && npm run typescript",
-    "test:ci": "standard && tap test/*.js test/esm/*.js --coverage-report=lcovonly && npm run typescript",
+    "test": "standard && tap test/*.js test/esm/*.js --no-check-coverage && npm run typescript",
+    "test:ci": "standard && tap test/*.js test/esm/*.js --no-check-coverage --coverage-report=lcovonly && npm run typescript",
     "typescript": "tsd"
   },
   "repository": {
