@@ -33,7 +33,7 @@ test('should support "default" function from babel module', t => {
     fp(plugin)
     t.pass()
   } catch (e) {
-    t.is(e.message, 'fastify-plugin expects a function, instead got a \'object\'')
+    t.equal(e.message, 'fastify-plugin expects a function, instead got a \'object\'')
   }
 })
 
@@ -44,7 +44,7 @@ test('should throw if the plugin is not a function', t => {
     fp('plugin')
     t.fail()
   } catch (e) {
-    t.is(e.message, 'fastify-plugin expects a function, instead got a \'string\'')
+    t.equal(e.message, 'fastify-plugin expects a function, instead got a \'string\'')
   }
 })
 
@@ -85,14 +85,14 @@ test('the options object should be an object', t => {
     fp(() => { }, null)
     t.fail()
   } catch (e) {
-    t.is(e.message, 'The options object should be an object')
+    t.equal(e.message, 'The options object should be an object')
   }
 
   try {
     fp(() => { }, [])
     t.fail()
   } catch (e) {
-    t.is(e.message, 'The options object should be an object')
+    t.equal(e.message, 'The options object should be an object')
   }
 })
 
@@ -103,7 +103,7 @@ test('should throw if the version number is not a string', t => {
     fp(() => { }, { fastify: 12 })
     t.fail()
   } catch (e) {
-    t.is(e.message, 'fastify-plugin expects a version string, instead got \'number\'')
+    t.equal(e.message, 'fastify-plugin expects a version string, instead got \'number\'')
   }
 })
 
@@ -118,7 +118,7 @@ test('Should accept an option object', t => {
 
   fp(plugin, opts)
   t.ok(plugin[Symbol.for('skip-override')])
-  t.deepEqual(plugin[Symbol.for('plugin-meta')], opts)
+  t.same(plugin[Symbol.for('plugin-meta')], opts)
 })
 
 test('Should accept an option object and checks the version', t => {
@@ -132,7 +132,7 @@ test('Should accept an option object and checks the version', t => {
 
   fp(plugin, opts)
   t.ok(plugin[Symbol.for('skip-override')])
-  t.deepEqual(plugin[Symbol.for('plugin-meta')], opts)
+  t.same(plugin[Symbol.for('plugin-meta')], opts)
 })
 
 test('should set anonymous function name to file it was called from with a counter', t => {
@@ -142,15 +142,15 @@ test('should set anonymous function name to file it was called from with a count
     next()
   })
 
-  t.is(fn[Symbol.for('plugin-meta')].name, 'test-auto-0')
-  t.is(fn[Symbol.for('fastify.display-name')], 'test-auto-0')
+  t.equal(fn[Symbol.for('plugin-meta')].name, 'test-auto-0')
+  t.equal(fn[Symbol.for('fastify.display-name')], 'test-auto-0')
 
   const fn2 = fp((fastify, opts, next) => {
     next()
   })
 
-  t.is(fn2[Symbol.for('plugin-meta')].name, 'test-auto-1')
-  t.is(fn2[Symbol.for('fastify.display-name')], 'test-auto-1')
+  t.equal(fn2[Symbol.for('plugin-meta')].name, 'test-auto-1')
+  t.equal(fn2[Symbol.for('fastify.display-name')], 'test-auto-1')
 
   t.end()
 })
@@ -164,8 +164,8 @@ test('should set display-name to meta name', t => {
     name: functionName
   })
 
-  t.is(fn[Symbol.for('plugin-meta')].name, functionName)
-  t.is(fn[Symbol.for('fastify.display-name')], functionName)
+  t.equal(fn[Symbol.for('plugin-meta')].name, functionName)
+  t.equal(fn[Symbol.for('fastify.display-name')], functionName)
 })
 
 test('should preserve fastify version in meta', t => {
@@ -175,7 +175,7 @@ test('should preserve fastify version in meta', t => {
 
   const fn = fp((fastify, opts, next) => next(), opts)
 
-  t.is(fn[Symbol.for('plugin-meta')].fastify, '>=0.10.0')
+  t.equal(fn[Symbol.for('plugin-meta')].fastify, '>=0.10.0')
 })
 
 test('should check fastify dependency graph - plugin', t => {
@@ -194,7 +194,7 @@ test('should check fastify dependency graph - plugin', t => {
   }))
 
   fastify.ready(err => {
-    t.is(err.message, "The dependency 'plugin2-name' of plugin 'test' is not registered")
+    t.equal(err.message, "The dependency 'plugin2-name' of plugin 'test' is not registered")
   })
 })
 
@@ -214,7 +214,7 @@ test('should check fastify dependency graph - decorate', t => {
   }))
 
   fastify.ready(err => {
-    t.is(err.message, "The decorator 'plugin2' required by 'test' is not present in Fastify")
+    t.equal(err.message, "The decorator 'plugin2' required by 'test' is not present in Fastify")
   })
 })
 
@@ -234,6 +234,6 @@ test('should check fastify dependency graph - decorateReply', t => {
   }))
 
   fastify.ready(err => {
-    t.is(err.message, "The decorator 'plugin2' required by 'test' is not present in Reply")
+    t.equal(err.message, "The decorator 'plugin2' required by 'test' is not present in Reply")
   })
 })
