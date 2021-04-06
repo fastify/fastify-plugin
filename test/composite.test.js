@@ -11,6 +11,6 @@ test('anonymous function should be named composite.test0', t => {
     next()
   })
 
-  t.is(fn[Symbol.for('plugin-meta')].name, 'composite.test-auto-0')
-  t.is(fn[Symbol.for('fastify.display-name')], 'composite.test-auto-0')
+  t.equal(fn[Symbol.for('plugin-meta')].name, 'composite.test-auto-0')
+  t.equal(fn[Symbol.for('fastify.display-name')], 'composite.test-auto-0')
 })

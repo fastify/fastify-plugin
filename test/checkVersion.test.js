@@ -6,7 +6,7 @@ const fp = require('../plugin')
 test('checkVersion having require.main.filename', (t) => {
   const info = console.info
   t.ok(require.main.filename)
-  t.tearDown(() => {
+  t.teardown(() => {
     console.info = info
   })
 
@@ -26,7 +26,7 @@ test('checkVersion having require.main.filename', (t) => {
 test('checkVersion having no require.main.filename but process.argv[1]', (t) => {
   const filename = require.main.filename
   const info = console.info
-  t.tearDown(() => {
+  t.teardown(() => {
     require.main.filename = filename
     console.info = info
   })
@@ -50,7 +50,7 @@ test('checkVersion having no require.main.filename and no process.argv[1]', (t) 
   const filename = require.main.filename
   const argv = process.argv
   const info = console.info
-  t.tearDown(() => {
+  t.teardown(() => {
     require.main.filename = filename
     process.argv = argv
     console.info = info

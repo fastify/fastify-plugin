@@ -6,7 +6,7 @@ const fp = require('../plugin')
 test('webpack removes require.main.filename', (t) => {
   const filename = require.main.filename
   const info = console.info
-  t.tearDown(() => {
+  t.teardown(() => {
     require.main.filename = filename
     console.info = info
   })
@@ -31,7 +31,7 @@ test('support faux modules', (t) => {
     next()
   })
 
-  t.is(plugin.default, plugin)
+  t.equal(plugin.default, plugin)
   t.end()
 })
 
@@ -42,7 +42,7 @@ test('support ts named imports', (t) => {
     name: 'hello'
   })
 
-  t.is(plugin.hello, plugin)
+  t.equal(plugin.hello, plugin)
   t.end()
 })
 
@@ -53,7 +53,7 @@ test('from kebabo-case to camelCase', (t) => {
     name: 'hello-world'
   })
 
-  t.is(plugin.helloWorld, plugin)
+  t.equal(plugin.helloWorld, plugin)
   t.end()
 })
 
@@ -64,7 +64,7 @@ test('from kebab-case to camelCase multiple words', (t) => {
     name: 'hello-long-world'
   })
 
-  t.is(plugin.helloLongWorld, plugin)
+  t.equal(plugin.helloLongWorld, plugin)
   t.end()
 })
 
@@ -80,6 +80,6 @@ test('from kebab-case to camelCase multiple words does not override', (t) => {
     name: 'hello-long-world'
   })
 
-  t.is(plugin.helloLongWorld, foobar)
+  t.equal(plugin.helloLongWorld, foobar)
   t.end()
 })

@@ -43,6 +43,6 @@ const anonymousStack = 'Unable to parse this'
 
 t.plan(3)
 
-t.is(extractPluginName(winStack), 'hello.test')
-t.is(extractPluginName(nixStack), 'this.is.a.test')
-t.is(extractPluginName(anonymousStack), 'anonymous')
+t.equal(extractPluginName(winStack), 'hello.test')
+t.equal(extractPluginName(nixStack), 'this.is.a.test')
+t.equal(extractPluginName(anonymousStack), 'anonymous')
