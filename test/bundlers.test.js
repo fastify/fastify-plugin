@@ -35,6 +35,19 @@ test('support faux modules', (t) => {
   t.end()
 })
 
+test('support faux modules does not override existing default field in babel module', (t) => {
+  const module = {
+    default: (fastify, opts, next) => next()
+  }
+
+  module.default.default = 'Existing default field'
+
+  const plugin = fp(module)
+
+  t.equal(plugin.default, 'Existing default field')
+  t.end()
+})
+
 test('support ts named imports', (t) => {
   const plugin = fp((fastify, opts, next) => {
     next()
