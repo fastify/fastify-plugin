@@ -6,6 +6,8 @@ interface Options {
   foo: string
 }
 
+const testSymbol = Symbol('foobar')
+
 // Callback
 
 const pluginCallback: FastifyPluginCallback = (fastify, options, next) => { }
@@ -21,9 +23,9 @@ expectAssignable<FastifyPluginCallback>(fp(pluginCallback, {
   fastify: '',
   name: '',
   decorators: {
-    fastify: [ '' ],
-    reply: [ '' ],
-    request: [ '' ]
+    fastify: [ '', testSymbol ],
+    reply: [ '', testSymbol ],
+    request: [ '', testSymbol ]
   },
   dependencies: [ '' ]
 }))
@@ -48,9 +50,9 @@ expectAssignable<FastifyPluginAsync>(fp(pluginAsync, {
   fastify: '',
   name: '',
   decorators: {
-    fastify: [ '' ],
-    reply: [ '' ],
-    request: [ '' ]
+    fastify: [ '', testSymbol ],
+    reply: [ '', testSymbol ],
+    request: [ '', testSymbol ]
   },
   dependencies: [ '' ]
 }))
