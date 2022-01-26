@@ -24,9 +24,9 @@ export interface PluginMetadata {
   name?: string,
   /** Decorator dependencies for this plugin */
   decorators?: {
-    fastify?: string[],
-    reply?: string[],
-    request?: string[]
+    fastify?: (string | symbol)[],
+    reply?: (string | symbol)[],
+    request?: (string | symbol)[]
   },
   /** The plugin dependencies */
   dependencies?: string[]
