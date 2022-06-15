@@ -183,12 +183,12 @@ test('should check fastify dependency graph - plugin', t => {
   const fastify = Fastify()
 
   fastify.register(fp((fastify, opts, next) => next(), {
-    fastify: '3.x',
+    fastify: '4.x',
     name: 'plugin1-name'
   }))
 
   fastify.register(fp((fastify, opts, next) => next(), {
-    fastify: '3.x',
+    fastify: '4.x',
     name: 'test',
     dependencies: ['plugin1-name', 'plugin2-name']
   }))
@@ -203,12 +203,12 @@ test('should check fastify dependency graph - decorate', t => {
   const fastify = Fastify()
 
   fastify.decorate('plugin1', fp((fastify, opts, next) => next(), {
-    fastify: '3.x',
+    fastify: '4.x',
     name: 'plugin1-name'
   }))
 
   fastify.register(fp((fastify, opts, next) => next(), {
-    fastify: '3.x',
+    fastify: '4.x',
     name: 'test',
     decorators: { fastify: ['plugin1', 'plugin2'] }
   }))
@@ -223,12 +223,12 @@ test('should check fastify dependency graph - decorateReply', t => {
   const fastify = Fastify()
 
   fastify.decorateReply('plugin1', fp((fastify, opts, next) => next(), {
-    fastify: '3.x',
+    fastify: '4.x',
     name: 'plugin1-name'
   }))
 
   fastify.register(fp((fastify, opts, next) => next(), {
-    fastify: '3.x',
+    fastify: '4.x',
     name: 'test',
     decorators: { reply: ['plugin1', 'plugin2'] }
   }))

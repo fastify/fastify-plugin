@@ -10,6 +10,7 @@ When you build plugins for Fastify and you want that them to be accessible in th
 1. Use the `skip-override` hidden property
 2. Use this module
 
+__Note: the v4.x series of this module covers Fastify v4__
 __Note: the v2.x & v3.x series of this module covers Fastify v3. For Fastify v2 support, refer to the v1.x series.__
 
 ## Usage
@@ -50,7 +51,7 @@ const fp = require('fastify-plugin')
 module.exports = fp(function (fastify, opts, next) {
   // your plugin code
   next()
-}, { fastify: '3.x' })
+}, { fastify: '4.x' })
 ```
 
 If you need to check the Fastify version only, you can pass just the version string.
@@ -69,7 +70,7 @@ function plugin (fastify, opts, next) {
 }
 
 module.exports = fp(plugin, {
-  fastify: '3.x',
+  fastify: '4.x',
   name: 'your-plugin-name'
 })
 ```
@@ -86,7 +87,7 @@ function plugin (fastify, opts, next) {
 }
 
 module.exports = fp(plugin, {
-  fastify: '3.x',
+  fastify: '4.x',
   decorators: {
     fastify: ['plugin1', 'plugin2'],
     reply: ['compress']

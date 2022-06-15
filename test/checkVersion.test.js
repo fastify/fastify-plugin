@@ -17,7 +17,7 @@ test('checkVersion having require.main.filename', (t) => {
   fp((fastify, opts, next) => {
     next()
   }, {
-    fastify: '^3.0.0'
+    fastify: '^4.0.0'
   })
 
   t.end()
@@ -40,7 +40,7 @@ test('checkVersion having no require.main.filename but process.argv[1]', (t) => 
   fp((fastify, opts, next) => {
     next()
   }, {
-    fastify: '^3.0.0'
+    fastify: '^4.0.0'
   })
 
   t.end()
@@ -66,7 +66,7 @@ test('checkVersion having no require.main.filename and no process.argv[1]', (t) 
   fp((fastify, opts, next) => {
     next()
   }, {
-    fastify: '^3.0.0'
+    fastify: '^4.0.0'
   })
 
   t.end()
