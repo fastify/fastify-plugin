@@ -59,7 +59,7 @@ test('support ts named imports', (t) => {
   t.end()
 })
 
-test('from kebabo-case to camelCase', (t) => {
+test('from kebab-case to camelCase', (t) => {
   const plugin = fp((fastify, opts, next) => {
     next()
   }, {
