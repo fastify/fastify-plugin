@@ -81,7 +81,7 @@ test('from @-prefixed named imports', (t) => {
   t.end()
 })
 
-test('from @-prefixed named kebabo-case to camelCase', (t) => {
+test('from @-prefixed named kebab-case to camelCase', (t) => {
   const plugin = fp((fastify, opts, next) => {
     next()
   }, {
