@@ -59,7 +59,7 @@ test('support ts named imports', (t) => {
   t.end()
 })
 
-test('from kebabo-case to camelCase', (t) => {
+test('from kebab-case to camelCase', (t) => {
   const plugin = fp((fastify, opts, next) => {
     next()
   }, {
@@ -67,6 +67,28 @@ test('from kebabo-case to camelCase', (t) => {
   })
 
   t.equal(plugin.helloWorld, plugin)
+  t.end()
+})
+
+test('from @-prefixed named imports', (t) => {
+  const plugin = fp((fastify, opts, next) => {
+    next()
+  }, {
+    name: '@hello/world'
+  })
+
+  t.equal(plugin.helloWorld, plugin)
+  t.end()
+})
+
+test('from @-prefixed named kebab-case to camelCase', (t) => {
+  const plugin = fp((fastify, opts, next) => {
+    next()
+  }, {
+    name: '@hello/my-world'
+  })
+
+  t.equal(plugin.helloMyWorld, plugin)
   t.end()
 })
 
