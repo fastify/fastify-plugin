@@ -3,6 +3,10 @@
 import {
   FastifyPluginCallback,
   FastifyPluginAsync,
+  RawServerBase,
+  RawServerDefault,
+  FastifyTypeProvider,
+  FastifyTypeProviderDefault,
 } from 'fastify'
 
 /**
@@ -13,10 +17,41 @@ import {
  * @param fn Fastify plugin function
  * @param options Optional plugin options
  */
-export default function fp<Options>(fn: FastifyPluginAsync<Options>, options?: PluginMetadata): FastifyPluginAsync<Options>;
-export default function fp<Options>(fn: FastifyPluginAsync<Options>, options?: string): FastifyPluginAsync<Options>;
-export default function fp<Options>(fn: FastifyPluginCallback<Options>, options?: PluginMetadata): FastifyPluginCallback<Options>;
-export default function fp<Options>(fn: FastifyPluginCallback<Options>, options?: string): FastifyPluginCallback<Options>;
+export default function fp<
+  Options,
+  RawServer extends RawServerBase = RawServerDefault,
+  TypeProvider extends FastifyTypeProvider = FastifyTypeProviderDefault
+>(
+  fn: FastifyPluginAsync<Options, RawServer, TypeProvider>,
+  options?: PluginMetadata
+): FastifyPluginAsync<Options, RawServer, TypeProvider>;
+
+export default function fp<
+  Options,
+  RawServer extends RawServerBase = RawServerDefault,
+  TypeProvider extends FastifyTypeProvider = FastifyTypeProviderDefault
+>(
+  fn: FastifyPluginAsync<Options, RawServer, TypeProvider>,
+  options?: string
+): FastifyPluginAsync<Options, RawServer, TypeProvider>;
+
+export default function fp<
+  Options,
+  RawServer extends RawServerBase = RawServerDefault,
+  TypeProvider extends FastifyTypeProvider = FastifyTypeProviderDefault
+>(
+  fn: FastifyPluginCallback<Options, RawServer, TypeProvider>,
+  options?: PluginMetadata
+): FastifyPluginCallback<Options, RawServer, TypeProvider>;
+
+export default function fp<
+  Options,
+  RawServer extends RawServerBase = RawServerDefault,
+  TypeProvider extends FastifyTypeProvider = FastifyTypeProviderDefault
+>(
+  fn: FastifyPluginCallback<Options>,
+  options?: string
+): FastifyPluginCallback<Options>;
 
 export interface PluginMetadata {
   /** Bare-minimum version of Fastify for your plugin, just add the semver range that you need. */

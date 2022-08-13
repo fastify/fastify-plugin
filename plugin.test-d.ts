@@ -1,6 +1,8 @@
 import fp from './plugin';
 import fastify, { FastifyPluginCallback, FastifyPluginAsync, FastifyError, FastifyInstance, FastifyPluginOptions } from 'fastify';
 import { expectAssignable } from 'tsd'
+import { Server } from "node:https"
+import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox"
 
 interface Options {
   foo: string
@@ -36,6 +38,16 @@ const pluginCallbackWithOptions: FastifyPluginCallback<Options> = (fastify, opti
 
 expectAssignable<FastifyPluginCallback<Options>>(fp(pluginCallbackWithOptions))
 
+const pluginCallbackWithServer: FastifyPluginCallback<Options, Server> = (fastify, options, next) => {
+  expectAssignable<Server>(fastify.server)
+}
+
+expectAssignable<FastifyPluginCallback<Options, Server>>(fp(pluginCallbackWithServer))
+
+const pluginCallbackWithTypeProvider: FastifyPluginCallback<Options, Server, TypeBoxTypeProvider> = (fastify, options, next) => {}
+
+expectAssignable<FastifyPluginCallback<Options, Server, TypeBoxTypeProvider>>(fp(pluginCallbackWithTypeProvider))
+
 // Async
 
 const pluginAsync: FastifyPluginAsync = async (fastify, options) => { }
@@ -63,12 +75,26 @@ const pluginAsyncWithOptions: FastifyPluginAsync<Options> = async (fastify, opti
 
 expectAssignable<FastifyPluginAsync<Options>>(fp(pluginAsyncWithOptions))
 
+const pluginAsyncWithServer: FastifyPluginAsync<Options, Server> = async (fastify, options) => {
+  expectAssignable<Server>(fastify.server)
+}
+
+expectAssignable<FastifyPluginAsync<Options, Server>>(fp(pluginAsyncWithServer))
+
+const pluginAsyncWithTypeProvider: FastifyPluginAsync<Options, Server, TypeBoxTypeProvider> = async (fastify, options) => {}
+
+expectAssignable<FastifyPluginAsync<Options, Server, TypeBoxTypeProvider>>(fp(pluginAsyncWithTypeProvider))
+
 // Fastify register
 
 const server = fastify()
 server.register(fp(pluginCallback))
 server.register(fp(pluginCallbackWithTypes))
 server.register(fp(pluginCallbackWithOptions))
+server.register(fp(pluginCallbackWithServer))
+server.register(fp(pluginCallbackWithTypeProvider))
 server.register(fp(pluginAsync))
 server.register(fp(pluginAsyncWithTypes))
 server.register(fp(pluginAsyncWithOptions))
+server.register(fp(pluginAsyncWithServer))
+server.register(fp(pluginAsyncWithTypeProvider))
