@@ -3,6 +3,7 @@
 import {
   FastifyPluginCallback,
   FastifyPluginAsync,
+  FastifyPluginOptions,
   RawServerBase,
   RawServerDefault,
   FastifyTypeProvider,
@@ -18,7 +19,7 @@ import {
  * @param options Optional plugin options
  */
 export default function fp<
-  Options,
+  Options extends FastifyPluginOptions,
   RawServer extends RawServerBase = RawServerDefault,
   TypeProvider extends FastifyTypeProvider = FastifyTypeProviderDefault
 >(
@@ -27,7 +28,7 @@ export default function fp<
 ): FastifyPluginAsync<Options, RawServer, TypeProvider>;
 
 export default function fp<
-  Options,
+  Options extends FastifyPluginOptions,
   RawServer extends RawServerBase = RawServerDefault,
   TypeProvider extends FastifyTypeProvider = FastifyTypeProviderDefault
 >(
@@ -36,7 +37,7 @@ export default function fp<
 ): FastifyPluginAsync<Options, RawServer, TypeProvider>;
 
 export default function fp<
-  Options,
+  Options extends FastifyPluginOptions,
   RawServer extends RawServerBase = RawServerDefault,
   TypeProvider extends FastifyTypeProvider = FastifyTypeProviderDefault
 >(
@@ -45,7 +46,7 @@ export default function fp<
 ): FastifyPluginCallback<Options, RawServer, TypeProvider>;
 
 export default function fp<
-  Options,
+  Options extends FastifyPluginOptions,
   RawServer extends RawServerBase = RawServerDefault,
   TypeProvider extends FastifyTypeProvider = FastifyTypeProviderDefault
 >(
