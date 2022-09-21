@@ -237,3 +237,38 @@ test('should check fastify dependency graph - decorateReply', t => {
     t.equal(err.message, "The decorator 'plugin2' required by 'test' is not present in Reply")
   })
 })
+
+test('should accept an option to encapsulate', t => {
+  t.plan(4)
+  const fastify = Fastify()
+
+  fastify.register(fp((fastify, opts, next) => {
+    fastify.decorate('accessible', true)
+    next()
+  }, {
+    name: 'accessible-plugin'
+  }))
+
+  fastify.register(fp((fastify, opts, next) => {
+    fastify.decorate('alsoAccessible', true)
+    next()
+  }, {
+    name: 'accessible-plugin2',
+    encapsulate: false
+  }))
+
+  fastify.register(fp((fastify, opts, next) => {
+    fastify.decorate('encapsulated', true)
+    next()
+  }, {
+    name: 'encapsulated-plugin',
+    encapsulate: true
+  }))
+
+  fastify.ready(err => {
+    t.notOk(err)
+    t.ok(fastify.hasDecorator('accessible'))
+    t.ok(fastify.hasDecorator('alsoAccessible'))
+    t.notOk(fastify.hasDecorator('encapsulated'))
+  })
+})
