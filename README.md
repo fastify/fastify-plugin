@@ -97,7 +97,9 @@ module.exports = fp(plugin, {
 ```
 
 #### Encapsulate
-You can optionally keep the plugin encapsulated.
+You can optionally keep the plugin encapsulated, which is the default behavior if you weren't using `fastify-plugin`.
+This allows you to set the plugin's name and validate its dependencies without making the plugin accessible.
+Read more about encapsulation [here](https://github.com/fastify/fastify/blob/main/docs/Reference/Encapsulation.md).
 ```js
 const fp = require('fastify-plugin')
 
