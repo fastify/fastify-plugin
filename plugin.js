@@ -41,7 +41,7 @@ function plugin (fn, options = {}) {
     options.name = checkName(fn) + '-auto-' + count++
   }
 
-  fn[Symbol.for('skip-override')] = !options.encapsulate
+  fn[Symbol.for('skip-override')] = options.encapsulate !== true
   fn[Symbol.for('fastify.display-name')] = options.name
   fn[Symbol.for('plugin-meta')] = options
 
