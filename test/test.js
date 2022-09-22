@@ -266,7 +266,7 @@ test('should accept an option to encapsulate', t => {
   }))
 
   fastify.ready(err => {
-    t.notOk(err)
+    t.error(err)
     t.ok(fastify.hasDecorator('accessible'))
     t.ok(fastify.hasDecorator('alsoAccessible'))
     t.notOk(fastify.hasDecorator('encapsulated'))
