@@ -272,3 +272,18 @@ test('should accept an option to encapsulate', t => {
     t.notOk(fastify.hasDecorator('encapsulated'))
   })
 })
+
+test('should check dependencies when encapsulated', t => {
+  t.plan(1)
+  const fastify = Fastify()
+
+  fastify.register(fp((fastify, opts, next) => next(), {
+    name: 'test',
+    dependencies: ['missing-dependency-name'],
+    encapsulate: true
+  }))
+
+  fastify.ready(err => {
+    t.equal(err.message, "The dependency 'missing-dependency-name' of plugin 'test' is not registered")
+  })
+})
