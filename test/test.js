@@ -287,3 +287,95 @@ test('should check dependencies when encapsulated', t => {
     t.equal(err.message, "The dependency 'missing-dependency-name' of plugin 'test' is not registered")
   })
 })
+
+test('should check version when encapsulated', t => {
+  t.plan(1)
+  const fastify = Fastify()
+
+  fastify.register(fp((fastify, opts, next) => next(), {
+    name: 'test',
+    fastify: '<=2.10.0',
+    encapsulate: true
+  }))
+
+  fastify.ready(err => {
+    t.match(err.message, /fastify-plugin: test - expected '<=2.10.0' fastify version, '\d.\d.\d' is installed/)
+  })
+})
+
+test('should check decorators when encapsulated', t => {
+  t.plan(1)
+  const fastify = Fastify()
+
+  fastify.decorate('plugin1', 'foo')
+
+  fastify.register(fp((fastify, opts, next) => next(), {
+    fastify: '4.x',
+    name: 'test',
+    encapsulate: true,
+    decorators: { fastify: ['plugin1', 'plugin2'] }
+  }))
+
+  fastify.ready(err => {
+    t.equal(err.message, "The decorator 'plugin2' required by 'test' is not present in Fastify")
+  })
+})
+
+test('plugin name when encapsulated', async t => {
+  const fastify = Fastify()
+
+  fastify.register(function plugin (instance, opts, next) {
+    next()
+  })
+
+  fastify.register(fp(getFn('hello'), {
+    fastify: '4.x',
+    name: 'hello',
+    encapsulate: true
+  }))
+
+  fastify.register(function plugin (fastify, opts, next) {
+    fastify.register(fp(getFn('deep'), {
+      fastify: '4.x',
+      name: 'deep',
+      encapsulate: true
+    }))
+
+    fastify.register(fp(function genericPlugin (fastify, opts, next) {
+      t.equal(fastify.pluginName, 'deep-deep', 'should be deep-deep')
+
+      fastify.register(fp(getFn('deep-deep-deep'), {
+        fastify: '4.x',
+        name: 'deep-deep-deep',
+        encapsulate: true
+      }))
+
+      fastify.register(fp(getFn('deep-deep -> not-encapsulated-2'), {
+        fastify: '4.x',
+        name: 'not-encapsulated-2'
+      }))
+
+      next()
+    }, {
+      fastify: '4.x',
+      name: 'deep-deep',
+      encapsulate: true
+    }))
+
+    fastify.register(fp(getFn('plugin -> not-encapsulated'), {
+      fastify: '4.x',
+      name: 'not-encapsulated'
+    }))
+
+    next()
+  })
+
+  await fastify.ready()
+
+  function getFn (expectedName) {
+    return function genericPlugin (fastify, opts, next) {
+      t.equal(fastify.pluginName, expectedName, `should be ${expectedName}`)
+      next()
+    }
+  }
+})
