@@ -96,6 +96,31 @@ module.exports = fp(plugin, {
 })
 ```
 
+#### Encapsulate
+
+By default, `fastify-plugin` breaks the [encapsulation](https://github.com/fastify/fastify/blob/HEAD/docs/Reference/Encapsulation.md) but you can optionally keep the plugin encapsulated.
+This allows you to set the plugin's name and validate its dependencies without making the plugin accessible.
+```js
+const fp = require('fastify-plugin')
+
+function plugin (fastify, opts, next) {
+  // the decorator is not accessible outside this plugin
+  fastify.decorate('util', function() {})
+  next()
+}
+
+module.exports = fp(plugin, {
+  name: 'my-encapsulated-plugin',
+  fastify: '4.x',
+  decorators: {
+    fastify: ['plugin1', 'plugin2'],
+    reply: ['compress']
+  },
+  dependencies: ['plugin1-name', 'plugin2-name'],
+  encapsulate: true
+})
+```
+
 #### Bundlers and Typescript
 `fastify-plugin` adds a `.default` and `[name]` property to the passed in function.
 The type definition would have to be updated to leverage this.

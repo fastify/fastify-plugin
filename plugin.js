@@ -18,10 +18,6 @@ function plugin (fn, options = {}) {
     )
   }
 
-  fn[Symbol.for('skip-override')] = true
-
-  const pluginName = (options && options.name) || checkName(fn)
-
   if (typeof options === 'string') {
     options = {
       fastify: options
@@ -42,9 +38,10 @@ function plugin (fn, options = {}) {
 
   if (!options.name) {
     autoName = true
-    options.name = pluginName + '-auto-' + count++
+    options.name = checkName(fn) + '-auto-' + count++
   }
 
+  fn[Symbol.for('skip-override')] = options.encapsulate !== true
   fn[Symbol.for('fastify.display-name')] = options.name
   fn[Symbol.for('plugin-meta')] = options
 

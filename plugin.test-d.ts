@@ -29,7 +29,8 @@ expectAssignable<FastifyPluginCallback>(fp(pluginCallback, {
     reply: [ '', testSymbol ],
     request: [ '', testSymbol ]
   },
-  dependencies: [ '' ]
+  dependencies: [ '' ],
+  encapsulate: true
 }))
 
 const pluginCallbackWithOptions: FastifyPluginCallback<Options> = (fastify, options, next) => {
@@ -66,7 +67,8 @@ expectAssignable<FastifyPluginAsync>(fp(pluginAsync, {
     reply: [ '', testSymbol ],
     request: [ '', testSymbol ]
   },
-  dependencies: [ '' ]
+  dependencies: [ '' ],
+  encapsulate: true
 }))
 
 const pluginAsyncWithOptions: FastifyPluginAsync<Options> = async (fastify, options) => {

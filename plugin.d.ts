@@ -65,7 +65,8 @@ export interface PluginMetadata {
     request?: (string | symbol)[]
   },
   /** The plugin dependencies */
-  dependencies?: string[]
+  dependencies?: string[],
+  encapsulate?: boolean
 }
 
 // Exporting PluginOptions for backward compatibility after renaming it to PluginMetadata
