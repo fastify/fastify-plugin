@@ -18,16 +18,16 @@ import {
  * @param fn Fastify plugin function
  * @param options Optional plugin options
  */
-export default function fp<
+declare function fp<
   Options extends FastifyPluginOptions,
   RawServer extends RawServerBase = RawServerDefault,
   TypeProvider extends FastifyTypeProvider = FastifyTypeProviderDefault
 >(
   fn: FastifyPluginAsync<Options, RawServer, TypeProvider>,
-  options?: PluginMetadata
+  options?: fp.PluginMetadata
 ): FastifyPluginAsync<Options, RawServer, TypeProvider>;
 
-export default function fp<
+declare function fp<
   Options extends FastifyPluginOptions,
   RawServer extends RawServerBase = RawServerDefault,
   TypeProvider extends FastifyTypeProvider = FastifyTypeProviderDefault
@@ -36,16 +36,16 @@ export default function fp<
   options?: string
 ): FastifyPluginAsync<Options, RawServer, TypeProvider>;
 
-export default function fp<
+declare function fp<
   Options extends FastifyPluginOptions,
   RawServer extends RawServerBase = RawServerDefault,
   TypeProvider extends FastifyTypeProvider = FastifyTypeProviderDefault
 >(
   fn: FastifyPluginCallback<Options, RawServer, TypeProvider>,
-  options?: PluginMetadata
+  options?: fp.PluginMetadata
 ): FastifyPluginCallback<Options, RawServer, TypeProvider>;
 
-export default function fp<
+declare function fp<
   Options extends FastifyPluginOptions,
   RawServer extends RawServerBase = RawServerDefault,
   TypeProvider extends FastifyTypeProvider = FastifyTypeProviderDefault
@@ -54,20 +54,26 @@ export default function fp<
   options?: string
 ): FastifyPluginCallback<Options>;
 
-export interface PluginMetadata {
-  /** Bare-minimum version of Fastify for your plugin, just add the semver range that you need. */
-  fastify?: string,
-  name?: string,
-  /** Decorator dependencies for this plugin */
-  decorators?: {
-    fastify?: (string | symbol)[],
-    reply?: (string | symbol)[],
-    request?: (string | symbol)[]
-  },
-  /** The plugin dependencies */
-  dependencies?: string[],
-  encapsulate?: boolean
+declare namespace fp {
+
+  export interface PluginMetadata {
+    /** Bare-minimum version of Fastify for your plugin, just add the semver range that you need. */
+    fastify?: string,
+    name?: string,
+    /** Decorator dependencies for this plugin */
+    decorators?: {
+      fastify?: (string | symbol)[],
+      reply?: (string | symbol)[],
+      request?: (string | symbol)[]
+    },
+    /** The plugin dependencies */
+    dependencies?: string[],
+    encapsulate?: boolean
+  }
+
+  // Exporting PluginOptions for backward compatibility after renaming it to PluginMetadata
+  export interface PluginOptions extends PluginMetadata {}
+
 }
 
-// Exporting PluginOptions for backward compatibility after renaming it to PluginMetadata
-export interface PluginOptions extends PluginMetadata {}
+export = fp;
