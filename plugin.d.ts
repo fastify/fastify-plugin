@@ -74,6 +74,8 @@ declare namespace fp {
   // Exporting PluginOptions for backward compatibility after renaming it to PluginMetadata
   export interface PluginOptions extends PluginMetadata {}
 
+  // default export for ESM
+  export { fp as default } 
 }
 
 export = fp;
