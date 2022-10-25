@@ -7,7 +7,7 @@
   "scripts": {
     "test": "standard && tap test/*.js test/esm/*.js --no-check-coverage && npm run typescript",
     "test:ci": "standard && tap test/*.js test/esm/*.js --no-check-coverage --coverage-report=lcovonly && npm run typescript",
-    "typescript": "tsd"
+    "typescript": "tsd && tsd --files test/*.test-d.ts"
   },
   "repository": {
     "type": "git",
