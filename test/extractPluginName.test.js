@@ -1,7 +1,7 @@
 'use strict'
 
 const t = require('tap')
-const extractPluginName = require('../stackParser')
+const extractPluginName = require('../lib/extractPluginName')
 
 const winStack = `Error: anonymous function
 at checkName (C:\\Users\\leonardo.davinci\\Desktop\\fastify-plugin\\index.js:43:11)
