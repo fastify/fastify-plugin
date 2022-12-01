@@ -1,6 +1,7 @@
 'use strict'
 
-const extractPluginName = require('./lib/extractPluginName')
+const getPluginName = require('./lib/getPluginName')
+const toCamelCase = require('./lib/toCamelCase')
 
 let count = 0
 
@@ -38,7 +39,7 @@ function plugin (fn, options = {}) {
 
   if (!options.name) {
     autoName = true
-    options.name = checkName(fn) + '-auto-' + count++
+    options.name = getPluginName(fn) + '-auto-' + count++
   }
 
   fn[Symbol.for('skip-override')] = options.encapsulate !== true
@@ -59,26 +60,6 @@ function plugin (fn, options = {}) {
   }
 
   return fn
-}
-
-function checkName (fn) {
-  if (fn.name.length > 0) return fn.name
-
-  try {
-    throw new Error('anonymous function')
-  } catch (e) {
-    return extractPluginName(e.stack)
-  }
-}
-
-function toCamelCase (name) {
-  if (name[0] === '@') {
-    name = name.slice(1).replace('/', '-')
-  }
-  const newName = name.replace(/-(.)/g, function (match, g1) {
-    return g1.toUpperCase()
-  })
-  return newName
 }
 
 module.exports = plugin
