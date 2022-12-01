@@ -1,6 +1,6 @@
 'use strict'
 
-const extractPluginName = require('./stackParser')
+const extractPluginName = require('./lib/extractPluginName')
 
 let count = 0
 
