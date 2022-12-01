@@ -81,5 +81,6 @@ function toCamelCase (name) {
   return newName
 }
 
-plugin.default = plugin
 module.exports = plugin
+module.exports.default = plugin
+module.exports.fastifyPlugin = plugin

@@ -3,7 +3,7 @@
   "version": "4.3.0",
   "description": "Plugin helper for Fastify",
   "main": "plugin.js",
-  "types": "plugin.d.ts",
+  "types": "types/plugin.d.ts",
   "scripts": {
     "lint": "standard",
     "test": "npm run test:unit && npm run test:typescript",
