@@ -299,7 +299,7 @@ test('should check version when encapsulated', t => {
   }))
 
   fastify.ready(err => {
-    t.match(err.message, /fastify-plugin: test - expected '<=2.10.0' fastify version, '\d.\d.\d' is installed/)
+    t.match(err.message, /fastify-plugin: test - expected '<=2.10.0' fastify version, '\d.\d+.\d+' is installed/)
   })
 })
 
