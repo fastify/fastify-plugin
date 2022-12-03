@@ -62,5 +62,6 @@ function plugin (fn, options = {}) {
   return fn
 }
 
-plugin.default = plugin
 module.exports = plugin
+module.exports.default = plugin
+module.exports.fastifyPlugin = plugin
