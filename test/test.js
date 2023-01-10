@@ -155,6 +155,29 @@ test('should set anonymous function name to file it was called from with a count
   t.end()
 })
 
+test('should set function name if Error.stackTraceLimit is set to 0', t => {
+  const stackTraceLimit = Error.stackTraceLimit = 0
+
+  const fp = proxyquire('../plugin.js', { stubs: {} })
+
+  const fn = fp((fastify, opts, next) => {
+    next()
+  })
+
+  t.equal(fn[Symbol.for('plugin-meta')].name, 'test-auto-0')
+  t.equal(fn[Symbol.for('fastify.display-name')], 'test-auto-0')
+
+  const fn2 = fp((fastify, opts, next) => {
+    next()
+  })
+
+  t.equal(fn2[Symbol.for('plugin-meta')].name, 'test-auto-1')
+  t.equal(fn2[Symbol.for('fastify.display-name')], 'test-auto-1')
+
+  Error.stackTraceLimit = stackTraceLimit
+  t.end()
+})
+
 test('should set display-name to meta name', t => {
   t.plan(2)
 
