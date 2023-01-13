@@ -23,9 +23,9 @@ Example using a callback:
 ```js
 const fp = require('fastify-plugin')
 
-module.exports = fp(function (fastify, opts, next) {
+module.exports = fp(function (fastify, opts, done) {
   // your plugin code
-  next()
+  done()
 })
 ```
 
@@ -48,9 +48,9 @@ If you need to set a bare-minimum version of Fastify for your plugin, just add t
 ```js
 const fp = require('fastify-plugin')
 
-module.exports = fp(function (fastify, opts, next) {
+module.exports = fp(function (fastify, opts, done) {
   // your plugin code
-  next()
+  done()
 }, { fastify: '4.x' })
 ```
 
@@ -64,9 +64,9 @@ Fastify uses this option to validate the dependency graph, allowing it to ensure
 ```js
 const fp = require('fastify-plugin')
 
-function plugin (fastify, opts, next) {
+function plugin (fastify, opts, done) {
   // your plugin code
-  next()
+  done()
 }
 
 module.exports = fp(plugin, {
@@ -81,9 +81,9 @@ You can also check if the `plugins` and `decorators` that your plugin intend to 
 ```js
 const fp = require('fastify-plugin')
 
-function plugin (fastify, opts, next) {
+function plugin (fastify, opts, done) {
   // your plugin code
-  next()
+  done()
 }
 
 module.exports = fp(plugin, {
@@ -103,10 +103,10 @@ This allows you to set the plugin's name and validate its dependencies without m
 ```js
 const fp = require('fastify-plugin')
 
-function plugin (fastify, opts, next) {
+function plugin (fastify, opts, done) {
   // the decorator is not accessible outside this plugin
   fastify.decorate('util', function() {})
-  next()
+  done()
 }
 
 module.exports = fp(plugin, {
@@ -132,13 +132,13 @@ The type definition would have to be updated to leverage this.
 It is common for developers to inline their plugin with fastify-plugin such as:
 
 ```js
-fp((fastify, opts, next) => { next() })
+fp((fastify, opts, done) => { done() })
 fp(async (fastify, opts) => { return })
 ```
 
 TypeScript can sometimes infer the types of the arguments for these functions. Plugins in fastify are recommended to be typed using either `FastifyPluginCallback` or `FastifyPluginAsync`. These two definitions only differ in two ways:
 
-1. The third argument `next` (the callback part)
+1. The third argument `done` (the callback part)
 2. The return type `FastifyPluginCallback` or `FastifyPluginAsync`
 
 At this time, TypeScript inference is not smart enough to differentiate by definition argument length alone.
@@ -149,14 +149,14 @@ Thus, if you are a TypeScript developer please use on the following patterns ins
 // Callback
 
 // Assign type directly
-const pluginCallback: FastifyPluginCallback = (fastify, options, next) => { }
+const pluginCallback: FastifyPluginCallback = (fastify, options, done) => { }
 fp(pluginCallback)
 
 // or define your own function declaration that satisfies the existing definitions
-const pluginCallbackWithTypes = (fastify: FastifyInstance, options: FastifyPluginOptions, next: (error?: FastifyError) => void): void => { }
+const pluginCallbackWithTypes = (fastify: FastifyInstance, options: FastifyPluginOptions, done: (error?: FastifyError) => void): void => { }
 fp(pluginCallbackWithTypes)
 // or inline
-fp((fastify: FastifyInstance, options: FastifyPluginOptions, next: (error?: FastifyError) => void): void => { })
+fp((fastify: FastifyInstance, options: FastifyPluginOptions, done: (error?: FastifyError) => void): void => { })
 
 // Async
 
