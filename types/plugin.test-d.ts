@@ -1,6 +1,6 @@
 import fastifyPlugin from '..';
-import fastify, { FastifyPluginCallback, FastifyPluginAsync, FastifyError, FastifyInstance, FastifyPluginOptions } from 'fastify';
-import { expectAssignable } from 'tsd'
+import fastify, { FastifyPluginCallback, FastifyPluginAsync, FastifyError, FastifyInstance, FastifyPluginOptions, RawServerDefault, FastifyTypeProviderDefault } from 'fastify';
+import { expectType } from 'tsd'
 import { Server } from "node:https"
 import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox"
 
@@ -13,15 +13,15 @@ const testSymbol = Symbol('foobar')
 // Callback
 
 const pluginCallback: FastifyPluginCallback = (fastify, options, next) => { }
-expectAssignable<FastifyPluginCallback>(fastifyPlugin(pluginCallback))
+expectType<FastifyPluginCallback>(fastifyPlugin(pluginCallback))
 
 const pluginCallbackWithTypes = (fastify: FastifyInstance, options: FastifyPluginOptions, next: (error?: FastifyError) => void): void => { }
-expectAssignable<FastifyPluginCallback>(fastifyPlugin(pluginCallbackWithTypes))
+expectType<FastifyPluginCallback<FastifyPluginOptions, RawServerDefault, FastifyTypeProviderDefault>>(fastifyPlugin(pluginCallbackWithTypes))
 
-expectAssignable<FastifyPluginCallback>(fastifyPlugin((fastify: FastifyInstance, options: FastifyPluginOptions, next: (error?: FastifyError) => void): void => { }))
+expectType<FastifyPluginCallback<FastifyPluginOptions, RawServerDefault, FastifyTypeProviderDefault>>(fastifyPlugin((fastify: FastifyInstance, options: FastifyPluginOptions, next: (error?: FastifyError) => void): void => { }))
 
-expectAssignable<FastifyPluginCallback>(fastifyPlugin(pluginCallback, '' ))
-expectAssignable<FastifyPluginCallback>(fastifyPlugin(pluginCallback, {
+expectType<FastifyPluginCallback>(fastifyPlugin(pluginCallback, '' ))
+expectType<FastifyPluginCallback>(fastifyPlugin(pluginCallback, {
   fastify: '',
   name: '',
   decorators: {
@@ -34,32 +34,32 @@ expectAssignable<FastifyPluginCallback>(fastifyPlugin(pluginCallback, {
 }))
 
 const pluginCallbackWithOptions: FastifyPluginCallback<Options> = (fastify, options, next) => {
-  expectAssignable<string>(options.foo)
+  expectType<string>(options.foo)
 }
 
-expectAssignable<FastifyPluginCallback<Options>>(fastifyPlugin(pluginCallbackWithOptions))
+expectType<FastifyPluginCallback<Options>>(fastifyPlugin(pluginCallbackWithOptions))
 
 const pluginCallbackWithServer: FastifyPluginCallback<Options, Server> = (fastify, options, next) => {
-  expectAssignable<Server>(fastify.server)
+  expectType<Server>(fastify.server)
 }
 
-expectAssignable<FastifyPluginCallback<Options, Server>>(fastifyPlugin(pluginCallbackWithServer))
+expectType<FastifyPluginCallback<Options, Server>>(fastifyPlugin(pluginCallbackWithServer))
 
 const pluginCallbackWithTypeProvider: FastifyPluginCallback<Options, Server, TypeBoxTypeProvider> = (fastify, options, next) => {}
 
-expectAssignable<FastifyPluginCallback<Options, Server, TypeBoxTypeProvider>>(fastifyPlugin(pluginCallbackWithTypeProvider))
+expectType<FastifyPluginCallback<Options, Server, TypeBoxTypeProvider>>(fastifyPlugin(pluginCallbackWithTypeProvider))
 
 // Async
 
 const pluginAsync: FastifyPluginAsync = async (fastify, options) => { }
-expectAssignable<FastifyPluginAsync>(fastifyPlugin(pluginAsync))
+expectType<FastifyPluginAsync>(fastifyPlugin(pluginAsync))
 
 const pluginAsyncWithTypes = async (fastify: FastifyInstance, options: FastifyPluginOptions): Promise<void> => { }
-expectAssignable<FastifyPluginAsync>(fastifyPlugin(pluginAsyncWithTypes))
+expectType<FastifyPluginAsync<FastifyPluginOptions, RawServerDefault, FastifyTypeProviderDefault>>(fastifyPlugin(pluginAsyncWithTypes))
 
-expectAssignable<FastifyPluginAsync>(fastifyPlugin(async (fastify: FastifyInstance, options: FastifyPluginOptions): Promise<void> => { }))
-expectAssignable<FastifyPluginAsync>(fastifyPlugin(pluginAsync, '' ))
-expectAssignable<FastifyPluginAsync>(fastifyPlugin(pluginAsync, {
+expectType<FastifyPluginAsync<FastifyPluginOptions, RawServerDefault, FastifyTypeProviderDefault>>(fastifyPlugin(async (fastify: FastifyInstance, options: FastifyPluginOptions): Promise<void> => { }))
+expectType<FastifyPluginAsync>(fastifyPlugin(pluginAsync, '' ))
+expectType<FastifyPluginAsync>(fastifyPlugin(pluginAsync, {
   fastify: '',
   name: '',
   decorators: {
@@ -72,20 +72,20 @@ expectAssignable<FastifyPluginAsync>(fastifyPlugin(pluginAsync, {
 }))
 
 const pluginAsyncWithOptions: FastifyPluginAsync<Options> = async (fastify, options) => {
-  expectAssignable<string>(options.foo)
+  expectType<string>(options.foo)
 }
 
-expectAssignable<FastifyPluginAsync<Options>>(fastifyPlugin(pluginAsyncWithOptions))
+expectType<FastifyPluginAsync<Options>>(fastifyPlugin(pluginAsyncWithOptions))
 
 const pluginAsyncWithServer: FastifyPluginAsync<Options, Server> = async (fastify, options) => {
-  expectAssignable<Server>(fastify.server)
+  expectType<Server>(fastify.server)
 }
 
-expectAssignable<FastifyPluginAsync<Options, Server>>(fastifyPlugin(pluginAsyncWithServer))
+expectType<FastifyPluginAsync<Options, Server>>(fastifyPlugin(pluginAsyncWithServer))
 
 const pluginAsyncWithTypeProvider: FastifyPluginAsync<Options, Server, TypeBoxTypeProvider> = async (fastify, options) => {}
 
-expectAssignable<FastifyPluginAsync<Options, Server, TypeBoxTypeProvider>>(fastifyPlugin(pluginAsyncWithTypeProvider))
+expectType<FastifyPluginAsync<Options, Server, TypeBoxTypeProvider>>(fastifyPlugin(pluginAsyncWithTypeProvider))
 
 // Fastify register
 
@@ -100,3 +100,15 @@ server.register(fastifyPlugin(pluginAsyncWithTypes))
 server.register(fastifyPlugin(pluginAsyncWithOptions))
 server.register(fastifyPlugin(pluginAsyncWithServer))
 server.register(fastifyPlugin(pluginAsyncWithTypeProvider))
+
+// properly handling callback and async
+fastifyPlugin<Options>(function (fastify, options, next) {
+  expectType<FastifyInstance>(fastify)
+  expectType<Options>(options)
+  expectType<(err?: Error) => void>(next)
+})
+
+fastifyPlugin<Options>(async function (fastify, options) {
+  expectType<FastifyInstance>(fastify)
+  expectType<Options>(options)
+})
