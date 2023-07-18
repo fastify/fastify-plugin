@@ -1,6 +1,6 @@
 {
   "name": "fastify-plugin",
-  "version": "4.5.0",
+  "version": "4.5.1",
   "description": "Plugin helper for Fastify",
   "main": "plugin.js",
   "types": "types/plugin.d.ts",
