@@ -1,5 +1,5 @@
 import fastifyPlugin from '..';
-import fastify, { FastifyPluginCallback, FastifyPluginAsync, FastifyError, FastifyInstance, FastifyPluginOptions, RawServerDefault, FastifyTypeProviderDefault } from 'fastify';
+import fastify, { FastifyPluginCallback, FastifyPluginAsync, FastifyError, FastifyInstance, FastifyPluginOptions, RawServerDefault, FastifyTypeProviderDefault, FastifyBaseLogger } from 'fastify';
 import { expectAssignable, expectError, expectNotType, expectType } from 'tsd'
 import { Server } from "node:https"
 import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox"
@@ -123,7 +123,7 @@ fastifyPlugin<Options>(async function (fastify, options) {
   expectType<Options>(options)
 })
 
-expectAssignable<FastifyPluginAsync<Options>>(fastifyPlugin(async function (fastify: FastifyInstance, options: Options) { }))
+expectAssignable<FastifyPluginAsync<Options, RawServerDefault, FastifyTypeProviderDefault, FastifyBaseLogger>>(fastifyPlugin(async function (fastify: FastifyInstance, options: Options) { }))
 expectNotType<any>(fastifyPlugin(async function (fastify: FastifyInstance, options: Options) { }))
 
 fastifyPlugin(async function (fastify, options: Options) {
