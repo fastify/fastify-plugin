@@ -46,24 +46,17 @@ declare namespace fastifyPlugin {
  * @param fn Fastify plugin function
  * @param options Optional plugin options
  */
- declare function fastifyPlugin<
- Options extends FastifyPluginOptions,
- RawServer extends RawServerBase = RawServerDefault,
- TypeProvider extends FastifyTypeProvider = FastifyTypeProviderDefault,
- Logger extends FastifyBaseLogger = FastifyBaseLogger
->(
- fn: FastifyPluginAsync<Options, RawServer, TypeProvider, Logger>,
- options?: fastifyPlugin.PluginMetadata | string
-): FastifyPluginAsync<Options, RawServer, TypeProvider, Logger>;
 
 declare function fastifyPlugin<
- Options extends FastifyPluginOptions,
- RawServer extends RawServerBase = RawServerDefault,
- TypeProvider extends FastifyTypeProvider = FastifyTypeProviderDefault,
- Logger extends FastifyBaseLogger = FastifyBaseLogger
+  Options extends FastifyPluginOptions,
+  RawServer extends RawServerBase = RawServerDefault,
+  TypeProvider extends FastifyTypeProvider = FastifyTypeProviderDefault,
+  Logger extends FastifyBaseLogger = FastifyBaseLogger,
+  Fn extends FastifyPluginCallback<Options, RawServer, TypeProvider, Logger> | FastifyPluginAsync<Options, RawServer, TypeProvider, Logger> = FastifyPluginCallback<Options, RawServer, TypeProvider, Logger>
 >(
- fn: FastifyPluginCallback<Options, RawServer, TypeProvider, Logger>,
- options?: fastifyPlugin.PluginMetadata | string
-): FastifyPluginCallback<Options, RawServer, TypeProvider, Logger>;
+  fn: Fn,
+  options?: fastifyPlugin.PluginMetadata | string
+): Fn extends FastifyPluginAsync<Options, RawServer, TypeProvider, Logger> ? FastifyPluginAsync<Options, RawServer, TypeProvider, Logger> : FastifyPluginCallback<Options, RawServer, TypeProvider, Logger>;
+
 
 export = fastifyPlugin
