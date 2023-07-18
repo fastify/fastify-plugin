@@ -10,6 +10,7 @@ import {
   FastifyTypeProviderDefault,
   FastifyBaseLogger,
 } from 'fastify'
+import { IncomingMessage, Server, ServerResponse } from 'http'
 
 type FastifyPlugin = typeof fastifyPlugin
 
@@ -48,15 +49,15 @@ declare namespace fastifyPlugin {
  */
 
 declare function fastifyPlugin<
-  Options extends FastifyPluginOptions,
+  Options extends FastifyPluginOptions = Record<never, never>,
   RawServer extends RawServerBase = RawServerDefault,
   TypeProvider extends FastifyTypeProvider = FastifyTypeProviderDefault,
   Logger extends FastifyBaseLogger = FastifyBaseLogger,
   Fn extends FastifyPluginCallback<Options, RawServer, TypeProvider, Logger> | FastifyPluginAsync<Options, RawServer, TypeProvider, Logger> = FastifyPluginCallback<Options, RawServer, TypeProvider, Logger>
 >(
-  fn: Fn,
+  fn: Fn extends FastifyPluginAsync<Options, RawServer, TypeProvider, Logger> ? FastifyPluginAsync<Options, RawServer, TypeProvider, Logger> : FastifyPluginCallback<Options, RawServer, TypeProvider, Logger>,
   options?: fastifyPlugin.PluginMetadata | string
-): Fn extends FastifyPluginAsync<Options, RawServer, TypeProvider, Logger> ? FastifyPluginAsync<Options, RawServer, TypeProvider, Logger> : FastifyPluginCallback<Options, RawServer, TypeProvider, Logger>;
+): Fn;
 
 
 export = fastifyPlugin

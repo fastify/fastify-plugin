@@ -102,6 +102,12 @@ server.register(fastifyPlugin(pluginAsyncWithServer))
 server.register(fastifyPlugin(pluginAsyncWithTypeProvider))
 
 // properly handling callback and async
+fastifyPlugin(function (fastify, options, next) {
+  expectType<FastifyInstance>(fastify)
+  expectType<Record<never, never>>(options)
+  expectType<(err?: Error) => void>(next)
+})
+
 fastifyPlugin<Options>(function (fastify, options, next) {
   expectType<FastifyInstance>(fastify)
   expectType<Options>(options)
