@@ -2,13 +2,14 @@
   "name": "fastify-plugin",
   "version": "4.5.1",
   "description": "Plugin helper for Fastify",
-  "main": "plugin.js",
-  "types": "types/plugin.d.ts",
+  "main": "./dist/plugin.js",
+  "types": "./dist/plugin.d.ts",
   "scripts": {
     "lint": "standard",
     "test": "npm run test:unit && npm run test:typescript",
-    "test:unit": "tap",
-    "test:typescript": "tsd"
+    "test:unit": "tap --ts",
+    "test:typescript": "tsd",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -28,10 +29,14 @@
   "devDependencies": {
     "@fastify/type-provider-typebox": "^3.0.0",
     "@types/node": "^20.1.0",
+    "@types/proxyquire": "^1.3.28",
+    "@types/tap": "^15.0.8",
     "fastify": "^4.0.1",
     "proxyquire": "^2.1.3",
     "standard": "^17.0.0",
     "tap": "^16.0.1",
-    "tsd": "^0.28.0"
+    "ts-node": "^10.9.1",
+    "tsd": "^0.28.0",
+    "typescript": "^5.1.6"
   }
 }
