@@ -1,7 +1,5 @@
-'use strict'
-
-const { test } = require('tap')
-const toCamelCase = require('../lib/toCamelCase')
+import {test} from 'tap'
+import toCamelCase from '../lib/toCamelCase'
 
 test('from kebab-case to camelCase', (t) => {
   t.plan(1)
