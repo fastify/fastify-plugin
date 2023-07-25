@@ -1,7 +1,7 @@
 {
-  "name": "fastify-plugin",
-  "version": "4.5.1",
-  "description": "Plugin helper for Fastify",
+  "name": "fastify-plugin-ts",
+  "version": "0.0.1",
+  "description": "Plugin helper for Fastify in TypeScript",
   "main": "./dist/plugin.js",
   "types": "./dist/plugin.d.ts",
   "scripts": {
@@ -12,19 +12,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fastify/fastify-plugin.git"
+    "url": "git+https://github.com/andersonjoseph/fastify-plugin-ts.git"
   },
   "keywords": [
     "plugin",
     "helper",
     "fastify"
   ],
-  "author": "Tomas Della Vedova - @delvedor (http://delved.org)",
+  "author": "Anderson Joseph <andersonjoseph@mailfence.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/fastify/fastify-plugin/issues"
+    "url": "https://github.com/andersonjoseph/fastify-plugin-ts/issues"
   },
-  "homepage": "https://github.com/fastify/fastify-plugin#readme",
+  "homepage": "https://github.com/andersonjoseph/fastify-plugin-ts#readme",
   "devDependencies": {
     "@fastify/type-provider-typebox": "^3.0.0",
     "@types/node": "^20.1.0",
@@ -36,5 +36,8 @@
     "tap": "^16.0.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
-  }
+  },
+  "files": [
+    "./dist/"
+  ]
 }
