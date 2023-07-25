@@ -8,7 +8,6 @@
     "lint": "standard",
     "test": "npm run test:unit && npm run test:typescript",
     "test:unit": "tap --ts",
-    "test:typescript": "tsd",
     "build": "tsc"
   },
   "repository": {
@@ -36,7 +35,6 @@
     "standard": "^17.0.0",
     "tap": "^16.0.1",
     "ts-node": "^10.9.1",
-    "tsd": "^0.28.0",
     "typescript": "^5.1.6"
   }
 }
