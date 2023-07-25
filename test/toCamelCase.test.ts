@@ -1,4 +1,4 @@
-import {test} from 'tap'
+import { test } from 'tap'
 import toCamelCase from '../lib/toCamelCase'
 
 test('from kebab-case to camelCase', (t) => {

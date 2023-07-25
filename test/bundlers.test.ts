@@ -1,19 +1,19 @@
 
-import {FastifyInstance, FastifyPluginOptions} from 'fastify'
-import {test} from 'tap'
+import { FastifyInstance, FastifyPluginOptions } from 'fastify'
+import { test } from 'tap'
 import fp from '../plugin'
 
 test('webpack removes require.main.filename', (t) => {
   const filename = require.main?.filename
   const info = console.info
   t.teardown(() => {
-    if(require.main && filename) {
+    if ((require.main != null) && filename) {
       require.main.filename = filename
     }
     console.info = info
   })
 
-  if(require.main) {
+  if (require.main != null) {
     require.main.filename = ''
   }
 
@@ -44,7 +44,7 @@ test('support faux modules does not override existing default field in babel mod
     default: (_fastify: any, _opts: any, next: () => any) => next()
   }
 
-  Reflect.set(module.default, 'default', 'Existing default field');
+  Reflect.set(module.default, 'default', 'Existing default field')
 
   const plugin = fp(module)
 

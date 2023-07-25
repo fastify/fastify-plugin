@@ -1,4 +1,4 @@
-export default function toCamelCase (name: string) {
+export default function toCamelCase (name: string): string {
   if (name[0] === '@') {
     name = name.slice(1).replace('/', '-')
   }

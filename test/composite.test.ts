@@ -1,4 +1,4 @@
-import {test} from 'tap'
+import { test } from 'tap'
 import fp from '../plugin'
 
 test('anonymous function should be named composite.test0', t => {

@@ -4,17 +4,17 @@ import {
   RawServerDefault,
   FastifyTypeProvider,
   FastifyTypeProviderDefault,
-  FastifyBaseLogger,
+  FastifyBaseLogger
 } from 'fastify'
 
 import getPluginName from './lib/getPluginName'
 import {
   GetPluginAsyncOrCallback,
   PluginAsyncOrCallback,
-  PluginMetadata,
-} from './types';
+  PluginMetadata
+} from './types'
 
-import toCamelCase from './lib/toCamelCase';
+import toCamelCase from './lib/toCamelCase'
 
 let count = 0
 
@@ -31,17 +31,17 @@ export default function plugin<
   RawServer extends RawServerBase = RawServerDefault,
   TypeProvider extends FastifyTypeProvider = FastifyTypeProviderDefault,
   Logger extends FastifyBaseLogger = FastifyBaseLogger,
-  Fn extends PluginAsyncOrCallback<Options, RawServer, TypeProvider, Logger, Fn> = 
-    GetPluginAsyncOrCallback<Options, RawServer, TypeProvider, Logger, unknown>,
->(
- fn: GetPluginAsyncOrCallback<Options, RawServer, TypeProvider, Logger, Fn> | {default: GetPluginAsyncOrCallback<Options, RawServer, TypeProvider, Logger, Fn>},
+  Fn extends PluginAsyncOrCallback<Options, RawServer, TypeProvider, Logger, Fn> =
+  GetPluginAsyncOrCallback<Options, RawServer, TypeProvider, Logger, unknown>,
+> (
+  fn: GetPluginAsyncOrCallback<Options, RawServer, TypeProvider, Logger, Fn> | { default: GetPluginAsyncOrCallback<Options, RawServer, TypeProvider, Logger, Fn> },
   options: PluginMetadata | string = {}
-): GetPluginAsyncOrCallback<Options, RawServer, TypeProvider, Logger, Fn> & 
-  {default: GetPluginAsyncOrCallback<Options, RawServer, TypeProvider, Logger, Fn>} &
-  {[K in undefined extends Options['name'] ? string : Options['name']]?: GetPluginAsyncOrCallback<Options, RawServer, TypeProvider, Logger, Fn>} {
+): GetPluginAsyncOrCallback<Options, RawServer, TypeProvider, Logger, Fn> &
+  { default: GetPluginAsyncOrCallback<Options, RawServer, TypeProvider, Logger, Fn> } &
+  { [K in undefined extends Options['name'] ? string : Options['name']]?: GetPluginAsyncOrCallback<Options, RawServer, TypeProvider, Logger, Fn> } {
   let autoName = false
 
-  if('default' in fn && fn.default) {
+  if ('default' in fn) {
     // Support for 'export default' behaviour in transpiled ECMAScript module
     fn = fn.default
   }
@@ -70,9 +70,9 @@ export default function plugin<
     throw new TypeError(`fastify-plugin expects a version string, instead got '${typeof options.fastify}'`)
   }
 
-  if (!options.name) {
+  if (options.name === undefined) {
     autoName = true
-    options.name = getPluginName(fn) + '-auto-' + count++
+    options.name = getPluginName(fn) + '-auto-' + String(count++)
   }
 
   Reflect.set(fn, Symbol.for('skip-override'), options.encapsulate !== true)
@@ -80,19 +80,19 @@ export default function plugin<
   Reflect.set(fn, Symbol.for('plugin-meta'), options)
 
   // Faux modules support
-  if(!('default' in fn)) {
-    Reflect.set(fn, 'default', fn);
+  if (!('default' in fn)) {
+    Reflect.set(fn, 'default', fn)
   }
 
   // TypeScript support for named imports
   // See https://github.com/fastify/fastify/issues/2404 for more details
   // The type definitions would have to be update to match this.
   const camelCase = toCamelCase(options.name)
-  if (!autoName && !Reflect.get(fn, camelCase)) {
-    Reflect.set(fn, camelCase, fn);
+  if (!autoName && Reflect.get(fn, camelCase) === undefined) {
+    Reflect.set(fn, camelCase, fn)
   }
 
-  return fn as typeof fn & {default: typeof fn}
+  return fn as typeof fn & { default: typeof fn }
 }
 
 module.exports = plugin

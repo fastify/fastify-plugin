@@ -1,22 +1,17 @@
-import {FastifyBaseLogger} from "fastify"
-import {FastifyPluginCallback} from "fastify"
-import {FastifyPluginAsync} from "fastify"
-import {FastifyTypeProvider} from "fastify"
-import {RawServerBase} from "fastify"
-import {FastifyPluginOptions} from "fastify"
+import { FastifyBaseLogger, FastifyPluginCallback, FastifyPluginAsync, FastifyTypeProvider, RawServerBase, FastifyPluginOptions } from 'fastify'
 
 export interface PluginMetadata {
   /** Bare-minimum version of Fastify for your plugin, just add the semver range that you need. */
-  fastify?: string,
-  name?: string,
+  fastify?: string
+  name?: string
   /** Decorator dependencies for this plugin */
   decorators?: {
-    fastify?: (string | symbol)[],
-    reply?: (string | symbol)[],
-    request?: (string | symbol)[]
-  },
+    fastify?: Array<string | symbol>
+    reply?: Array<string | symbol>
+    request?: Array<string | symbol>
+  }
   /** The plugin dependencies */
-  dependencies?: string[],
+  dependencies?: string[]
   encapsulate?: boolean
 }
 
@@ -47,4 +42,3 @@ export type GetPluginAsyncOrCallback<
     ? FastifyPluginAsync<Options, RawServer, TypeProvider, Logger>
     : FastifyPluginCallback<Options, RawServer, TypeProvider, Logger>
   : Fn
-

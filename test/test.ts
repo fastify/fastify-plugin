@@ -1,8 +1,8 @@
 import t from 'tap'
 import proxyquire from 'proxyquire'
-const test = t.test
 import fp from '../plugin'
-import Fastify, {FastifyInstance, FastifyPluginOptions} from 'fastify'
+import Fastify, { FastifyInstance, FastifyPluginOptions } from 'fastify'
+const test = t.test
 
 test('fastify-plugin is a function', t => {
   t.plan(1)
@@ -31,11 +31,10 @@ test('should support "default" function from babel module', t => {
     fp(plugin)
     t.pass()
   } catch (e) {
-    if(e instanceof Error) {
+    if (e instanceof Error) {
       t.equal(e.message, 'fastify-plugin expects a function, instead got a \'object\'')
-    }
-    else {
-      t.fail();
+    } else {
+      t.fail()
     }
   }
 })
@@ -162,7 +161,8 @@ test('should set anonymous function name to file it was called from with a count
   t.equal(fn2[Symbol.for('plugin-meta')].name, 'test-auto-1')
   t.equal(fn2[Symbol.for('fastify.display-name')], 'test-auto-1')
 
-  t.end() })
+  t.end()
+})
 test('should set function name if Error.stackTraceLimit is set to 0', t => {
   const stackTraceLimit = Error.stackTraceLimit = 0
 

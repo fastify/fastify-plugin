@@ -1,4 +1,4 @@
-import {test} from 'tap'
+import { test } from 'tap'
 import fp from '../plugin'
 
 test('anonymous function should be named mu1tip1e.composite.test', t => {
