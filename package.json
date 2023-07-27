@@ -6,7 +6,7 @@
   "types": "./dist/plugin.d.ts",
   "scripts": {
     "lint": "ts-standard",
-    "test": "tap --ts",
+    "test": "tap --ts --no-check-coverage",
     "build": "tsc"
   },
   "repository": {
