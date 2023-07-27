@@ -6,8 +6,8 @@
   "types": "./dist/plugin.d.ts",
   "scripts": {
     "lint": "ts-standard",
-    "test": "npm run test:unit",
-    "test:unit": "tap --ts"
+    "test": "tap --ts",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",

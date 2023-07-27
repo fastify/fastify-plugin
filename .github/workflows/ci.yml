@@ -4,9 +4,6 @@ on:
   push:
     branches:
      - main
-     - master
-     - next
-     - 'v*'
     paths-ignore:
       - 'docs/**'
       - '*.md'
@@ -16,8 +13,23 @@ on:
       - '*.md'
 
 jobs:
-  test:
-    uses: fastify/workflows/.github/workflows/plugins-ci.yml@v3
-    with:
-      lint: true
-      license-check: true
+  build:
+    runs-on: ubuntu-latest
+    
+    timeout-minutes: 15
+
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x, 20.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm i
+    - run: npm run build
+    - run: npm run lint
+    - run: npm test
