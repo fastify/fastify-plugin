@@ -4,4 +4,4 @@ flow: false
 coverage: true
 
 files:
-  - test/**/*.js
+  - test/**/*.ts

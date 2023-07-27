@@ -1,20 +1,18 @@
-'use strict'
-
-const { test } = require('tap')
-const fp = require('../plugin')
+import { test } from 'tap'
+import fp from '../plugin'
 
 test('checkVersion having require.main.filename', (t) => {
   const info = console.info
-  t.ok(require.main.filename)
+  t.ok(require.main?.filename)
   t.teardown(() => {
     console.info = info
   })
 
-  console.info = function (msg) {
+  console.info = function (msg: string) {
     t.fail('logged: ' + msg)
   }
 
-  fp((fastify, opts, next) => {
+  fp((_fastify, _opts, next) => {
     next()
   }, {
     fastify: '^4.0.0'
@@ -24,20 +22,24 @@ test('checkVersion having require.main.filename', (t) => {
 })
 
 test('checkVersion having no require.main.filename but process.argv[1]', (t) => {
-  const filename = require.main.filename
+  const filename = require.main?.filename
   const info = console.info
   t.teardown(() => {
-    require.main.filename = filename
+    if ((require.main != null) && filename) {
+      require.main.filename = filename
+    }
     console.info = info
   })
 
-  require.main.filename = null
+  if (require.main != null) {
+    require.main.filename = ''
+  }
 
-  console.info = function (msg) {
+  console.info = function (msg: string) {
     t.fail('logged: ' + msg)
   }
 
-  fp((fastify, opts, next) => {
+  fp((_fastify, _opts, next) => {
     next()
   }, {
     fastify: '^4.0.0'
@@ -47,23 +49,27 @@ test('checkVersion having no require.main.filename but process.argv[1]', (t) => 
 })
 
 test('checkVersion having no require.main.filename and no process.argv[1]', (t) => {
-  const filename = require.main.filename
+  const filename = require.main?.filename
   const argv = process.argv
   const info = console.info
   t.teardown(() => {
-    require.main.filename = filename
+    if ((require.main != null) && filename) {
+      require.main.filename = filename
+    }
     process.argv = argv
     console.info = info
   })
 
-  require.main.filename = null
-  process.argv[1] = null
+  if (require.main != null) {
+    require.main.filename = ''
+  }
+  process.argv[1] = ''
 
-  console.info = function (msg) {
+  console.info = function (msg: string) {
     t.fail('logged: ' + msg)
   }
 
-  fp((fastify, opts, next) => {
+  fp((_fastify, _opts, next) => {
     next()
   }, {
     fastify: '^4.0.0'

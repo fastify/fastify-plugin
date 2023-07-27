@@ -1,37 +1,42 @@
 {
-  "name": "fastify-plugin",
-  "version": "4.5.1",
-  "description": "Plugin helper for Fastify",
-  "main": "plugin.js",
-  "types": "types/plugin.d.ts",
+  "name": "fastify-plugin-ts",
+  "version": "0.0.1",
+  "description": "Plugin helper for Fastify in TypeScript",
+  "main": "./dist/plugin.js",
+  "types": "./dist/plugin.d.ts",
   "scripts": {
-    "lint": "standard",
-    "test": "npm run test:unit && npm run test:typescript",
-    "test:unit": "tap",
-    "test:typescript": "tsd"
+    "lint": "ts-standard",
+    "test": "tap --ts",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fastify/fastify-plugin.git"
+    "url": "git+https://github.com/andersonjoseph/fastify-plugin-ts.git"
   },
   "keywords": [
     "plugin",
     "helper",
     "fastify"
   ],
-  "author": "Tomas Della Vedova - @delvedor (http://delved.org)",
+  "author": "Anderson Joseph <andersonjoseph@mailfence.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/fastify/fastify-plugin/issues"
+    "url": "https://github.com/andersonjoseph/fastify-plugin-ts/issues"
   },
-  "homepage": "https://github.com/fastify/fastify-plugin#readme",
+  "homepage": "https://github.com/andersonjoseph/fastify-plugin-ts#readme",
   "devDependencies": {
     "@fastify/type-provider-typebox": "^3.0.0",
     "@types/node": "^20.1.0",
+    "@types/proxyquire": "^1.3.28",
+    "@types/tap": "^15.0.8",
     "fastify": "^4.0.1",
     "proxyquire": "^2.1.3",
-    "standard": "^17.0.0",
     "tap": "^16.0.1",
-    "tsd": "^0.28.0"
-  }
+    "ts-node": "^10.9.1",
+    "ts-standard": "^12.0.2",
+    "typescript": "^5.1.6"
+  },
+  "files": [
+    "./dist/"
+  ]
 }

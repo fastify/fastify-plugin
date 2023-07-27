@@ -1,23 +1,27 @@
-'use strict'
 
-const { test } = require('tap')
-const fp = require('../plugin')
+import { FastifyInstance, FastifyPluginOptions } from 'fastify'
+import { test } from 'tap'
+import fp from '../plugin'
 
 test('webpack removes require.main.filename', (t) => {
-  const filename = require.main.filename
+  const filename = require.main?.filename
   const info = console.info
   t.teardown(() => {
-    require.main.filename = filename
+    if ((require.main != null) && filename) {
+      require.main.filename = filename
+    }
     console.info = info
   })
 
-  require.main.filename = null
+  if (require.main != null) {
+    require.main.filename = ''
+  }
 
-  console.info = function (msg) {
+  console.info = function (msg: string) {
     t.fail('logged: ' + msg)
   }
 
-  fp((fastify, opts, next) => {
+  fp((_fastify, _opts, next) => {
     next()
   }, {
     fastify: '^4.0.0'
@@ -27,7 +31,7 @@ test('webpack removes require.main.filename', (t) => {
 })
 
 test('support faux modules', (t) => {
-  const plugin = fp((fastify, opts, next) => {
+  const plugin = fp((_fastify, _opts, next) => {
     next()
   })
 
@@ -37,10 +41,10 @@ test('support faux modules', (t) => {
 
 test('support faux modules does not override existing default field in babel module', (t) => {
   const module = {
-    default: (fastify, opts, next) => next()
+    default: (_fastify: any, _opts: any, next: () => any) => next()
   }
 
-  module.default.default = 'Existing default field'
+  Reflect.set(module.default, 'default', 'Existing default field')
 
   const plugin = fp(module)
 
@@ -49,7 +53,7 @@ test('support faux modules does not override existing default field in babel mod
 })
 
 test('support ts named imports', (t) => {
-  const plugin = fp((fastify, opts, next) => {
+  const plugin = fp((_fastify, _opts, next) => {
     next()
   }, {
     name: 'hello'
@@ -60,7 +64,7 @@ test('support ts named imports', (t) => {
 })
 
 test('from kebab-case to camelCase', (t) => {
-  const plugin = fp((fastify, opts, next) => {
+  const plugin = fp((_fastify, _opts, next) => {
     next()
   }, {
     name: 'hello-world'
@@ -71,7 +75,7 @@ test('from kebab-case to camelCase', (t) => {
 })
 
 test('from @-prefixed named imports', (t) => {
-  const plugin = fp((fastify, opts, next) => {
+  const plugin = fp((_fastify, _opts, next) => {
     next()
   }, {
     name: '@hello/world'
@@ -82,7 +86,7 @@ test('from @-prefixed named imports', (t) => {
 })
 
 test('from @-prefixed named kebab-case to camelCase', (t) => {
-  const plugin = fp((fastify, opts, next) => {
+  const plugin = fp((_fastify, _opts, next) => {
     next()
   }, {
     name: '@hello/my-world'
@@ -93,7 +97,7 @@ test('from @-prefixed named kebab-case to camelCase', (t) => {
 })
 
 test('from kebab-case to camelCase multiple words', (t) => {
-  const plugin = fp((fastify, opts, next) => {
+  const plugin = fp((_fastify, _opts, next) => {
     next()
   }, {
     name: 'hello-long-world'
@@ -104,7 +108,7 @@ test('from kebab-case to camelCase multiple words', (t) => {
 })
 
 test('from kebab-case to camelCase multiple words does not override', (t) => {
-  const fn = (fastify, opts, next) => {
+  const fn = (_fastify: FastifyInstance, _opts: FastifyPluginOptions, next: () => void) => {
     next()
   }
 
