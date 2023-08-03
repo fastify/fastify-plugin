@@ -7,7 +7,8 @@
   "scripts": {
     "lint": "ts-standard",
     "test": "tap --ts --no-check-coverage",
-    "build": "tsc"
+    "build": "tsc",
+    "prepublish": "npm run build && npm test"
   },
   "repository": {
     "type": "git",
