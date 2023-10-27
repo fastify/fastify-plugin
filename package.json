@@ -3,6 +3,7 @@
   "version": "4.5.1",
   "description": "Plugin helper for Fastify",
   "main": "plugin.js",
+  "type": "commonjs",
   "types": "types/plugin.d.ts",
   "scripts": {
     "lint": "standard",
