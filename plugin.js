@@ -8,7 +8,7 @@ let count = 0
 function plugin (fn, options = {}) {
   let autoName = false
 
-  if (typeof fn.default !== 'undefined') {
+  if (fn.default !== undefined) {
     // Support for 'export default' behaviour in transpiled ECMAScript module
     fn = fn.default
   }
