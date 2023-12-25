@@ -6,7 +6,7 @@
 
 `fastify-plugin` is a plugin helper for [Fastify](https://github.com/fastify/fastify).
 
-When you build plugins for Fastify and you want that them to be accessible in the same context where you require them, you have two ways:
+When you build plugins for Fastify and you want them to be accessible in the same context where you require them, you have two ways:
 1. Use the `skip-override` hidden property
 2. Use this module
 
