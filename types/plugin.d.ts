@@ -10,7 +10,6 @@ import {
   FastifyTypeProviderDefault,
   FastifyBaseLogger,
 } from 'fastify'
-import { IncomingMessage, Server, ServerResponse } from 'http'
 
 type FastifyPlugin = typeof fastifyPlugin
 
