@@ -13,6 +13,12 @@ When you build plugins for Fastify and you want them to be accessible in the sam
 __Note: the v4.x series of this module covers Fastify v4__
 __Note: the v2.x & v3.x series of this module covers Fastify v3. For Fastify v2 support, refer to the v1.x series.__
 
+## Install
+
+```sh
+npm i fastify-plugin
+```
+
 ## Usage
 `fastify-plugin` can do three things for you:
 - Add the `skip-override` hidden property
