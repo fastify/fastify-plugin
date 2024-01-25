@@ -142,7 +142,7 @@ fp((fastify, opts, done) => { done() })
 fp(async (fastify, opts) => { return })
 ```
 
-TypeScript can sometimes infer the types of the arguments for these functions. Plugins in fastify are recommended to be typed using either `FastifyPluginCallback` or `FastifyPluginAsync`. These two definitions only differ in two ways:
+TypeScript can sometimes infer the types of the arguments for these functions. Plugins in Fastify are recommended to be typed using either `FastifyPluginCallback` or `FastifyPluginAsync`. These two definitions only differ in two ways:
 
 1. The third argument `done` (the callback part)
 2. The return type `FastifyPluginCallback` or `FastifyPluginAsync`
