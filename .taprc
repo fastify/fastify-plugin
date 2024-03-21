@@ -1,7 +1,5 @@
-ts: false
-jsx: false
-flow: false
-coverage: true
-
+# vim: set filetype=yaml :
 files:
   - test/**/*.js
+plugin:
+  - "!@tapjs/typescript"
