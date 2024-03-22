@@ -1,2 +1,4 @@
 files:
   - test/**/*.js
+plugin:
+  - "!@tapjs/typescript"
