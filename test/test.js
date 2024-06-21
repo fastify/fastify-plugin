@@ -6,6 +6,8 @@ const test = t.test
 const fp = require('../plugin')
 const Fastify = require('fastify')
 
+const pkg = require('../package.json')
+
 test('fastify-plugin is a function', t => {
   t.plan(1)
   t.type(fp, 'function')
@@ -206,12 +208,12 @@ test('should check fastify dependency graph - plugin', t => {
   const fastify = Fastify()
 
   fastify.register(fp((fastify, opts, next) => next(), {
-    fastify: '4.x',
+    fastify: '5.x',
     name: 'plugin1-name'
   }))
 
   fastify.register(fp((fastify, opts, next) => next(), {
-    fastify: '4.x',
+    fastify: '5.x',
     name: 'test',
     dependencies: ['plugin1-name', 'plugin2-name']
   }))
@@ -226,12 +228,12 @@ test('should check fastify dependency graph - decorate', t => {
   const fastify = Fastify()
 
   fastify.decorate('plugin1', fp((fastify, opts, next) => next(), {
-    fastify: '4.x',
+    fastify: '5.x',
     name: 'plugin1-name'
   }))
 
   fastify.register(fp((fastify, opts, next) => next(), {
-    fastify: '4.x',
+    fastify: '5.x',
     name: 'test',
     decorators: { fastify: ['plugin1', 'plugin2'] }
   }))
@@ -246,12 +248,12 @@ test('should check fastify dependency graph - decorateReply', t => {
   const fastify = Fastify()
 
   fastify.decorateReply('plugin1', fp((fastify, opts, next) => next(), {
-    fastify: '4.x',
+    fastify: '5.x',
     name: 'plugin1-name'
   }))
 
   fastify.register(fp((fastify, opts, next) => next(), {
-    fastify: '4.x',
+    fastify: '5.x',
     name: 'test',
     decorators: { reply: ['plugin1', 'plugin2'] }
   }))
@@ -311,20 +313,24 @@ test('should check dependencies when encapsulated', t => {
   })
 })
 
-test('should check version when encapsulated', t => {
-  t.plan(1)
-  const fastify = Fastify()
+test(
+  'should check version when encapsulated',
+  { skip: /\d-.+/.test(pkg.devDependencies.fastify) },
+  t => {
+    t.plan(1)
+    const fastify = Fastify()
 
-  fastify.register(fp((fastify, opts, next) => next(), {
-    name: 'test',
-    fastify: '<=2.10.0',
-    encapsulate: true
-  }))
+    fastify.register(fp((fastify, opts, next) => next(), {
+      name: 'test',
+      fastify: '<=2.10.0',
+      encapsulate: true
+    }))
 
-  fastify.ready(err => {
-    t.match(err.message, /fastify-plugin: test - expected '<=2.10.0' fastify version, '\d.\d+.\d+' is installed/)
-  })
-})
+    fastify.ready(err => {
+      t.match(err.message, /fastify-plugin: test - expected '<=2.10.0' fastify version, '\d.\d+.\d+' is installed/)
+    })
+  }
+)
 
 test('should check decorators when encapsulated', t => {
   t.plan(1)
@@ -333,7 +339,7 @@ test('should check decorators when encapsulated', t => {
   fastify.decorate('plugin1', 'foo')
 
   fastify.register(fp((fastify, opts, next) => next(), {
-    fastify: '4.x',
+    fastify: '5.x',
     name: 'test',
     encapsulate: true,
     decorators: { fastify: ['plugin1', 'plugin2'] }
@@ -352,14 +358,14 @@ test('plugin name when encapsulated', async t => {
   })
 
   fastify.register(fp(getFn('hello'), {
-    fastify: '4.x',
+    fastify: '5.x',
     name: 'hello',
     encapsulate: true
   }))
 
   fastify.register(function plugin (fastify, opts, next) {
     fastify.register(fp(getFn('deep'), {
-      fastify: '4.x',
+      fastify: '5.x',
       name: 'deep',
       encapsulate: true
     }))
@@ -368,25 +374,25 @@ test('plugin name when encapsulated', async t => {
       t.equal(fastify.pluginName, 'deep-deep', 'should be deep-deep')
 
       fastify.register(fp(getFn('deep-deep-deep'), {
-        fastify: '4.x',
+        fastify: '5.x',
         name: 'deep-deep-deep',
         encapsulate: true
       }))
 
       fastify.register(fp(getFn('deep-deep -> not-encapsulated-2'), {
-        fastify: '4.x',
+        fastify: '5.x',
         name: 'not-encapsulated-2'
       }))
 
       next()
     }, {
-      fastify: '4.x',
+      fastify: '5.x',
       name: 'deep-deep',
       encapsulate: true
     }))
 
     fastify.register(fp(getFn('plugin -> not-encapsulated'), {
-      fastify: '4.x',
+      fastify: '5.x',
       name: 'not-encapsulated'
     }))
 
