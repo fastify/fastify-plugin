@@ -20,7 +20,7 @@ test('webpack removes require.main.filename', (t) => {
   fp((fastify, opts, next) => {
     next()
   }, {
-    fastify: '^4.0.0'
+    fastify: '^5.0.0'
   })
 
   t.end()
