@@ -57,7 +57,7 @@ const fp = require('fastify-plugin')
 module.exports = fp(function (fastify, opts, done) {
   // your plugin code
   done()
-}, { fastify: '4.x' })
+}, { fastify: '5.x' })
 ```
 
 If you need to check the Fastify version only, you can pass just the version string.
@@ -76,7 +76,7 @@ function plugin (fastify, opts, done) {
 }
 
 module.exports = fp(plugin, {
-  fastify: '4.x',
+  fastify: '5.x',
   name: 'your-plugin-name'
 })
 ```
@@ -93,7 +93,7 @@ function plugin (fastify, opts, done) {
 }
 
 module.exports = fp(plugin, {
-  fastify: '4.x',
+  fastify: '5.x',
   decorators: {
     fastify: ['plugin1', 'plugin2'],
     reply: ['compress']
@@ -117,7 +117,7 @@ function plugin (fastify, opts, done) {
 
 module.exports = fp(plugin, {
   name: 'my-encapsulated-plugin',
-  fastify: '4.x',
+  fastify: '5.x',
   decorators: {
     fastify: ['plugin1', 'plugin2'],
     reply: ['compress']

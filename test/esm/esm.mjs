@@ -6,7 +6,7 @@ t.test('esm base support', async t => {
   fp((fastify, opts, next) => {
     next()
   }, {
-    fastify: '^3.0.0'
+    fastify: '^5.0.0'
   })
 
   t.end()
