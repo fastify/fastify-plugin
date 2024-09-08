@@ -1,14 +1,11 @@
 /// <reference types="fastify" />
 
 import {
-  FastifyPluginCallback,
-  FastifyPluginAsync,
   FastifyPluginOptions,
-  RawServerBase,
-  RawServerDefault,
-  FastifyTypeProvider,
-  FastifyTypeProviderDefault,
-  FastifyBaseLogger,
+  FastifyPlugin as BaseFastifyPlugin,
+  AnyFastifyInstance,
+  UnEncapsulatedPlugin,
+  FastifyInstance, FastifyPluginCallback, FastifyPluginAsync
 } from 'fastify'
 
 type FastifyPlugin = typeof fastifyPlugin
@@ -49,13 +46,16 @@ declare namespace fastifyPlugin {
 
 declare function fastifyPlugin<
   Options extends FastifyPluginOptions = Record<never, never>,
-  RawServer extends RawServerBase = RawServerDefault,
-  TypeProvider extends FastifyTypeProvider = FastifyTypeProviderDefault,
-  Logger extends FastifyBaseLogger = FastifyBaseLogger,
-  Fn extends FastifyPluginCallback<Options, RawServer, TypeProvider, Logger> | FastifyPluginAsync<Options, RawServer, TypeProvider, Logger> = FastifyPluginCallback<Options, RawServer, TypeProvider, Logger>
->(
-  fn: Fn extends unknown ? Fn extends (...args: any) => Promise<any> ? FastifyPluginAsync<Options, RawServer, TypeProvider, Logger> : FastifyPluginCallback<Options, RawServer, TypeProvider, Logger> : Fn,
+  Plugin extends FastifyPluginCallback<Options, AnyFastifyInstance, AnyFastifyInstance> = FastifyPluginCallback<Options, AnyFastifyInstance, AnyFastifyInstance>>(
+  fn: Plugin,
   options?: fastifyPlugin.PluginMetadata | string
-): Fn;
+): UnEncapsulatedPlugin<NoInfer<Plugin>>;
+
+declare function fastifyPlugin<
+  Options extends FastifyPluginOptions = Record<never, never>,
+  Plugin extends FastifyPluginAsync<Options, AnyFastifyInstance, AnyFastifyInstance> = FastifyPluginAsync<Options, AnyFastifyInstance, AnyFastifyInstance>>(
+  fn: Plugin,
+  options?: fastifyPlugin.PluginMetadata | string
+): UnEncapsulatedPlugin<NoInfer<Plugin>>;
 
 export = fastifyPlugin
