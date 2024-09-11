@@ -1,12 +1,12 @@
 'use strict'
 
-const { test } = require('tap')
+const { test } = require('node:test')
 const fp = require('../plugin')
 
-test('webpack removes require.main.filename', (t) => {
+test('webpack removes require.main.filename', async (t) => {
   const filename = require.main.filename
   const info = console.info
-  t.teardown(() => {
+  t.after(() => {
     require.main.filename = filename
     console.info = info
   })
@@ -14,7 +14,7 @@ test('webpack removes require.main.filename', (t) => {
   require.main.filename = null
 
   console.info = function (msg) {
-    t.fail('logged: ' + msg)
+    t.assert.fail('logged: ' + msg)
   }
 
   fp((fastify, opts, next) => {
@@ -22,17 +22,14 @@ test('webpack removes require.main.filename', (t) => {
   }, {
     fastify: '^5.0.0'
   })
-
-  t.end()
 })
 
-test('support faux modules', (t) => {
+test('support faux modules', async (t) => {
   const plugin = fp((fastify, opts, next) => {
     next()
   })
 
-  t.equal(plugin.default, plugin)
-  t.end()
+  t.assert.strictEqual(plugin.default, plugin)
 })
 
 test('support faux modules does not override existing default field in babel module', (t) => {
@@ -44,66 +41,60 @@ test('support faux modules does not override existing default field in babel mod
 
   const plugin = fp(module)
 
-  t.equal(plugin.default, 'Existing default field')
-  t.end()
+  t.assert.strictEqual(plugin.default, 'Existing default field')
 })
 
-test('support ts named imports', (t) => {
+test('support ts named imports', async (t) => {
   const plugin = fp((fastify, opts, next) => {
     next()
   }, {
     name: 'hello'
   })
 
-  t.equal(plugin.hello, plugin)
-  t.end()
+  t.assert.strictEqual(plugin.hello, plugin)
 })
 
-test('from kebab-case to camelCase', (t) => {
+test('from kebab-case to camelCase', async (t) => {
   const plugin = fp((fastify, opts, next) => {
     next()
   }, {
     name: 'hello-world'
   })
 
-  t.equal(plugin.helloWorld, plugin)
-  t.end()
+  t.assert.strictEqual(plugin.helloWorld, plugin)
 })
 
-test('from @-prefixed named imports', (t) => {
+test('from @-prefixed named imports', async (t) => {
   const plugin = fp((fastify, opts, next) => {
     next()
   }, {
     name: '@hello/world'
   })
 
-  t.equal(plugin.helloWorld, plugin)
-  t.end()
+  t.assert.strictEqual(plugin.helloWorld, plugin)
 })
 
-test('from @-prefixed named kebab-case to camelCase', (t) => {
+test('from @-prefixed named kebab-case to camelCase', async (t) => {
   const plugin = fp((fastify, opts, next) => {
     next()
   }, {
     name: '@hello/my-world'
   })
 
-  t.equal(plugin.helloMyWorld, plugin)
-  t.end()
+  t.assert.strictEqual(plugin.helloMyWorld, plugin)
 })
 
-test('from kebab-case to camelCase multiple words', (t) => {
+test('from kebab-case to camelCase multiple words', async (t) => {
   const plugin = fp((fastify, opts, next) => {
     next()
   }, {
     name: 'hello-long-world'
   })
 
-  t.equal(plugin.helloLongWorld, plugin)
-  t.end()
+  t.assert.strictEqual(plugin.helloLongWorld, plugin)
 })
 
-test('from kebab-case to camelCase multiple words does not override', (t) => {
+test('from kebab-case to camelCase multiple words does not override', async (t) => {
   const fn = (fastify, opts, next) => {
     next()
   }
@@ -115,6 +106,5 @@ test('from kebab-case to camelCase multiple words does not override', (t) => {
     name: 'hello-long-world'
   })
 
-  t.equal(plugin.helloLongWorld, foobar)
-  t.end()
+  t.assert.strictEqual(plugin.helloLongWorld, foobar)
 })
