@@ -3,7 +3,7 @@
 const { test } = require('node:test')
 const fp = require('../plugin')
 
-test('webpack removes require.main.filename', async (t) => {
+test('webpack removes require.main.filename', t => {
   const filename = require.main.filename
   const info = console.info
   t.after(() => {
