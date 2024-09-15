@@ -1,6 +1,6 @@
 'use strict'
 
-const t = require('tap')
+const { test } = require('node:test')
 const extractPluginName = require('../lib/getPluginName').extractPluginName
 
 const winStack = `Error: anonymous function
@@ -41,8 +41,9 @@ at TAP.test (/home/leonardo/desktop/fastify-plugin/node_modules/tap/lib/test.js:
 
 const anonymousStack = 'Unable to parse this'
 
-t.plan(3)
-
-t.equal(extractPluginName(winStack), 'hello.test')
-t.equal(extractPluginName(nixStack), 'this.is.a.test')
-t.equal(extractPluginName(anonymousStack), 'anonymous')
+test('extractPluginName tests', (t) => {
+  t.plan(3)
+  t.assert.strictEqual(extractPluginName(winStack), 'hello.test')
+  t.assert.strictEqual(extractPluginName(nixStack), 'this.is.a.test')
+  t.assert.strictEqual(extractPluginName(anonymousStack), 'anonymous')
+})

@@ -1,17 +1,17 @@
 'use strict'
 
-const { test } = require('tap')
+const { test } = require('node:test')
 const fp = require('../plugin')
 
 test('checkVersion having require.main.filename', (t) => {
   const info = console.info
-  t.ok(require.main.filename)
-  t.teardown(() => {
+  t.assert.ok(require.main.filename)
+  t.after(() => {
     console.info = info
   })
 
   console.info = function (msg) {
-    t.fail('logged: ' + msg)
+    t.assert.fail('logged: ' + msg)
   }
 
   fp((fastify, opts, next) => {
@@ -19,14 +19,12 @@ test('checkVersion having require.main.filename', (t) => {
   }, {
     fastify: '^5.0.0'
   })
-
-  t.end()
 })
 
 test('checkVersion having no require.main.filename but process.argv[1]', (t) => {
   const filename = require.main.filename
   const info = console.info
-  t.teardown(() => {
+  t.after(() => {
     require.main.filename = filename
     console.info = info
   })
@@ -34,7 +32,7 @@ test('checkVersion having no require.main.filename but process.argv[1]', (t) => 
   require.main.filename = null
 
   console.info = function (msg) {
-    t.fail('logged: ' + msg)
+    t.assert.fail('logged: ' + msg)
   }
 
   fp((fastify, opts, next) => {
@@ -42,15 +40,13 @@ test('checkVersion having no require.main.filename but process.argv[1]', (t) => 
   }, {
     fastify: '^5.0.0'
   })
-
-  t.end()
 })
 
 test('checkVersion having no require.main.filename and no process.argv[1]', (t) => {
   const filename = require.main.filename
   const argv = process.argv
   const info = console.info
-  t.teardown(() => {
+  t.after(() => {
     require.main.filename = filename
     process.argv = argv
     console.info = info
@@ -60,7 +56,7 @@ test('checkVersion having no require.main.filename and no process.argv[1]', (t) 
   process.argv[1] = null
 
   console.info = function (msg) {
-    t.fail('logged: ' + msg)
+    t.assert.fail('logged: ' + msg)
   }
 
   fp((fastify, opts, next) => {
@@ -68,6 +64,4 @@ test('checkVersion having no require.main.filename and no process.argv[1]', (t) 
   }, {
     fastify: '^5.0.0'
   })
-
-  t.end()
 })

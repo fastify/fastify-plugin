@@ -1,16 +1,14 @@
 'use strict'
 
-const t = require('tap')
-const test = t.test
+const { test } = require('node:test')
 const fp = require('../plugin')
 
-test('anonymous function should be named composite.test0', t => {
+test('anonymous function should be named composite.test0', (t) => {
   t.plan(2)
-
   const fn = fp((fastify, opts, next) => {
     next()
   })
 
-  t.equal(fn[Symbol.for('plugin-meta')].name, 'composite.test-auto-0')
-  t.equal(fn[Symbol.for('fastify.display-name')], 'composite.test-auto-0')
+  t.assert.strictEqual(fn[Symbol.for('plugin-meta')].name, 'composite.test-auto-0')
+  t.assert.strictEqual(fn[Symbol.for('fastify.display-name')], 'composite.test-auto-0')
 })
