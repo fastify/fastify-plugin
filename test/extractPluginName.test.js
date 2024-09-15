@@ -41,7 +41,7 @@ at TAP.test (/home/leonardo/desktop/fastify-plugin/node_modules/tap/lib/test.js:
 
 const anonymousStack = 'Unable to parse this'
 
-test('extractPluginName tests', async (t) => {
+test('extractPluginName tests', (t) => {
   t.plan(3)
   t.assert.strictEqual(extractPluginName(winStack), 'hello.test')
   t.assert.strictEqual(extractPluginName(nixStack), 'this.is.a.test')

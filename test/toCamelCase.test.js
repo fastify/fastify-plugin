@@ -3,7 +3,7 @@
 const { test } = require('node:test')
 const toCamelCase = require('../lib/toCamelCase')
 
-test('from kebab-case to camelCase', async (t) => {
+test('from kebab-case to camelCase', (t) => {
   t.plan(1)
   t.assert.strictEqual(toCamelCase('hello-world'), 'helloWorld')
 })

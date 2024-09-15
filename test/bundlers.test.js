@@ -24,7 +24,7 @@ test('webpack removes require.main.filename', t => {
   })
 })
 
-test('support faux modules', async (t) => {
+test('support faux modules', (t) => {
   const plugin = fp((fastify, opts, next) => {
     next()
   })
@@ -44,7 +44,7 @@ test('support faux modules does not override existing default field in babel mod
   t.assert.strictEqual(plugin.default, 'Existing default field')
 })
 
-test('support ts named imports', async (t) => {
+test('support ts named imports', (t) => {
   const plugin = fp((fastify, opts, next) => {
     next()
   }, {
@@ -54,7 +54,7 @@ test('support ts named imports', async (t) => {
   t.assert.strictEqual(plugin.hello, plugin)
 })
 
-test('from kebab-case to camelCase', async (t) => {
+test('from kebab-case to camelCase', (t) => {
   const plugin = fp((fastify, opts, next) => {
     next()
   }, {
@@ -64,7 +64,7 @@ test('from kebab-case to camelCase', async (t) => {
   t.assert.strictEqual(plugin.helloWorld, plugin)
 })
 
-test('from @-prefixed named imports', async (t) => {
+test('from @-prefixed named imports', (t) => {
   const plugin = fp((fastify, opts, next) => {
     next()
   }, {
@@ -74,7 +74,7 @@ test('from @-prefixed named imports', async (t) => {
   t.assert.strictEqual(plugin.helloWorld, plugin)
 })
 
-test('from @-prefixed named kebab-case to camelCase', async (t) => {
+test('from @-prefixed named kebab-case to camelCase', (t) => {
   const plugin = fp((fastify, opts, next) => {
     next()
   }, {
@@ -84,7 +84,7 @@ test('from @-prefixed named kebab-case to camelCase', async (t) => {
   t.assert.strictEqual(plugin.helloMyWorld, plugin)
 })
 
-test('from kebab-case to camelCase multiple words', async (t) => {
+test('from kebab-case to camelCase multiple words', (t) => {
   const plugin = fp((fastify, opts, next) => {
     next()
   }, {
@@ -94,7 +94,7 @@ test('from kebab-case to camelCase multiple words', async (t) => {
   t.assert.strictEqual(plugin.helloLongWorld, plugin)
 })
 
-test('from kebab-case to camelCase multiple words does not override', async (t) => {
+test('from kebab-case to camelCase multiple words does not override', (t) => {
   const fn = (fastify, opts, next) => {
     next()
   }

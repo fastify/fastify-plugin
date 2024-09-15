@@ -7,12 +7,12 @@ const Fastify = require('fastify')
 
 const pkg = require('../package.json')
 
-test('fastify-plugin is a function', async (t) => {
+test('fastify-plugin is a function', (t) => {
   t.plan(1)
   t.assert.ok(typeof fp === 'function')
 })
 
-test('should return the function with the skip-override Symbol', async (t) => {
+test('should return the function with the skip-override Symbol', (t) => {
   t.plan(1)
 
   function plugin (fastify, opts, next) {
@@ -23,7 +23,7 @@ test('should return the function with the skip-override Symbol', async (t) => {
   t.assert.ok(plugin[Symbol.for('skip-override')])
 })
 
-test('should support "default" function from babel module', async (t) => {
+test('should support "default" function from babel module', (t) => {
   t.plan(1)
 
   const plugin = {
@@ -38,7 +38,7 @@ test('should support "default" function from babel module', async (t) => {
   }
 })
 
-test('should throw if the plugin is not a function', async (t) => {
+test('should throw if the plugin is not a function', (t) => {
   t.plan(1)
 
   try {
@@ -49,7 +49,7 @@ test('should throw if the plugin is not a function', async (t) => {
   }
 })
 
-test('should check the fastify version', async (t) => {
+test('should check the fastify version', (t) => {
   t.plan(1)
 
   function plugin (fastify, opts, next) {
@@ -64,7 +64,7 @@ test('should check the fastify version', async (t) => {
   }
 })
 
-test('should check the fastify version', async (t) => {
+test('should check the fastify version', (t) => {
   t.plan(1)
 
   function plugin (fastify, opts, next) {
@@ -79,7 +79,7 @@ test('should check the fastify version', async (t) => {
   }
 })
 
-test('the options object should be an object', async (t) => {
+test('the options object should be an object', (t) => {
   t.plan(2)
 
   try {
@@ -97,7 +97,7 @@ test('the options object should be an object', async (t) => {
   }
 })
 
-test('should throw if the version number is not a string', async (t) => {
+test('should throw if the version number is not a string', (t) => {
   t.plan(1)
 
   try {
@@ -108,7 +108,7 @@ test('should throw if the version number is not a string', async (t) => {
   }
 })
 
-test('Should accept an option object', async (t) => {
+test('Should accept an option object', (t) => {
   t.plan(2)
 
   const opts = { hello: 'world' }
@@ -123,7 +123,7 @@ test('Should accept an option object', async (t) => {
   t.assert.deepStrictEqual(plugin[Symbol.for('plugin-meta')], opts, 'plugin-meta should match opts')
 })
 
-test('Should accept an option object and checks the version', async (t) => {
+test('Should accept an option object and checks the version', (t) => {
   t.plan(2)
 
   const opts = { hello: 'world', fastify: '>=0.10.0' }
@@ -137,7 +137,7 @@ test('Should accept an option object and checks the version', async (t) => {
   t.assert.deepStrictEqual(plugin[Symbol.for('plugin-meta')], opts)
 })
 
-test('should set anonymous function name to file it was called from with a counter', async (t) => {
+test('should set anonymous function name to file it was called from with a counter', (t) => {
   const fp = proxyquire('../plugin.js', { stubs: {} })
 
   const fn = fp((fastify, opts, next) => {
@@ -155,7 +155,7 @@ test('should set anonymous function name to file it was called from with a count
   t.assert.strictEqual(fn2[Symbol.for('fastify.display-name')], 'test-auto-1')
 })
 
-test('should set function name if Error.stackTraceLimit is set to 0', async (t) => {
+test('should set function name if Error.stackTraceLimit is set to 0', (t) => {
   const stackTraceLimit = Error.stackTraceLimit = 0
 
   const fp = proxyquire('../plugin.js', { stubs: {} })
@@ -177,7 +177,7 @@ test('should set function name if Error.stackTraceLimit is set to 0', async (t) 
   Error.stackTraceLimit = stackTraceLimit
 })
 
-test('should set display-name to meta name', async (t) => {
+test('should set display-name to meta name', (t) => {
   t.plan(2)
 
   const functionName = 'superDuperSpecialFunction'
@@ -190,7 +190,7 @@ test('should set display-name to meta name', async (t) => {
   t.assert.strictEqual(fn[Symbol.for('fastify.display-name')], functionName)
 })
 
-test('should preserve fastify version in meta', async (t) => {
+test('should preserve fastify version in meta', (t) => {
   t.plan(1)
 
   const opts = { hello: 'world', fastify: '>=0.10.0' }
@@ -215,12 +215,7 @@ test('should check fastify dependency graph - plugin', async (t) => {
     dependencies: ['plugin1-name', 'plugin2-name']
   }))
 
-  try {
-    await fastify.ready()
-    t.assert.fail()
-  } catch (err) {
-    t.assert.strictEqual(err.message, "The dependency 'plugin2-name' of plugin 'test' is not registered")
-  }
+  await t.assert.rejects(fastify.ready(), { message: "The dependency 'plugin2-name' of plugin 'test' is not registered" })
 })
 
 test('should check fastify dependency graph - decorate', async (t) => {
@@ -238,12 +233,7 @@ test('should check fastify dependency graph - decorate', async (t) => {
     decorators: { fastify: ['plugin1', 'plugin2'] }
   }))
 
-  try {
-    await fastify.ready()
-    t.assert.fail()
-  } catch (err) {
-    t.assert.strictEqual(err.message, "The decorator 'plugin2' required by 'test' is not present in Fastify")
-  }
+  await t.assert.rejects(fastify.ready(), { message: "The decorator 'plugin2' required by 'test' is not present in Fastify" })
 })
 
 test('should check fastify dependency graph - decorateReply', async (t) => {
@@ -261,11 +251,7 @@ test('should check fastify dependency graph - decorateReply', async (t) => {
     decorators: { reply: ['plugin1', 'plugin2'] }
   }))
 
-  try {
-    await fastify.ready()
-  } catch (err) {
-    t.assert.strictEqual(err.message, "The decorator 'plugin2' required by 'test' is not present in Reply")
-  }
+  await t.assert.rejects(fastify.ready(), { message: "The decorator 'plugin2' required by 'test' is not present in Reply" })
 })
 
 test('should accept an option to encapsulate', async (t) => {
@@ -296,11 +282,8 @@ test('should accept an option to encapsulate', async (t) => {
     encapsulate: true
   }))
 
-  try {
-    await fastify.ready()
-  } catch (err) {
-    t.assert.ifError(err)
-  }
+  await fastify.ready()
+
   t.assert.ok(fastify.hasDecorator('accessible'))
   t.assert.ok(fastify.hasDecorator('alsoAccessible'))
   t.assert.ok(!fastify.hasDecorator('encapsulated'))
@@ -316,14 +299,7 @@ test('should check dependencies when encapsulated', async (t) => {
     encapsulate: true
   }))
 
-  try {
-    await fastify.ready()
-  } catch (err) {
-    t.assert.strictEqual(err.message, "The dependency 'missing-dependency-name' of plugin 'test' is not registered")
-  }
-  // fastify.ready(err => {
-  //   t.equal(err.message, "The dependency 'missing-dependency-name' of plugin 'test' is not registered")
-  // })
+  await t.assert.rejects(fastify.ready(), { message: "The dependency 'missing-dependency-name' of plugin 'test' is not registered" })
 })
 
 test(
@@ -339,11 +315,7 @@ test(
       encapsulate: true
     }))
 
-    try {
-      await fastify.ready()
-    } catch (err) {
-      t.assert.match(err.message, /fastify-plugin: test - expected '<=2.10.0' fastify version, '\d.\d+.\d+' is installed/)
-    }
+    await t.assert.rejects(fastify.ready(), { message: /fastify-plugin: test - expected '<=2.10.0' fastify version, '\d.\d+.\d+' is installed/ })
   }
 )
 
@@ -360,11 +332,7 @@ test('should check decorators when encapsulated', async (t) => {
     decorators: { fastify: ['plugin1', 'plugin2'] }
   }))
 
-  try {
-    await fastify.ready()
-  } catch (err) {
-    t.assert.strictEqual(err.message, "The decorator 'plugin2' required by 'test' is not present in Fastify")
-  }
+  await t.assert.rejects(fastify.ready(), { message: "The decorator 'plugin2' required by 'test' is not present in Fastify" })
 })
 
 test('plugin name when encapsulated', async (t) => {

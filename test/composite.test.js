@@ -3,7 +3,7 @@
 const { test } = require('node:test')
 const fp = require('../plugin')
 
-test('anonymous function should be named composite.test0', async (t) => {
+test('anonymous function should be named composite.test0', (t) => {
   t.plan(2)
   const fn = fp((fastify, opts, next) => {
     next()

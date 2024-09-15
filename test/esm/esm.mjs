@@ -1,7 +1,7 @@
 import { test } from 'node:test'
 import fp from '../../plugin.js'
 
-test('esm base support', async (t) => {
+test('esm base support', (t) => {
   fp((fastify, opts, next) => {
     next()
   }, {

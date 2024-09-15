@@ -3,7 +3,7 @@
 const { test } = require('node:test')
 const fp = require('../plugin')
 
-test('anonymous function should be named mu1tip1e.composite.test', async (t) => {
+test('anonymous function should be named mu1tip1e.composite.test', (t) => {
   t.plan(2)
 
   const fn = fp((fastify, opts, next) => {
