@@ -33,7 +33,7 @@ declare namespace fastifyPlugin {
    * @deprecated Use PluginMetadata instead
    */
   export interface PluginOptions extends PluginMetadata {}
-  
+
   export const fastifyPlugin: FastifyPlugin
   export { fastifyPlugin as default }
 }
