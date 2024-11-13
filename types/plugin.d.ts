@@ -2,10 +2,12 @@
 
 import {
   FastifyPluginOptions,
-  FastifyPlugin as BaseFastifyPlugin,
   AnyFastifyInstance,
   UnEncapsulatedPlugin,
-  FastifyInstance, FastifyPluginCallback, FastifyPluginAsync
+  FastifyPluginCallback,
+  FastifyPluginAsync,
+  ApplyDependencies,
+  FastifyDependencies
 } from 'fastify'
 
 type FastifyPlugin = typeof fastifyPlugin
@@ -33,6 +35,18 @@ declare namespace fastifyPlugin {
   
   export const fastifyPlugin: FastifyPlugin
   export { fastifyPlugin as default }
+
+  export function createPlugin<
+    TPlugin extends FastifyPluginCallback,
+    TDependencies extends FastifyDependencies,
+    TEnhanced extends ApplyDependencies<TPlugin, TDependencies> = ApplyDependencies<TPlugin, TDependencies>
+  > (plugin: TEnhanced, options?: { dependencies?: TDependencies }): UnEncapsulatedPlugin<TEnhanced>
+
+  export function createPlugin<
+    TPlugin extends FastifyPluginAsync,
+    TDependencies extends FastifyDependencies,
+    TEnhanced extends ApplyDependencies<TPlugin, TDependencies> = ApplyDependencies<TPlugin, TDependencies>
+  > (plugin: TEnhanced, options?: { dependencies?: TDependencies }): UnEncapsulatedPlugin<TEnhanced>
 }
 
 /**
