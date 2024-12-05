@@ -1,6 +1,6 @@
 # fastify-plugin
 
-![CI](https://github.com/fastify/fastify-plugin/workflows/CI/badge.svg?branch=master)
+[![CI](https://github.com/fastify/fastify-plugin/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/fastify/fastify-plugin/actions/workflows/ci.yml)
 [![NPM version](https://img.shields.io/npm/v/fastify-plugin.svg?style=flat)](https://www.npmjs.com/package/fastify-plugin)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://standardjs.com/)
 
