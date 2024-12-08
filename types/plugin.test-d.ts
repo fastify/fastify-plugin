@@ -1,10 +1,10 @@
-import fastifyPlugin from '..';
-import fastify, { FastifyPluginCallback, FastifyPluginAsync, FastifyError, FastifyInstance, FastifyPluginOptions, RawServerDefault, FastifyTypeProviderDefault, FastifyBaseLogger } from 'fastify';
+import fastifyPlugin from '..'
+import fastify, { FastifyPluginCallback, FastifyPluginAsync, FastifyError, FastifyInstance, FastifyPluginOptions, RawServerDefault, FastifyTypeProviderDefault, FastifyBaseLogger } from 'fastify'
 import { expectAssignable, expectError, expectNotType, expectType } from 'tsd'
-import { Server } from "node:https"
-import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox"
-import fastifyExampleCallback from './example-callback.test-d';
-import fastifyExampleAsync from './example-async.test-d';
+import { Server } from 'node:https'
+import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
+import fastifyExampleCallback from './example-callback.test-d'
+import fastifyExampleAsync from './example-async.test-d'
 
 interface Options {
   foo: string

@@ -1,6 +1,6 @@
-import { FastifyPluginCallback } from "fastify";
+import { FastifyPluginCallback } from 'fastify'
 
-type FastifyExampleCallback = FastifyPluginCallback<fastifyExampleCallback.FastifyExampleCallbackOptions>;
+type FastifyExampleCallback = FastifyPluginCallback<fastifyExampleCallback.FastifyExampleCallbackOptions>
 
 declare namespace fastifyExampleCallback {
 
@@ -14,6 +14,6 @@ declare namespace fastifyExampleCallback {
   export { fastifyExampleCallback as default }
 }
 
-declare function fastifyExampleCallback(...params: Parameters<FastifyExampleCallback>): ReturnType<FastifyExampleCallback>
+declare function fastifyExampleCallback (...params: Parameters<FastifyExampleCallback>): ReturnType<FastifyExampleCallback>
 
 export default fastifyExampleCallback

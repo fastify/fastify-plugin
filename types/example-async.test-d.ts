@@ -1,6 +1,6 @@
-import { FastifyPluginAsync } from "fastify";
+import { FastifyPluginAsync } from 'fastify'
 
-type FastifyExampleAsync = FastifyPluginAsync<fastifyExampleAsync.FastifyExampleAsyncOptions>;
+type FastifyExampleAsync = FastifyPluginAsync<fastifyExampleAsync.FastifyExampleAsyncOptions>
 
 declare namespace fastifyExampleAsync {
 
@@ -14,6 +14,6 @@ declare namespace fastifyExampleAsync {
   export { fastifyExampleAsync as default }
 }
 
-declare function fastifyExampleAsync(...params: Parameters<FastifyExampleAsync>): ReturnType<FastifyExampleAsync>
+declare function fastifyExampleAsync (...params: Parameters<FastifyExampleAsync>): ReturnType<FastifyExampleAsync>
 
 export default fastifyExampleAsync
