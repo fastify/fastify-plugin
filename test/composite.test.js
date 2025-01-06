@@ -5,7 +5,7 @@ const fp = require('../plugin')
 
 test('anonymous function should be named composite.test0', (t) => {
   t.plan(2)
-  const fn = fp((fastify, opts, next) => {
+  const fn = fp((_fastify, _opts, next) => {
     next()
   })
 

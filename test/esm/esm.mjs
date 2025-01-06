@@ -2,7 +2,7 @@ import { test } from 'node:test'
 import fp from '../../plugin.js'
 
 test('esm base support', (t) => {
-  fp((fastify, opts, next) => {
+  fp((_fastify, _opts, next) => {
     next()
   }, {
     fastify: '^5.0.0'

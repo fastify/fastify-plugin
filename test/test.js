@@ -15,7 +15,7 @@ test('fastify-plugin is a function', (t) => {
 test('should return the function with the skip-override Symbol', (t) => {
   t.plan(1)
 
-  function plugin (fastify, opts, next) {
+  function plugin (_fastify, _opts, next) {
     next()
   }
 
@@ -52,14 +52,14 @@ test('should throw if the plugin is not a function', (t) => {
 test('should check the fastify version', (t) => {
   t.plan(1)
 
-  function plugin (fastify, opts, next) {
+  function plugin (_fastify, _opts, next) {
     next()
   }
 
   try {
     fp(plugin, { fastify: '>=0.10.0' })
     t.assert.ok(true)
-  } catch (e) {
+  } catch {
     t.assert.fail()
   }
 })
@@ -67,14 +67,14 @@ test('should check the fastify version', (t) => {
 test('should check the fastify version', (t) => {
   t.plan(1)
 
-  function plugin (fastify, opts, next) {
+  function plugin (_fastify, _opts, next) {
     next()
   }
 
   try {
     fp(plugin, '>=0.10.0')
     t.assert.ok(true)
-  } catch (e) {
+  } catch {
     t.assert.fail()
   }
 })
@@ -113,7 +113,7 @@ test('Should accept an option object', (t) => {
 
   const opts = { hello: 'world' }
 
-  function plugin (fastify, opts, next) {
+  function plugin (_fastify, _opts, next) {
     next()
   }
 
@@ -128,7 +128,7 @@ test('Should accept an option object and checks the version', (t) => {
 
   const opts = { hello: 'world', fastify: '>=0.10.0' }
 
-  function plugin (fastify, opts, next) {
+  function plugin (_fastify, _opts, next) {
     next()
   }
 
@@ -140,14 +140,14 @@ test('Should accept an option object and checks the version', (t) => {
 test('should set anonymous function name to file it was called from with a counter', (t) => {
   const fp = proxyquire('../plugin.js', { stubs: {} })
 
-  const fn = fp((fastify, opts, next) => {
+  const fn = fp((_fastify, _opts, next) => {
     next()
   })
 
   t.assert.strictEqual(fn[Symbol.for('plugin-meta')].name, 'test-auto-0')
   t.assert.strictEqual(fn[Symbol.for('fastify.display-name')], 'test-auto-0')
 
-  const fn2 = fp((fastify, opts, next) => {
+  const fn2 = fp((_fastify, _opts, next) => {
     next()
   })
 
@@ -160,14 +160,14 @@ test('should set function name if Error.stackTraceLimit is set to 0', (t) => {
 
   const fp = proxyquire('../plugin.js', { stubs: {} })
 
-  const fn = fp((fastify, opts, next) => {
+  const fn = fp((_fastify, _opts, next) => {
     next()
   })
 
   t.assert.strictEqual(fn[Symbol.for('plugin-meta')].name, 'test-auto-0')
   t.assert.strictEqual(fn[Symbol.for('fastify.display-name')], 'test-auto-0')
 
-  const fn2 = fp((fastify, opts, next) => {
+  const fn2 = fp((_fastify, _opts, next) => {
     next()
   })
 
@@ -182,7 +182,7 @@ test('should set display-name to meta name', (t) => {
 
   const functionName = 'superDuperSpecialFunction'
 
-  const fn = fp((fastify, opts, next) => next(), {
+  const fn = fp((_fastify, _opts, next) => next(), {
     name: functionName
   })
 
@@ -195,7 +195,7 @@ test('should preserve fastify version in meta', (t) => {
 
   const opts = { hello: 'world', fastify: '>=0.10.0' }
 
-  const fn = fp((fastify, opts, next) => next(), opts)
+  const fn = fp((_fastify, _opts, next) => next(), opts)
 
   t.assert.strictEqual(fn[Symbol.for('plugin-meta')].fastify, '>=0.10.0')
 })
@@ -204,12 +204,12 @@ test('should check fastify dependency graph - plugin', async (t) => {
   t.plan(1)
   const fastify = Fastify()
 
-  fastify.register(fp((fastify, opts, next) => next(), {
+  fastify.register(fp((_fastify, _opts, next) => next(), {
     fastify: '5.x',
     name: 'plugin1-name'
   }))
 
-  fastify.register(fp((fastify, opts, next) => next(), {
+  fastify.register(fp((_fastify, _opts, next) => next(), {
     fastify: '5.x',
     name: 'test',
     dependencies: ['plugin1-name', 'plugin2-name']
@@ -222,12 +222,12 @@ test('should check fastify dependency graph - decorate', async (t) => {
   t.plan(1)
   const fastify = Fastify()
 
-  fastify.decorate('plugin1', fp((fastify, opts, next) => next(), {
+  fastify.decorate('plugin1', fp((_fastify, _opts, next) => next(), {
     fastify: '5.x',
     name: 'plugin1-name'
   }))
 
-  fastify.register(fp((fastify, opts, next) => next(), {
+  fastify.register(fp((_fastify, _opts, next) => next(), {
     fastify: '5.x',
     name: 'test',
     decorators: { fastify: ['plugin1', 'plugin2'] }
@@ -240,12 +240,12 @@ test('should check fastify dependency graph - decorateReply', async (t) => {
   t.plan(1)
   const fastify = Fastify()
 
-  fastify.decorateReply('plugin1', fp((fastify, opts, next) => next(), {
+  fastify.decorateReply('plugin1', fp((_fastify, _opts, next) => next(), {
     fastify: '5.x',
     name: 'plugin1-name'
   }))
 
-  fastify.register(fp((fastify, opts, next) => next(), {
+  fastify.register(fp((_fastify, _opts, next) => next(), {
     fastify: '5.x',
     name: 'test',
     decorators: { reply: ['plugin1', 'plugin2'] }
@@ -259,14 +259,14 @@ test('should accept an option to encapsulate', async (t) => {
 
   const fastify = Fastify()
 
-  fastify.register(fp((fastify, opts, next) => {
+  fastify.register(fp((fastify, _opts, next) => {
     fastify.decorate('accessible', true)
     next()
   }, {
     name: 'accessible-plugin'
   }))
 
-  fastify.register(fp((fastify, opts, next) => {
+  fastify.register(fp((fastify, _opts, next) => {
     fastify.decorate('alsoAccessible', true)
     next()
   }, {
@@ -274,7 +274,7 @@ test('should accept an option to encapsulate', async (t) => {
     encapsulate: false
   }))
 
-  fastify.register(fp((fastify, opts, next) => {
+  fastify.register(fp((fastify, _opts, next) => {
     fastify.decorate('encapsulated', true)
     next()
   }, {
@@ -293,7 +293,7 @@ test('should check dependencies when encapsulated', async (t) => {
   t.plan(1)
   const fastify = Fastify()
 
-  fastify.register(fp((fastify, opts, next) => next(), {
+  fastify.register(fp((_fastify, _opts, next) => next(), {
     name: 'test',
     dependencies: ['missing-dependency-name'],
     encapsulate: true
@@ -309,7 +309,7 @@ test(
     t.plan(1)
     const fastify = Fastify()
 
-    fastify.register(fp((fastify, opts, next) => next(), {
+    fastify.register(fp((_fastify, _opts, next) => next(), {
       name: 'test',
       fastify: '<=2.10.0',
       encapsulate: true
@@ -325,7 +325,7 @@ test('should check decorators when encapsulated', async (t) => {
 
   fastify.decorate('plugin1', 'foo')
 
-  fastify.register(fp((fastify, opts, next) => next(), {
+  fastify.register(fp((_fastify, _opts, next) => next(), {
     fastify: '5.x',
     name: 'test',
     encapsulate: true,
@@ -339,7 +339,7 @@ test('plugin name when encapsulated', async (t) => {
   t.plan(6)
   const fastify = Fastify()
 
-  fastify.register(function plugin (instance, opts, next) {
+  fastify.register(function plugin (_instance, _opts, next) {
     next()
   })
 
@@ -349,14 +349,14 @@ test('plugin name when encapsulated', async (t) => {
     encapsulate: true
   }))
 
-  fastify.register(function plugin (fastify, opts, next) {
+  fastify.register(function plugin (fastify, _opts, next) {
     fastify.register(fp(getFn('deep'), {
       fastify: '5.x',
       name: 'deep',
       encapsulate: true
     }))
 
-    fastify.register(fp(function genericPlugin (fastify, opts, next) {
+    fastify.register(fp(function genericPlugin (fastify, _opts, next) {
       t.assert.strictEqual(fastify.pluginName, 'deep-deep', 'should be deep-deep')
 
       fastify.register(fp(getFn('deep-deep-deep'), {
@@ -388,7 +388,7 @@ test('plugin name when encapsulated', async (t) => {
   await fastify.ready()
 
   function getFn (expectedName) {
-    return function genericPlugin (fastify, opts, next) {
+    return function genericPlugin (fastify, _opts, next) {
       t.assert.strictEqual(fastify.pluginName, expectedName, `should be ${expectedName}`)
       next()
     }

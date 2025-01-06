@@ -14,7 +14,7 @@ test('checkVersion having require.main.filename', (t) => {
     t.assert.fail('logged: ' + msg)
   }
 
-  fp((fastify, opts, next) => {
+  fp((_fastify, _opts, next) => {
     next()
   }, {
     fastify: '^5.0.0'
@@ -35,7 +35,7 @@ test('checkVersion having no require.main.filename but process.argv[1]', (t) => 
     t.assert.fail('logged: ' + msg)
   }
 
-  fp((fastify, opts, next) => {
+  fp((_fastify, _opts, next) => {
     next()
   }, {
     fastify: '^5.0.0'
@@ -59,7 +59,7 @@ test('checkVersion having no require.main.filename and no process.argv[1]', (t) 
     t.assert.fail('logged: ' + msg)
   }
 
-  fp((fastify, opts, next) => {
+  fp((_fastify, _opts, next) => {
     next()
   }, {
     fastify: '^5.0.0'
