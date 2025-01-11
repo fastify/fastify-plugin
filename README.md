@@ -177,7 +177,7 @@ fp(pluginAsyncWithTypes)
 fp(async (fastify: FastifyInstance, options: FastifyPluginOptions): Promise<void> => { })
 ```
 
-## Acknowledgements
+## Acknowledgments
 
 This project is kindly sponsored by:
 - [nearForm](https://nearform.com)
