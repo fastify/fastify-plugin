@@ -9,6 +9,7 @@ import {
   FastifyTypeProvider,
   FastifyTypeProviderDefault,
   FastifyBaseLogger,
+  FastifyInstance,
 } from 'fastify'
 
 type FastifyPlugin = typeof fastifyPlugin
@@ -38,6 +39,16 @@ declare namespace fastifyPlugin {
   export { fastifyPlugin as default }
 }
 
+// Todo: import decorators from fastify
+interface FastifyDecorators { fastify?: object, request?: object, reply?: object }
+interface FastifyPluginDecorators {
+  decorators: FastifyDecorators,
+  dependencies: (FastifyPluginCallback<any, any, any, any, any> | FastifyPluginAsync<any, any, any, any, any>)[]
+}
+
+type GetSixthGenericOfFasityInstance<T> = T extends FastifyInstance<any, any, any, any, any, infer U> ? U : void;
+type GetFirstParameter<T> = T extends (...args: infer P) => any ? P[0] : void;
+
 /**
  * This function does three things for you:
  *   1. Add the `skip-override` hidden property
@@ -48,13 +59,14 @@ declare namespace fastifyPlugin {
  */
 
 declare function fastifyPlugin<
+  Decorators extends FastifyPluginDecorators = { decorators: {}, dependencies: [] },
   Options extends FastifyPluginOptions = Record<never, never>,
   RawServer extends RawServerBase = RawServerDefault,
   TypeProvider extends FastifyTypeProvider = FastifyTypeProviderDefault,
   Logger extends FastifyBaseLogger = FastifyBaseLogger,
-  Fn extends FastifyPluginCallback<Options, RawServer, TypeProvider, Logger> | FastifyPluginAsync<Options, RawServer, TypeProvider, Logger> = FastifyPluginCallback<Options, RawServer, TypeProvider, Logger>
+  Fn extends FastifyPluginCallback<Options, RawServer, TypeProvider, Logger, Decorators['decorators']> | FastifyPluginAsync<Options, RawServer, TypeProvider, Logger, Decorators['decorators']> = FastifyPluginCallback<Options, RawServer, TypeProvider, Logger, Decorators['decorators']>
 > (
-  fn: Fn extends unknown ? Fn extends (...args: any) => Promise<any> ? FastifyPluginAsync<Options, RawServer, TypeProvider, Logger> : FastifyPluginCallback<Options, RawServer, TypeProvider, Logger> : Fn,
+  fn: Fn extends unknown ? Fn extends (...args: any) => Promise<any> ? FastifyPluginAsync<Options, RawServer, TypeProvider, Logger, Decorators['decorators'] & GetSixthGenericOfFasityInstance<GetFirstParameter<Decorators["dependencies"][number] extends undefined ? {} : Decorators["dependencies"][number]>>> : FastifyPluginCallback<Options, RawServer, TypeProvider, Logger, Decorators['decorators'] & GetSixthGenericOfFasityInstance<GetFirstParameter<Decorators["dependencies"][number] extends undefined ? {} : Decorators["dependencies"][number]>>> : Fn,
   options?: fastifyPlugin.PluginMetadata | string
 ): Fn
 
