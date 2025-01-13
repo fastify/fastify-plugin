@@ -95,15 +95,15 @@ expectType<FastifyPluginAsync<Options, Server, TypeBoxTypeProvider>>(fastifyPlug
 
 const server = fastify()
 server.register(fastifyPlugin(pluginCallback))
-server.register(fastifyPlugin(pluginCallbackWithTypes))
-server.register(fastifyPlugin(pluginCallbackWithOptions))
-server.register(fastifyPlugin(pluginCallbackWithServer))
-server.register(fastifyPlugin(pluginCallbackWithTypeProvider))
+server.register(fastifyPlugin(pluginCallbackWithTypes), { foo: 'bar' })
+server.register(fastifyPlugin(pluginCallbackWithOptions), { foo: 'bar' })
+server.register(fastifyPlugin(pluginCallbackWithServer), { foo: 'bar' })
+server.register(fastifyPlugin(pluginCallbackWithTypeProvider), { foo: 'bar' })
 server.register(fastifyPlugin(pluginAsync))
-server.register(fastifyPlugin(pluginAsyncWithTypes))
-server.register(fastifyPlugin(pluginAsyncWithOptions))
-server.register(fastifyPlugin(pluginAsyncWithServer))
-server.register(fastifyPlugin(pluginAsyncWithTypeProvider))
+server.register(fastifyPlugin(pluginAsyncWithTypes), { foo: 'bar' })
+server.register(fastifyPlugin(pluginAsyncWithOptions), { foo: 'bar' })
+server.register(fastifyPlugin(pluginAsyncWithServer), { foo: 'bar' })
+server.register(fastifyPlugin(pluginAsyncWithTypeProvider), { foo: 'bar' })
 
 // properly handling callback and async
 fastifyPlugin(function (fastify, options, next) {
