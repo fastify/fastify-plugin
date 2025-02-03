@@ -43,11 +43,11 @@ declare namespace fastifyPlugin {
 interface FastifyDecorators { fastify?: object, request?: object, reply?: object }
 interface FastifyPluginDecorators {
   decorators: FastifyDecorators,
-  dependencies: (FastifyPluginCallback<any, any, any, any, any> | FastifyPluginAsync<any, any, any, any, any>)[]
+  dependencies: (FastifyPluginCallback<any, any, any, any, any> | FastifyPluginAsync<any, any, any, any, any>)[],
 }
 
-type GetSixthGenericOfFasityInstance<T> = T extends FastifyInstance<any, any, any, any, any, infer U> ? U : void;
-type GetFirstParameter<T> = T extends (...args: infer P) => any ? P[0] : void;
+type GetSixthGenericOfFasityInstance<T> = T extends FastifyInstance<any, any, any, any, any, infer U> ? U : void
+type GetFirstParameter<T> = T extends (...args: infer P) => any ? P[0] : void
 
 /**
  * This function does three things for you:
@@ -66,8 +66,9 @@ declare function fastifyPlugin<
   Logger extends FastifyBaseLogger = FastifyBaseLogger,
   Fn extends FastifyPluginCallback<Options, RawServer, TypeProvider, Logger, Decorators['decorators']> | FastifyPluginAsync<Options, RawServer, TypeProvider, Logger, Decorators['decorators']> = FastifyPluginCallback<Options, RawServer, TypeProvider, Logger, Decorators['decorators']>
 > (
-  fn: Fn extends unknown ? Fn extends (...args: any) => Promise<any> ? FastifyPluginAsync<Options, RawServer, TypeProvider, Logger, Decorators['decorators'] & GetSixthGenericOfFasityInstance<GetFirstParameter<Decorators["dependencies"][number] extends undefined ? {} : Decorators["dependencies"][number]>>> : FastifyPluginCallback<Options, RawServer, TypeProvider, Logger, Decorators['decorators'] & GetSixthGenericOfFasityInstance<GetFirstParameter<Decorators["dependencies"][number] extends undefined ? {} : Decorators["dependencies"][number]>>> : Fn,
+  fn: Fn extends unknown ? Fn extends (...args: any) => Promise<any> ? FastifyPluginAsync<Options, RawServer, TypeProvider, Logger, Decorators['decorators'] & GetSixthGenericOfFasityInstance<GetFirstParameter<Decorators['dependencies'][number] extends undefined ? {} : Decorators['dependencies'][number]>>> : FastifyPluginCallback<Options, RawServer, TypeProvider, Logger, Decorators['decorators'] & GetSixthGenericOfFasityInstance<GetFirstParameter<Decorators['dependencies'][number] extends undefined ? {} : Decorators['dependencies'][number]>>> : Fn,
   options?: fastifyPlugin.PluginMetadata | string
 ): Fn
 
-export = fastifyPlugin
+export default fastifyPlugin
+export type GetPluginTypes<Decorators extends FastifyPluginDecorators = { decorators: {}, dependencies: [] }, Options extends FastifyPluginOptions = {}> = FastifyPluginAsync<Options, RawServerBase, FastifyTypeProviderDefault, FastifyBaseLogger, Decorators['decorators'] & GetSixthGenericOfFasityInstance<GetFirstParameter<Decorators['dependencies'][number] extends undefined ? {} : Decorators['dependencies'][number]>>>
