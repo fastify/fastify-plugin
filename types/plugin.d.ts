@@ -46,9 +46,6 @@ interface FastifyPluginDecorators {
   dependencies: (FastifyPluginCallback<any, any, any, any, any> | FastifyPluginAsync<any, any, any, any, any>)[],
 }
 
-type GetSixthGenericOfFasityInstance<T> = T extends FastifyInstance<any, any, any, any, any, infer U> ? U : void
-type GetFirstParameter<T> = T extends (...args: infer P) => any ? P[0] : void
-
 /**
  * This function does three things for you:
  *   1. Add the `skip-override` hidden property
@@ -71,4 +68,8 @@ declare function fastifyPlugin<
 ): Fn
 
 export default fastifyPlugin
-export type GetPluginTypes<Decorators extends FastifyPluginDecorators = { decorators: {}, dependencies: [] }, Options extends FastifyPluginOptions = {}> = FastifyPluginAsync<Options, RawServerDefault, FastifyTypeProviderDefault, FastifyBaseLogger, Decorators['decorators'] & GetSixthGenericOfFasityInstance<GetFirstParameter<Decorators['dependencies'][number] extends undefined ? (instance: any) => {} : Decorators['dependencies'][number]>>> | FastifyPluginCallback<Options, RawServerDefault, FastifyTypeProviderDefault, FastifyBaseLogger, Decorators['decorators'] & GetSixthGenericOfFasityInstance<GetFirstParameter<Decorators['dependencies'][number] extends undefined ? (instance: any) => {} : Decorators['dependencies'][number]>>>
+
+type GetSixthGenericOfFasityInstance<Instance> = Instance extends FastifyInstance<any, any, any, any, any, infer U> ? U : never
+type GetFirstParameter<T> = T extends (...args: infer P) => any ? P[0] : never
+type GetFastifyDecoratorsFromPlugins<Plugins extends (FastifyPluginCallback<any, any, any, any, any> | FastifyPluginAsync<any, any, any, any, any>)[]> = GetSixthGenericOfFasityInstance<GetFirstParameter<Plugins[number]>>
+export type GetPluginTypes<Decorators extends FastifyPluginDecorators = { decorators: {}, dependencies: [] }, Options extends FastifyPluginOptions = {}> = FastifyPluginAsync<Options, RawServerDefault, FastifyTypeProviderDefault, FastifyBaseLogger, Decorators['decorators'] & GetFastifyDecoratorsFromPlugins<Decorators['dependencies']>> | FastifyPluginCallback<Options, RawServerDefault, FastifyTypeProviderDefault, FastifyBaseLogger, Decorators['decorators'] & GetFastifyDecoratorsFromPlugins<Decorators['dependencies']>>
