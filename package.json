@@ -58,7 +58,6 @@
     }
   ],
   "devDependencies": {
-    "@fastify/pre-commit": "^2.1.0",
     "@fastify/type-provider-typebox": "^5.1.0",
     "@types/node": "^24.0.8",
     "c8": "^10.1.2",
