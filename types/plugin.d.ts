@@ -1,5 +1,3 @@
-/// <reference types="fastify" />
-
 import {
   FastifyPluginCallback,
   FastifyPluginAsync,
