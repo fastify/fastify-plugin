@@ -62,6 +62,17 @@ function plugin (fn, options = {}) {
   return fn
 }
 
+function createPlugin (fn, options = {}) {
+  const runtimeOptions = { ...options }
+
+  if (Array.isArray(runtimeOptions.dependencies)) {
+    delete runtimeOptions.dependencies
+  }
+
+  return plugin(fn, runtimeOptions)
+}
+
 module.exports = plugin
 module.exports.default = plugin
 module.exports.fastifyPlugin = plugin
+module.exports.createPlugin = createPlugin

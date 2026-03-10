@@ -46,6 +46,41 @@ module.exports = fp(async function (fastify, opts) {
 })
 ```
 
+### `createPlugin()`
+
+For TypeScript users that want Fastify to infer decorators from plugin return
+values, `fastify-plugin` also exposes `createPlugin()`.
+
+```ts
+import { createPlugin } from 'fastify-plugin'
+
+export default createPlugin(async (fastify) => {
+  return fastify.decorate('usersRepository', {
+    findAll () {
+      return []
+    }
+  })
+})
+```
+
+`createPlugin()` also accepts type-level plugin dependencies so a plugin can
+express that it expects decorators from previously registered plugins:
+
+```ts
+import { createPlugin } from 'fastify-plugin'
+import dbPlugin from './db-plugin'
+
+export default createPlugin((fastify) => {
+  fastify.usersRepository.findAll()
+  return fastify
+}, {
+  dependencies: [dbPlugin]
+})
+```
+
+Use `fp()` for legacy plugins and runtime metadata checks. Use `createPlugin()`
+when you want inference-friendly plugin composition.
+
 ## Metadata
 In addition, if you use this module when creating new plugins, you can declare the dependencies, the name, and the expected Fastify version that your plugin needs.
 
