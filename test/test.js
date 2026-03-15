@@ -12,6 +12,50 @@ test('fastify-plugin is a function', (t) => {
   t.assert.ok(typeof fp === 'function')
 })
 
+test('createPlugin is exported', (t) => {
+  t.plan(1)
+  t.assert.ok(typeof fp.createPlugin === 'function')
+})
+
+test('createPlugin removes runtime dependencies array metadata', (t) => {
+  t.plan(1)
+
+  function plugin (_fastify, _opts, next) {
+    next()
+  }
+
+  const wrapped = fp.createPlugin(plugin, {
+    dependencies: ['a', 'b'],
+    fastify: '5.x',
+    name: 'runtime-deps-test'
+  })
+
+  t.assert.deepStrictEqual(wrapped[Symbol.for('plugin-meta')], {
+    fastify: '5.x',
+    name: 'runtime-deps-test'
+  })
+})
+
+test('createPlugin keeps non-array dependencies metadata untouched', (t) => {
+  t.plan(1)
+
+  function plugin (_fastify, _opts, next) {
+    next()
+  }
+
+  const wrapped = fp.createPlugin(plugin, {
+    dependencies: 'legacy-dependency',
+    fastify: '5.x',
+    name: 'runtime-deps-string-test'
+  })
+
+  t.assert.deepStrictEqual(wrapped[Symbol.for('plugin-meta')], {
+    dependencies: 'legacy-dependency',
+    fastify: '5.x',
+    name: 'runtime-deps-string-test'
+  })
+})
+
 test('should return the function with the skip-override Symbol', (t) => {
   t.plan(1)
 
