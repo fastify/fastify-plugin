@@ -1,33 +1,47 @@
-import fastifyPlugin from '..'
-import fastify, { FastifyPluginCallback, FastifyPluginAsync, FastifyError, FastifyInstance, FastifyPluginOptions, RawServerDefault, FastifyTypeProviderDefault, FastifyBaseLogger } from 'fastify'
+import fastifyPlugin, { createPlugin } from '..'
+import fastify, {
+  AnyFastifyInstance,
+  FastifyError,
+  FastifyInstance,
+  FastifyPluginAsync,
+  FastifyPluginCallback,
+  FastifyPluginOptions,
+  UnEncapsulatedPlugin
+} from 'fastify'
 import { expectAssignable, expectError, expectNotType, expectType } from 'tsd'
 import { Server } from 'node:https'
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
 import fastifyExampleCallback from './example-callback.test-d'
 import fastifyExampleAsync from './example-async.test-d'
 
-interface Options {
+interface Options extends FastifyPluginOptions {
   foo: string
 }
 
 const testSymbol = Symbol('foobar')
 
-// Callback
+const legacyCallback: FastifyPluginCallback<Options> = (_fastify, options, done) => {
+  expectType<string>(options.foo)
+  done()
+}
+expectAssignable<UnEncapsulatedPlugin<FastifyPluginCallback<Options>>>(
+  fastifyPlugin(legacyCallback)
+)
+expectNotType<any>(fastifyPlugin(legacyCallback))
 
-const pluginCallback: FastifyPluginCallback = (_fastify, _options, _next) => { }
-expectType<FastifyPluginCallback>(fastifyPlugin(pluginCallback))
+const legacyAsync: FastifyPluginAsync<Options> = async (_fastify, options) => {
+  expectType<string>(options.foo)
+}
+expectAssignable<UnEncapsulatedPlugin<FastifyPluginAsync<Options>>>(
+  fastifyPlugin(legacyAsync)
+)
+expectNotType<any>(fastifyPlugin(legacyAsync))
 
-const pluginCallbackWithTypes = (_fastify: FastifyInstance, _options: FastifyPluginOptions, _next: (error?: FastifyError) => void): void => { }
-expectAssignable<FastifyPluginCallback>(fastifyPlugin(pluginCallbackWithTypes))
-expectNotType<any>(fastifyPlugin(pluginCallbackWithTypes))
-
-expectAssignable<FastifyPluginCallback>(fastifyPlugin((_fastify: FastifyInstance, _options: FastifyPluginOptions, _next: (error?: FastifyError) => void): void => { }))
-expectNotType<any>(fastifyPlugin((_fastify: FastifyInstance, _options: FastifyPluginOptions, _next: (error?: FastifyError) => void): void => { }))
-
-expectType<FastifyPluginCallback>(fastifyPlugin(pluginCallback, ''))
-expectType<FastifyPluginCallback>(fastifyPlugin(pluginCallback, {
+const wrappedCallback = fastifyPlugin((fastify: FastifyInstance, _options: FastifyPluginOptions, _next: (error?: FastifyError) => void) => {
+  return fastify.decorate('wrappedCallback', true)
+}, {
   fastify: '',
-  name: '',
+  name: 'wrapped-callback',
   decorators: {
     fastify: ['', testSymbol],
     reply: ['', testSymbol],
@@ -35,132 +49,78 @@ expectType<FastifyPluginCallback>(fastifyPlugin(pluginCallback, {
   },
   dependencies: [''],
   encapsulate: true
-}))
-
-const pluginCallbackWithOptions: FastifyPluginCallback<Options> = (_fastify, options, _next) => {
-  expectType<string>(options.foo)
-}
-
-expectType<FastifyPluginCallback<Options>>(fastifyPlugin(pluginCallbackWithOptions))
-
-const pluginCallbackWithServer: FastifyPluginCallback<Options, Server> = (fastify, _options, _next) => {
-  expectType<Server>(fastify.server)
-}
-
-expectType<FastifyPluginCallback<Options, Server>>(fastifyPlugin(pluginCallbackWithServer))
-
-const pluginCallbackWithTypeProvider: FastifyPluginCallback<Options, Server, TypeBoxTypeProvider> = (_fastify, _options, _next) => { }
-
-expectType<FastifyPluginCallback<Options, Server, TypeBoxTypeProvider>>(fastifyPlugin(pluginCallbackWithTypeProvider))
-
-// Async
-
-const pluginAsync: FastifyPluginAsync = async (_fastify, _options) => { }
-expectType<FastifyPluginAsync>(fastifyPlugin(pluginAsync))
-
-const pluginAsyncWithTypes = async (_fastify: FastifyInstance, _options: FastifyPluginOptions): Promise<void> => { }
-expectType<FastifyPluginAsync<FastifyPluginOptions, RawServerDefault, FastifyTypeProviderDefault>>(fastifyPlugin(pluginAsyncWithTypes))
-
-expectType<FastifyPluginAsync<FastifyPluginOptions, RawServerDefault, FastifyTypeProviderDefault>>(fastifyPlugin(async (_fastify: FastifyInstance, _options: FastifyPluginOptions): Promise<void> => { }))
-expectType<FastifyPluginAsync>(fastifyPlugin(pluginAsync, ''))
-expectType<FastifyPluginAsync>(fastifyPlugin(pluginAsync, {
-  fastify: '',
-  name: '',
-  decorators: {
-    fastify: ['', testSymbol],
-    reply: ['', testSymbol],
-    request: ['', testSymbol]
-  },
-  dependencies: [''],
-  encapsulate: true
-}))
-
-const pluginAsyncWithOptions: FastifyPluginAsync<Options> = async (_fastify, options) => {
-  expectType<string>(options.foo)
-}
-
-expectType<FastifyPluginAsync<Options>>(fastifyPlugin(pluginAsyncWithOptions))
-
-const pluginAsyncWithServer: FastifyPluginAsync<Options, Server> = async (fastify, _options) => {
-  expectType<Server>(fastify.server)
-}
-
-expectType<FastifyPluginAsync<Options, Server>>(fastifyPlugin(pluginAsyncWithServer))
-
-const pluginAsyncWithTypeProvider: FastifyPluginAsync<Options, Server, TypeBoxTypeProvider> = async (_fastify, _options) => { }
-
-expectType<FastifyPluginAsync<Options, Server, TypeBoxTypeProvider>>(fastifyPlugin(pluginAsyncWithTypeProvider))
-
-// Fastify register
-
-const server = fastify()
-server.register(fastifyPlugin(pluginCallback))
-server.register(fastifyPlugin(pluginCallbackWithTypes), { foo: 'bar' })
-server.register(fastifyPlugin(pluginCallbackWithOptions), { foo: 'bar' })
-server.register(fastifyPlugin(pluginCallbackWithServer), { foo: 'bar' })
-server.register(fastifyPlugin(pluginCallbackWithTypeProvider), { foo: 'bar' })
-server.register(fastifyPlugin(pluginAsync))
-server.register(fastifyPlugin(pluginAsyncWithTypes), { foo: 'bar' })
-server.register(fastifyPlugin(pluginAsyncWithOptions), { foo: 'bar' })
-server.register(fastifyPlugin(pluginAsyncWithServer), { foo: 'bar' })
-server.register(fastifyPlugin(pluginAsyncWithTypeProvider), { foo: 'bar' })
-
-// properly handling callback and async
-fastifyPlugin(function (fastify, options, next) {
-  expectType<FastifyInstance>(fastify)
-  expectType<Record<never, never>>(options)
-  expectType<(err?: Error) => void>(next)
 })
+expectAssignable<UnEncapsulatedPlugin<FastifyPluginCallback>>(wrappedCallback)
 
-fastifyPlugin<Options>(function (fastify, options, next) {
-  expectType<FastifyInstance>(fastify)
+const wrappedAsync = fastifyPlugin(async (fastify: FastifyInstance) => {
+  return fastify.decorate('wrappedAsync', true)
+})
+expectAssignable<UnEncapsulatedPlugin<FastifyPluginAsync>>(wrappedAsync)
+
+const callbackWithServer = fastifyPlugin((fastify: FastifyInstance<Server>) => {
+  expectType<Server>(fastify.server)
+  return fastify
+})
+expectAssignable<
+  UnEncapsulatedPlugin<FastifyPluginCallback<FastifyPluginOptions, FastifyInstance<Server>, FastifyInstance<Server>>>
+>(callbackWithServer)
+
+const asyncWithTypeProvider = fastifyPlugin(async (fastify: FastifyInstance, options: Options) => {
+  expectType<string>(options.foo)
+  return fastify.withTypeProvider<TypeBoxTypeProvider>()
+})
+expectAssignable<UnEncapsulatedPlugin<FastifyPluginAsync<Options>>>(asyncWithTypeProvider)
+
+const createdPlugin = createPlugin((instance: FastifyInstance) => {
+  return instance.decorate('createdPlugin', 42)
+})
+expectNotType<any>(createdPlugin)
+
+const app = fastify()
+app.register(fastifyPlugin(legacyCallback), { foo: 'bar' })
+app.register(fastifyPlugin(legacyAsync), { foo: 'bar' })
+app.register(wrappedCallback)
+app.register(wrappedAsync)
+app.register(createdPlugin)
+
+fastifyPlugin(function (fastify, options: Options, next: (err?: Error) => void) {
+  expectAssignable<AnyFastifyInstance>(fastify)
   expectType<Options>(options)
   expectType<(err?: Error) => void>(next)
+  return fastify
 })
-
-fastifyPlugin<Options>(async function (fastify, options) {
-  expectType<FastifyInstance>(fastify)
-  expectType<Options>(options)
-})
-
-expectAssignable<FastifyPluginAsync<Options, RawServerDefault, FastifyTypeProviderDefault, FastifyBaseLogger>>(fastifyPlugin(async function (_fastify: FastifyInstance, _options: Options) { }))
-expectNotType<any>(fastifyPlugin(async function (_fastify: FastifyInstance, _options: Options) { }))
 
 fastifyPlugin(async function (fastify, options: Options) {
-  expectType<FastifyInstance>(fastify)
+  expectAssignable<AnyFastifyInstance>(fastify)
   expectType<Options>(options)
-})
-
-fastifyPlugin(async function (fastify, options) {
-  expectType<FastifyInstance>(fastify)
-  expectType<Record<never, never>>(options)
+  return fastify
 })
 
 expectError(
   fastifyPlugin(async function (fastify, options: Options, _next) {
-    expectType<FastifyInstance>(fastify)
+    expectAssignable<AnyFastifyInstance>(fastify)
     expectType<Options>(options)
+    return fastify
   })
 )
-expectAssignable<FastifyPluginCallback<Options>>(fastifyPlugin(function (_fastify, _options, _next) { }))
-expectNotType<any>(fastifyPlugin(function (_fastify, _options, _next) { }))
-
-fastifyPlugin(function (fastify, options: Options, next) {
-  expectType<FastifyInstance>(fastify)
-  expectType<Options>(options)
-  expectType<(err?: Error) => void>(next)
-})
 
 expectError(
   fastifyPlugin(function (fastify, options: Options, _next) {
-    expectType<FastifyInstance>(fastify)
+    expectAssignable<AnyFastifyInstance>(fastify)
     expectType<Options>(options)
-    return Promise.resolve()
+    return Promise.resolve(fastify)
   })
 )
 
-server.register(fastifyExampleCallback, { foo: 'bar' })
-expectError(server.register(fastifyExampleCallback, { foo: 'baz' }))
+const pluginCallbackWithTypes = (fastify: FastifyInstance, _options: FastifyPluginOptions, _next: (error?: FastifyError) => void): FastifyInstance => fastify
+expectAssignable<UnEncapsulatedPlugin<FastifyPluginCallback>>(fastifyPlugin(pluginCallbackWithTypes))
 
-server.register(fastifyExampleAsync, { foo: 'bar' })
-expectError(server.register(fastifyExampleAsync, { foo: 'baz' }))
+const pluginAsyncWithTypes = async (fastify: FastifyInstance, _options: FastifyPluginOptions): Promise<FastifyInstance> => fastify
+expectAssignable<UnEncapsulatedPlugin<FastifyPluginAsync>>(fastifyPlugin(pluginAsyncWithTypes))
+
+const exampleApp = fastify()
+exampleApp.register(fastifyExampleCallback, { foo: 'bar' } as const)
+expectError(exampleApp.register(fastifyExampleCallback, { foo: 'baz' } as const))
+
+exampleApp.register(fastifyExampleAsync, { foo: 'bar' } as const)
+expectError(exampleApp.register(fastifyExampleAsync, { foo: 'baz' } as const))

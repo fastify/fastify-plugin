@@ -1,12 +1,9 @@
 import {
-  FastifyPluginCallback,
+  ApplyDependencies,
+  FastifyDependencies,
   FastifyPluginAsync,
-  FastifyPluginOptions,
-  RawServerBase,
-  RawServerDefault,
-  FastifyTypeProvider,
-  FastifyTypeProviderDefault,
-  FastifyBaseLogger,
+  FastifyPluginCallback,
+  UnEncapsulatedPlugin
 } from 'fastify'
 
 type FastifyPlugin = typeof fastifyPlugin
@@ -26,6 +23,15 @@ declare namespace fastifyPlugin {
     dependencies?: string[],
     encapsulate?: boolean
   }
+
+  /**
+   * Metadata accepted by `createPlugin()`.
+   * `dependencies` are type-level plugin dependencies rather than runtime plugin names.
+   */
+  export interface CreatePluginMetadata<TDependencies extends FastifyDependencies> extends Omit<PluginMetadata, 'dependencies'> {
+    dependencies?: TDependencies
+  }
+
   // Exporting PluginOptions for backward compatibility after renaming it to PluginMetadata
   /**
    * @deprecated Use PluginMetadata instead
@@ -34,6 +40,34 @@ declare namespace fastifyPlugin {
 
   export const fastifyPlugin: FastifyPlugin
   export { fastifyPlugin as default }
+
+  export function createPlugin <TPlugin extends (...args: any[]) => any> (
+    plugin: TPlugin extends FastifyPluginCallback<any> ? TPlugin : never,
+    options?: Omit<PluginMetadata, 'dependencies'>
+  ): UnEncapsulatedPlugin<TPlugin>
+
+  export function createPlugin <
+    TPlugin extends (...args: any[]) => any,
+    TDependencies extends FastifyDependencies,
+    TEnhanced extends ApplyDependencies<Extract<TPlugin, FastifyPluginCallback<any>>, TDependencies> = ApplyDependencies<Extract<TPlugin, FastifyPluginCallback<any>>, TDependencies>
+  > (
+    plugin: TEnhanced,
+    options: CreatePluginMetadata<TDependencies>
+  ): UnEncapsulatedPlugin<TEnhanced>
+
+  export function createPlugin <TPlugin extends (...args: any[]) => any> (
+    plugin: TPlugin extends FastifyPluginAsync<any> ? TPlugin : never,
+    options?: Omit<PluginMetadata, 'dependencies'>
+  ): UnEncapsulatedPlugin<TPlugin>
+
+  export function createPlugin <
+    TPlugin extends (...args: any[]) => any,
+    TDependencies extends FastifyDependencies,
+    TEnhanced extends ApplyDependencies<Extract<TPlugin, FastifyPluginAsync<any>>, TDependencies> = ApplyDependencies<Extract<TPlugin, FastifyPluginAsync<any>>, TDependencies>
+  > (
+    plugin: TEnhanced,
+    options: CreatePluginMetadata<TDependencies>
+  ): UnEncapsulatedPlugin<TEnhanced>
 }
 
 /**
@@ -45,15 +79,14 @@ declare namespace fastifyPlugin {
  * @param options Optional plugin options
  */
 
-declare function fastifyPlugin<
-  Options extends FastifyPluginOptions = Record<never, never>,
-  RawServer extends RawServerBase = RawServerDefault,
-  TypeProvider extends FastifyTypeProvider = FastifyTypeProviderDefault,
-  Logger extends FastifyBaseLogger = FastifyBaseLogger,
-  Fn extends FastifyPluginCallback<Options, RawServer, TypeProvider, Logger> | FastifyPluginAsync<Options, RawServer, TypeProvider, Logger> = FastifyPluginCallback<Options, RawServer, TypeProvider, Logger>
-> (
-  fn: Fn extends unknown ? Fn extends (...args: any) => Promise<any> ? FastifyPluginAsync<Options, RawServer, TypeProvider, Logger> : FastifyPluginCallback<Options, RawServer, TypeProvider, Logger> : Fn,
+declare function fastifyPlugin <TPlugin extends (...args: any[]) => any> (
+  fn: TPlugin extends FastifyPluginCallback<any> ? TPlugin : never,
   options?: fastifyPlugin.PluginMetadata | string
-): Fn
+): UnEncapsulatedPlugin<NoInfer<TPlugin>>
+
+declare function fastifyPlugin <TPlugin extends (...args: any[]) => any> (
+  fn: TPlugin extends FastifyPluginAsync<any> ? TPlugin : never,
+  options?: fastifyPlugin.PluginMetadata | string
+): UnEncapsulatedPlugin<NoInfer<TPlugin>>
 
 export = fastifyPlugin
