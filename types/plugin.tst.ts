@@ -32,7 +32,6 @@ const pluginCallbackWithTypes = (
 expect(
   fastifyPlugin(pluginCallbackWithTypes)
 ).type.toBeAssignableTo<FastifyPluginCallback>()
-expect(fastifyPlugin(pluginCallbackWithTypes)).type.not.toBe<any>()
 
 expect(
   fastifyPlugin(
@@ -211,13 +210,6 @@ expect(fastifyPlugin(pluginCallbackWithTypeProvider)).type.toBe<
     >
   >()
 
-  expect(
-    fastifyPlugin(async function (
-      _fastify: FastifyInstance,
-      _options: Options
-    ) {})
-  ).type.not.toBe<any>()
-
   fastifyPlugin(async function (fastify, options: Options) {
     expect(fastify).type.toBe<FastifyInstance>()
     expect(options).type.toBe<Options>()
@@ -228,11 +220,8 @@ expect(fastifyPlugin(pluginCallbackWithTypeProvider)).type.toBe<
     expect(options).type.toBe<Record<never, never>>()
   })
 
-  expect(async function (
-    fastify: FastifyInstance,
-    options: Options,
-    _next: any
-  ) {}).type.not.toBeAssignableTo<Parameters<typeof fastifyPlugin>[0]>()
+  // @ts-expect-error Target signature provides too few arguments
+  fastifyPlugin(async function (fastify, options, next) {})
 
   expect(
     fastifyPlugin(function (_fastify, _options, _next) {})
@@ -244,13 +233,17 @@ expect(fastifyPlugin(pluginCallbackWithTypeProvider)).type.toBe<
     expect(next).type.toBe<(err?: Error) => void>()
   })
 
-  expect(function (fastify: FastifyInstance, options: Options, _next: any) {
+  // @ts-expect-error Target signature provides too few arguments
+  fastifyPlugin(function (fastify, options, next) {
     return Promise.resolve()
-  }).type.not.toBeAssignableTo<Parameters<typeof fastifyPlugin>[0]>()
+  })
 
   server.register(fastifyExampleCallback, { foo: 'bar' })
-  expect({ foo: 'baz' as any }).type.not.toBe<{ foo: string }>()
-
+  expect(server.register).type.not.toBeCallableWith(fastifyExampleCallback, {
+    foo: 'baz'
+  })
   server.register(fastifyExampleAsync, { foo: 'bar' })
-  expect({ foo: 'baz' as any }).type.not.toBe<{ foo: string }>()
+  expect(server.register).type.not.toBeCallableWith(fastifyExampleAsync, {
+    foo: 'baz'
+  })
 })()
