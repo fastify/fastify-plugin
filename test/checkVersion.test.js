@@ -1,7 +1,7 @@
 'use strict'
 
 const { test } = require('node:test')
-const fp = require('../plugin')
+const fp = require('..')
 
 test('checkVersion having require.main.filename', (t) => {
   const info = console.info

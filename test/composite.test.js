@@ -1,7 +1,7 @@
 'use strict'
 
 const { test } = require('node:test')
-const fp = require('../plugin')
+const fp = require('..')
 
 test('anonymous function should be named composite.test0', (t) => {
   t.plan(2)

@@ -2,7 +2,7 @@
 
 const { test } = require('node:test')
 const proxyquire = require('proxyquire')
-const fp = require('../plugin')
+const fp = require('..')
 const Fastify = require('fastify')
 
 const pkg = require('../package.json')
@@ -138,7 +138,7 @@ test('Should accept an option object and checks the version', (t) => {
 })
 
 test('should set anonymous function name to file it was called from with a counter', (t) => {
-  const fp = proxyquire('../plugin.js', { stubs: {} })
+  const fp = proxyquire('../index.js', { stubs: {} })
 
   const fn = fp((_fastify, _opts, next) => {
     next()
@@ -158,7 +158,7 @@ test('should set anonymous function name to file it was called from with a count
 test('should set function name if Error.stackTraceLimit is set to 0', (t) => {
   const stackTraceLimit = Error.stackTraceLimit = 0
 
-  const fp = proxyquire('../plugin.js', { stubs: {} })
+  const fp = proxyquire('../index.js', { stubs: {} })
 
   const fn = fp((_fastify, _opts, next) => {
     next()
