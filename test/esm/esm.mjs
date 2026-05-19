@@ -1,5 +1,5 @@
 import { test } from 'node:test'
-import fp from '../../plugin.js'
+import fp from '../../index.js'
 
 test('esm base support', (t) => {
   fp((_fastify, _opts, next) => {

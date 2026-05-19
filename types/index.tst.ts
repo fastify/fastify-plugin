@@ -1,5 +1,5 @@
 import { expect } from 'tstyche'
-import fastifyPlugin from './plugin'
+import fastifyPlugin from '.'
 import fastify, {
   FastifyPluginCallback,
   FastifyPluginAsync,

@@ -1,7 +1,7 @@
 'use strict'
 
 const { test } = require('node:test')
-const fp = require('../plugin')
+const fp = require('..')
 
 test('webpack removes require.main.filename', t => {
   const filename = require.main.filename
