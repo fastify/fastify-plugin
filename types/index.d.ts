@@ -26,11 +26,6 @@ declare namespace fastifyPlugin {
     dependencies?: string[],
     encapsulate?: boolean
   }
-  // Exporting PluginOptions for backward compatibility after renaming it to PluginMetadata
-  /**
-   * @deprecated Use PluginMetadata instead
-   */
-  export interface PluginOptions extends PluginMetadata {}
 
   export const fastifyPlugin: FastifyPlugin
   export { fastifyPlugin as default }
