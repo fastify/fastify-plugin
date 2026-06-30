@@ -181,7 +181,10 @@ fp(async (fastify: FastifyInstance, options: FastifyPluginOptions): Promise<void
 
 This project is kindly sponsored by:
 - [nearForm](https://nearform.com)
-- [LetzDoIt](https://www.letzdoitapp.com/)
+
+Past sponsors:
+
+- LetzDoIt
 
 ## License
 
