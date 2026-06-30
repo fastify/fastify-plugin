@@ -177,6 +177,10 @@ fp(pluginAsyncWithTypes)
 fp(async (fastify: FastifyInstance, options: FastifyPluginOptions): Promise<void> => { })
 ```
 
+Do not mix the callback and async styles in the same plugin. An async plugin
+must not accept or call the `done` callback, and a callback-style plugin must
+not be declared with `async`.
+
 ## Acknowledgments
 
 This project is kindly sponsored by:
