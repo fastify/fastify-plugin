@@ -46,6 +46,38 @@ module.exports = fp(async function (fastify, opts) {
 })
 ```
 
+Do not mix callback and async styles in the same plugin function.
+
+If the plugin function is declared as `async`, do not use the `done` callback.
+Async plugin functions should return a promise and let Fastify handle completion
+through promise resolution or rejection.
+
+```js
+// Avoid this
+module.exports = fp(async function (fastify, opts, done) {
+  await exampleAsyncFunction()
+  done()
+})
+```
+
+Use either the callback style:
+
+```js
+module.exports = fp(function (fastify, opts, done) {
+  exampleAsyncFunction()
+    .then(() => done())
+    .catch(done)
+})
+```
+
+Or the async style:
+
+```js
+module.exports = fp(async function (fastify, opts) {
+  await exampleAsyncFunction()
+})
+```
+
 ## Metadata
 In addition, if you use this module when creating new plugins, you can declare the dependencies, the name, and the expected Fastify version that your plugin needs.
 
