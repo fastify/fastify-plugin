@@ -39,11 +39,16 @@ at TAP.process (/home/leonardo/desktop/fastify-plugin/node_modules/tap/lib/test.
 at TAP.sub (/home/leonardo/desktop/fastify-plugin/node_modules/tap/lib/test.js:185:10)
 at TAP.test (/home/leonardo/desktop/fastify-plugin/node_modules/tap/lib/test.js:209:17)`
 
+const hyphenatedStack = `Error: anonymous function
+at plugin (/home/leonardo/desktop/fastify-plugin/index.js:24:20)
+at Test.test (/home/leonardo/desktop/fastify-plugin/test/my-plugin.js:9:14)`
+
 const anonymousStack = 'Unable to parse this'
 
 test('extractPluginName tests', (t) => {
-  t.plan(3)
+  t.plan(4)
   t.assert.strictEqual(extractPluginName(winStack), 'hello.test')
   t.assert.strictEqual(extractPluginName(nixStack), 'this.is.a.test')
+  t.assert.strictEqual(extractPluginName(hyphenatedStack), 'my-plugin')
   t.assert.strictEqual(extractPluginName(anonymousStack), 'anonymous')
 })
