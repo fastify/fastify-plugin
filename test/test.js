@@ -49,6 +49,19 @@ test('should throw if the plugin is not a function', (t) => {
   }
 })
 
+test('should throw the type error if the plugin is nullish', (t) => {
+  t.plan(2)
+
+  t.assert.throws(() => fp(undefined), {
+    name: 'TypeError',
+    message: 'fastify-plugin expects a function, instead got a \'undefined\''
+  })
+  t.assert.throws(() => fp(null), {
+    name: 'TypeError',
+    message: 'fastify-plugin expects a function, instead got a \'object\''
+  })
+})
+
 test('should check the fastify version', (t) => {
   t.plan(1)
 
