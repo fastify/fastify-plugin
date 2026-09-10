@@ -43,7 +43,7 @@ function plugin (fn, options = {}) {
 
   if (!options.name) {
     autoName = true
-    options.name = getPluginName(fn) + '-auto-' + count++
+    options = { ...options, name: getPluginName(fn) + '-auto-' + count++ }
   }
 
   fn[kSkipOverride] = options.encapsulate !== true
