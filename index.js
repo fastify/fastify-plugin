@@ -37,6 +37,10 @@ function plugin (fn, options = {}) {
     throw new TypeError(`fastify-plugin expects a version string, instead got '${typeof options.fastify}'`)
   }
 
+  if (options.name && typeof options.name !== 'string') {
+    throw new TypeError(`fastify-plugin expects a name string, instead got '${typeof options.name}'`)
+  }
+
   if (!options.name) {
     autoName = true
     options.name = getPluginName(fn) + '-auto-' + count++
