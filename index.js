@@ -3,6 +3,10 @@
 const getPluginName = require('./lib/getPluginName')
 const toCamelCase = require('./lib/toCamelCase')
 
+const kSkipOverride = Symbol.for('skip-override')
+const kDisplayName = Symbol.for('fastify.display-name')
+const kPluginMeta = Symbol.for('plugin-meta')
+
 let count = 0
 
 function plugin (fn, options = {}) {
@@ -42,9 +46,9 @@ function plugin (fn, options = {}) {
     options.name = getPluginName(fn) + '-auto-' + count++
   }
 
-  fn[Symbol.for('skip-override')] = options.encapsulate !== true
-  fn[Symbol.for('fastify.display-name')] = options.name
-  fn[Symbol.for('plugin-meta')] = options
+  fn[kSkipOverride] = options.encapsulate !== true
+  fn[kDisplayName] = options.name
+  fn[kPluginMeta] = options
 
   // Faux modules support
   if (!fn.default) {
