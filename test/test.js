@@ -122,7 +122,7 @@ test('should throw if the version number is not a string', (t) => {
 })
 
 test('Should accept an option object', (t) => {
-  t.plan(2)
+  t.plan(4)
 
   const opts = { hello: 'world' }
 
@@ -132,12 +132,15 @@ test('Should accept an option object', (t) => {
 
   fp(plugin, opts)
 
+  const meta = plugin[Symbol.for('plugin-meta')]
   t.assert.ok(plugin[Symbol.for('skip-override')], 'skip-override symbol should be present')
-  t.assert.deepStrictEqual(plugin[Symbol.for('plugin-meta')], opts, 'plugin-meta should match opts')
+  t.assert.strictEqual(meta.hello, 'world', 'plugin-meta should carry the options')
+  t.assert.match(meta.name, /^plugin-auto-\d+$/, 'plugin-meta should carry the generated name')
+  t.assert.deepStrictEqual(opts, { hello: 'world' }, 'options must not be mutated')
 })
 
 test('Should accept an option object and checks the version', (t) => {
-  t.plan(2)
+  t.plan(3)
 
   const opts = { hello: 'world', fastify: '>=0.10.0' }
 
@@ -146,8 +149,34 @@ test('Should accept an option object and checks the version', (t) => {
   }
 
   fp(plugin, opts)
+  const meta = plugin[Symbol.for('plugin-meta')]
   t.assert.ok(plugin[Symbol.for('skip-override')])
-  t.assert.deepStrictEqual(plugin[Symbol.for('plugin-meta')], opts)
+  t.assert.deepStrictEqual({ hello: meta.hello, fastify: meta.fastify }, opts)
+  t.assert.deepStrictEqual(opts, { hello: 'world', fastify: '>=0.10.0' }, 'options must not be mutated')
+})
+
+test('Should keep options by reference when a name is given', (t) => {
+  t.plan(1)
+
+  const opts = { name: 'by-reference', fastify: '>=0.10.0' }
+  const plugin = fp((_fastify, _opts, next) => next(), opts)
+
+  t.assert.strictEqual(plugin[Symbol.for('plugin-meta')], opts)
+})
+
+test('Should give distinct auto names to plugins that share one options object', (t) => {
+  t.plan(4)
+
+  const shared = { fastify: '>=0.10.0' }
+  const first = fp((_fastify, _opts, next) => next(), shared)
+  const second = fp((_fastify, _opts, next) => next(), shared)
+
+  const firstName = first[Symbol.for('plugin-meta')].name
+  const secondName = second[Symbol.for('plugin-meta')].name
+  t.assert.match(firstName, /^test-auto-\d+$/)
+  t.assert.match(secondName, /^test-auto-\d+$/)
+  t.assert.notStrictEqual(firstName, secondName, 'the second plugin must not inherit the first auto name')
+  t.assert.strictEqual(shared.name, undefined, 'options must not be mutated')
 })
 
 test('should set anonymous function name to file it was called from with a counter', (t) => {
