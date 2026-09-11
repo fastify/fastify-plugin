@@ -3,12 +3,16 @@
 const getPluginName = require('./lib/getPluginName')
 const toCamelCase = require('./lib/toCamelCase')
 
+const kSkipOverride = Symbol.for('skip-override')
+const kDisplayName = Symbol.for('fastify.display-name')
+const kPluginMeta = Symbol.for('plugin-meta')
+
 let count = 0
 
 function plugin (fn, options = {}) {
   let autoName = false
 
-  if (fn.default !== undefined) {
+  if (fn?.default !== undefined) {
     // Support for 'export default' behaviour in transpiled ECMAScript module
     fn = fn.default
   }
@@ -39,12 +43,12 @@ function plugin (fn, options = {}) {
 
   if (!options.name) {
     autoName = true
-    options.name = getPluginName(fn) + '-auto-' + count++
+    options = { ...options, name: getPluginName(fn) + '-auto-' + count++ }
   }
 
-  fn[Symbol.for('skip-override')] = options.encapsulate !== true
-  fn[Symbol.for('fastify.display-name')] = options.name
-  fn[Symbol.for('plugin-meta')] = options
+  fn[kSkipOverride] = options.encapsulate !== true
+  fn[kDisplayName] = options.name
+  fn[kPluginMeta] = options
 
   // Faux modules support
   if (!fn.default) {
