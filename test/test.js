@@ -1,6 +1,7 @@
 'use strict'
 
 const { test } = require('node:test')
+const { kDisplayName, kPluginMeta, kSkipOverride } = require('../lib/symbols')
 const proxyquire = require('proxyquire')
 const fp = require('..')
 const Fastify = require('fastify')
@@ -20,7 +21,7 @@ test('should return the function with the skip-override Symbol', (t) => {
   }
 
   fp(plugin)
-  t.assert.ok(plugin[Symbol.for('skip-override')])
+  t.assert.ok(plugin[kSkipOverride])
 })
 
 test('should support "default" function from babel module', (t) => {
@@ -93,20 +94,27 @@ test('should check the fastify version', (t) => {
 })
 
 test('the options object should be an object', (t) => {
-  t.plan(2)
+  t.plan(3)
 
   try {
     fp(() => { }, null)
     t.assert.fail()
   } catch (e) {
-    t.assert.strictEqual(e.message, 'The options object should be an object')
+    t.assert.strictEqual(e.message, "The metadata should be an object or version string, not 'null'")
   }
 
   try {
     fp(() => { }, [])
     t.assert.fail()
   } catch (e) {
-    t.assert.strictEqual(e.message, 'The options object should be an object')
+    t.assert.strictEqual(e.message, "The metadata should be an object or version string, not 'array'")
+  }
+
+  try {
+    fp(() => { }, true)
+    t.assert.fail()
+  } catch (e) {
+    t.assert.strictEqual(e.message, 'The metadata should be an object or version string, not \'boolean\'')
   }
 })
 
@@ -132,8 +140,8 @@ test('Should accept an option object', (t) => {
 
   fp(plugin, opts)
 
-  const meta = plugin[Symbol.for('plugin-meta')]
-  t.assert.ok(plugin[Symbol.for('skip-override')], 'skip-override symbol should be present')
+  const meta = plugin[kPluginMeta]
+  t.assert.ok(plugin[kSkipOverride], 'skip-override symbol should be present')
   t.assert.strictEqual(meta.hello, 'world', 'plugin-meta should carry the options')
   t.assert.match(meta.name, /^plugin-auto-\d+$/, 'plugin-meta should carry the generated name')
   t.assert.deepStrictEqual(opts, { hello: 'world' }, 'options must not be mutated')
@@ -149,8 +157,8 @@ test('Should accept an option object and checks the version', (t) => {
   }
 
   fp(plugin, opts)
-  const meta = plugin[Symbol.for('plugin-meta')]
-  t.assert.ok(plugin[Symbol.for('skip-override')])
+  const meta = plugin[kPluginMeta]
+  t.assert.ok(plugin[kSkipOverride])
   t.assert.deepStrictEqual({ hello: meta.hello, fastify: meta.fastify }, opts)
   t.assert.deepStrictEqual(opts, { hello: 'world', fastify: '>=0.10.0' }, 'options must not be mutated')
 })
@@ -161,7 +169,7 @@ test('Should keep options by reference when a name is given', (t) => {
   const opts = { name: 'by-reference', fastify: '>=0.10.0' }
   const plugin = fp((_fastify, _opts, next) => next(), opts)
 
-  t.assert.strictEqual(plugin[Symbol.for('plugin-meta')], opts)
+  t.assert.strictEqual(plugin[kPluginMeta], opts)
 })
 
 test('Should give distinct auto names to plugins that share one options object', (t) => {
@@ -171,8 +179,8 @@ test('Should give distinct auto names to plugins that share one options object',
   const first = fp((_fastify, _opts, next) => next(), shared)
   const second = fp((_fastify, _opts, next) => next(), shared)
 
-  const firstName = first[Symbol.for('plugin-meta')].name
-  const secondName = second[Symbol.for('plugin-meta')].name
+  const firstName = first[kPluginMeta].name
+  const secondName = second[kPluginMeta].name
   t.assert.match(firstName, /^test-auto-\d+$/)
   t.assert.match(secondName, /^test-auto-\d+$/)
   t.assert.notStrictEqual(firstName, secondName, 'the second plugin must not inherit the first auto name')
@@ -186,15 +194,15 @@ test('should set anonymous function name to file it was called from with a count
     next()
   })
 
-  t.assert.strictEqual(fn[Symbol.for('plugin-meta')].name, 'test-auto-0')
+  t.assert.strictEqual(fn[kPluginMeta].name, 'test-auto-0')
   t.assert.strictEqual(fn[Symbol.for('fastify.display-name')], 'test-auto-0')
 
   const fn2 = fp((_fastify, _opts, next) => {
     next()
   })
 
-  t.assert.strictEqual(fn2[Symbol.for('plugin-meta')].name, 'test-auto-1')
-  t.assert.strictEqual(fn2[Symbol.for('fastify.display-name')], 'test-auto-1')
+  t.assert.strictEqual(fn2[kPluginMeta].name, 'test-auto-1')
+  t.assert.strictEqual(fn2[kDisplayName], 'test-auto-1')
 })
 
 test('should set function name if Error.stackTraceLimit is set to 0', (t) => {
@@ -206,15 +214,15 @@ test('should set function name if Error.stackTraceLimit is set to 0', (t) => {
     next()
   })
 
-  t.assert.strictEqual(fn[Symbol.for('plugin-meta')].name, 'test-auto-0')
-  t.assert.strictEqual(fn[Symbol.for('fastify.display-name')], 'test-auto-0')
+  t.assert.strictEqual(fn[kPluginMeta].name, 'test-auto-0')
+  t.assert.strictEqual(fn[kDisplayName], 'test-auto-0')
 
   const fn2 = fp((_fastify, _opts, next) => {
     next()
   })
 
-  t.assert.strictEqual(fn2[Symbol.for('plugin-meta')].name, 'test-auto-1')
-  t.assert.strictEqual(fn2[Symbol.for('fastify.display-name')], 'test-auto-1')
+  t.assert.strictEqual(fn2[kPluginMeta].name, 'test-auto-1')
+  t.assert.strictEqual(fn2[kDisplayName], 'test-auto-1')
 
   Error.stackTraceLimit = stackTraceLimit
 })
@@ -228,8 +236,8 @@ test('should set display-name to meta name', (t) => {
     name: functionName
   })
 
-  t.assert.strictEqual(fn[Symbol.for('plugin-meta')].name, functionName)
-  t.assert.strictEqual(fn[Symbol.for('fastify.display-name')], functionName)
+  t.assert.strictEqual(fn[kPluginMeta].name, functionName)
+  t.assert.strictEqual(fn[kDisplayName], functionName)
 })
 
 test('should preserve fastify version in meta', (t) => {
@@ -239,7 +247,7 @@ test('should preserve fastify version in meta', (t) => {
 
   const fn = fp((_fastify, _opts, next) => next(), opts)
 
-  t.assert.strictEqual(fn[Symbol.for('plugin-meta')].fastify, '>=0.10.0')
+  t.assert.strictEqual(fn[kPluginMeta].fastify, '>=0.10.0')
 })
 
 test('should check fastify dependency graph - plugin', async (t) => {

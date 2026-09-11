@@ -1,6 +1,7 @@
 'use strict'
 
 const { test } = require('node:test')
+const { kPluginMeta, kDisplayName } = require('../lib/symbols')
 const fp = require('..')
 
 test('anonymous function should be named composite.test0', (t) => {
@@ -9,6 +10,6 @@ test('anonymous function should be named composite.test0', (t) => {
     next()
   })
 
-  t.assert.strictEqual(fn[Symbol.for('plugin-meta')].name, 'composite.test-auto-0')
-  t.assert.strictEqual(fn[Symbol.for('fastify.display-name')], 'composite.test-auto-0')
+  t.assert.strictEqual(fn[kPluginMeta].name, 'composite.test-auto-0')
+  t.assert.strictEqual(fn[kDisplayName], 'composite.test-auto-0')
 })

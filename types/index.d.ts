@@ -27,6 +27,15 @@ declare namespace fastifyPlugin {
     encapsulate?: boolean
   }
 
+  export type FastifyPluginFunction<
+    Options extends FastifyPluginOptions = Record<never, never>,
+    RawServer extends RawServerBase = RawServerDefault,
+    TypeProvider extends FastifyTypeProvider = FastifyTypeProviderDefault,
+    Logger extends FastifyBaseLogger = FastifyBaseLogger
+  > =
+    | FastifyPluginCallback<Options, RawServer, TypeProvider, Logger>
+    | FastifyPluginAsync<Options, RawServer, TypeProvider, Logger>
+
   export const fastifyPlugin: FastifyPlugin
   export { fastifyPlugin as default }
 }
