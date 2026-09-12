@@ -58,9 +58,11 @@ function plugin (fn, options = {}) {
   // TypeScript support for named imports
   // See https://github.com/fastify/fastify/issues/2404 for more details
   // The type definitions would have to be update to match this.
-  const camelCase = toCamelCase(options.name)
-  if (!autoName && !fn[camelCase]) {
-    fn[camelCase] = fn
+  if (!autoName) {
+    const camelCase = toCamelCase(options.name)
+    if (!fn[camelCase]) {
+      fn[camelCase] = fn
+    }
   }
 
   return fn
