@@ -121,6 +121,36 @@ test('should throw if the version number is not a string', (t) => {
   }
 })
 
+test('should throw if the name is not a string', (t) => {
+  const cases = [
+    { name: 123, type: 'number' },
+    { name: true, type: 'boolean' },
+    { name: {}, type: 'object' },
+    { name: ['a-b'], type: 'object' },
+    { name: Symbol('a'), type: 'symbol' },
+    { name: () => {}, type: 'function' }
+  ]
+  t.plan(cases.length)
+
+  for (const { name, type } of cases) {
+    t.assert.throws(() => fp(() => { }, { name }), {
+      name: 'TypeError',
+      message: `fastify-plugin expects a name string, instead got '${type}'`
+    })
+  }
+})
+
+test('should auto-name the plugin if the name is an empty string', (t) => {
+  t.plan(2)
+
+  const fn = fp((_fastify, _opts, next) => next(), {
+    name: ''
+  })
+
+  t.assert.match(fn[Symbol.for('plugin-meta')].name, /^test-auto-\d+$/)
+  t.assert.match(fn[Symbol.for('fastify.display-name')], /^test-auto-\d+$/)
+})
+
 test('Should accept an option object', (t) => {
   t.plan(4)
 
